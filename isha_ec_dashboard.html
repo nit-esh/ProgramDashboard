@@ -27,7 +27,7 @@ header{background:linear-gradient(135deg,#1e2a45,#2e3f66);padding:0 20px}
 
 .tabs-wrap{background:#162035;border-bottom:3px solid rgba(240,201,85,.18);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:#2e4060 #162035}
 .tabs-inner{max-width:1320px;margin:0 auto;display:flex;padding:0 10px;gap:1px;min-width:max-content}
-.tab{padding:9px 13px;background:transparent;border:none;color:rgba(255,255,255,.42);font-size:.67rem;font-weight:700;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-3px;white-space:nowrap;transition:color .12s,border-color .12s;display:flex;align-items:center;gap:4px}
+.tab{padding:12px 18px;background:transparent;border:none;color:rgba(255,255,255,.42);font-size:.8rem;font-weight:700;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-3px;white-space:nowrap;transition:color .12s,border-color .12s;display:flex;align-items:center;gap:4px}
 .tab:hover{color:rgba(255,255,255,.8)}
 .tab.active{color:#fff;border-bottom-color:var(--gold)}
 .tab .tc{font-size:.55rem;opacity:.55;font-weight:400;margin-left:1px}
@@ -417,7 +417,7 @@ function buildTabs(){
     btn.className='tab'+(i===0?' active':'');
     btn.id='tab-'+p.id;
     const badge=p.src==='crm'?'<span class="badge-crm">CRM</span>':'<span class="badge-ev">Events</span>';
-    btn.innerHTML=`${p.icon} ${p.name}${badge}<span class="tc">(${d.total.toLocaleString()})</span>`;
+    btn.innerHTML=`${p.name}${badge}<span class="tc">(${d.total.toLocaleString()})</span>`;
     btn.onclick=()=>{
       document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
       btn.classList.add('active');
@@ -454,7 +454,7 @@ function loadProgram(prog){
   CUR=prog;
   const d=PD[prog.id];
   document.getElementById('heroBg').style.backgroundImage=prog.bg;
-  document.getElementById('hTitle').textContent=prog.icon+' '+prog.name;
+  document.getElementById('hTitle').textContent=prog.name;
   document.getElementById('hDesc').textContent=prog.desc;
   document.getElementById('hTotal').textContent=d.total.toLocaleString();
   document.getElementById('hPeak').textContent=d.pkYr+'  ('+d.a[d.pkYr]+')';
