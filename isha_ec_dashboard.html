@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Isha Electronic City — Program Dashboard</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#faf6ef;--surface:#fff;--border:#e8dfc8;--navy:#1e2a45;--gold:#f0c955;--saffron:#d4641a;--text:#2c2c2c;--muted:#7a7060;--green:#1a6b3a;--red:#b83232}
@@ -18,10 +19,9 @@ header{background:linear-gradient(135deg,#1e2a45,#2e3f66);padding:0 20px}
 .brand h1{font-size:clamp(.8rem,1.8vw,1.15rem);font-weight:700;color:#fff;line-height:1.2}
 .brand p{font-size:.56rem;color:rgba(255,255,255,.4);letter-spacing:1.8px;text-transform:uppercase;margin-top:2px}
 .hdr-r{display:flex;align-items:center;gap:7px}
-.live-pill{display:flex;align-items:center;gap:4px;background:rgba(255,255,255,.09);padding:4px 10px;border-radius:20px}
-.live-dot{width:6px;height:6px;border-radius:50%;background:#4ade80;box-shadow:0 0 6px #4ade80;animation:blink 2s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
-.live-pill span{font-size:.57rem;color:#4ade80;font-weight:700;letter-spacing:.7px;text-transform:uppercase}
+.updated-pill{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.09);padding:4px 11px;border-radius:20px}
+.updated-pill .up-label{font-size:.52rem;color:rgba(255,255,255,.4);letter-spacing:.6px;text-transform:uppercase}
+.updated-pill .up-val{font-size:.57rem;color:rgba(255,255,255,.75);font-weight:600}
 .exp-btn{background:var(--gold);color:var(--navy);border:none;padding:6px 13px;font-size:.65rem;font-weight:700;cursor:pointer;border-radius:5px}
 .exp-btn:hover{background:#fff}
 
@@ -107,9 +107,75 @@ main{max-width:1320px;margin:0 auto;padding:14px 12px 50px}
 .ins-n{font-size:.6rem;color:var(--muted);margin-top:2px}
 
 footer{text-align:center;padding:13px;font-size:.54rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted);border-top:1px solid var(--border)}
+
+/* ── LOGIN ── */
+#loginScreen{position:fixed;inset:0;background:linear-gradient(135deg,#0f1828 0%,#1e2a45 60%,#2e3f66 100%);display:flex;align-items:center;justify-content:center;z-index:9999}
+#loginScreen.hidden{display:none}
+.login-box{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:44px 40px;width:100%;max-width:420px;backdrop-filter:blur(12px);box-shadow:0 24px 80px rgba(0,0,0,.5)}
+.login-logo{display:flex;align-items:center;gap:12px;margin-bottom:32px}
+.login-logo img{width:44px;height:44px;object-fit:contain}
+.login-logo span{font-size:1rem;font-weight:800;color:#fff;line-height:1.2;white-space:nowrap}
+.login-logo small{display:block;font-size:.52rem;color:rgba(255,255,255,.4);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px}
+.login-box h2{font-size:1.3rem;font-weight:800;color:#fff;margin-bottom:5px}
+.login-box p{font-size:.72rem;color:rgba(255,255,255,.5);margin-bottom:28px}
+.login-box label{display:block;font-size:.6rem;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:7px}
+.login-box input{width:100%;padding:12px 14px;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.15);border-radius:8px;color:#fff;font-size:.85rem;outline:none;transition:border-color .15s}
+.login-box input::placeholder{color:rgba(255,255,255,.25)}
+.login-box input:focus{border-color:var(--gold)}
+.login-err{font-size:.65rem;color:#f87171;margin-top:8px;min-height:18px}
+.login-btn{width:100%;margin-top:20px;padding:13px;background:var(--gold);color:var(--navy);font-size:.82rem;font-weight:800;border:none;border-radius:8px;cursor:pointer;letter-spacing:.3px;transition:background .15s}
+.login-btn:hover{background:#f5d060}
+.login-hint{font-size:.58rem;color:rgba(255,255,255,.25);text-align:center;margin-top:14px}
+/* Google button */
+#googleBtnWrap{width:100%;display:flex;justify-content:center;margin:20px 0 4px}
+#googleBtnWrap>div{width:100%!important}
+.or-divider{display:flex;align-items:center;gap:10px;margin:14px 0}
+.or-divider span{font-size:.6rem;color:rgba(255,255,255,.25);white-space:nowrap}
+.or-divider::before,.or-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.1)}
+.google-loading{font-size:.65rem;color:rgba(255,255,255,.3);text-align:center;padding:12px 0}
+
+/* ── USER PILL ── */
+.user-pill{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.09);padding:5px 12px;border-radius:20px}
+.user-pill .role-badge{font-size:.5rem;font-weight:700;padding:2px 7px;border-radius:10px;text-transform:uppercase;letter-spacing:.6px}
+.role-admin{background:#f0c955;color:#1e2a45}
+.role-coord{background:#d4641a;color:#fff}
+.user-pill .user-email{font-size:.6rem;color:rgba(255,255,255,.7);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.logout-btn{background:none;border:none;color:rgba(255,255,255,.35);font-size:.6rem;cursor:pointer;padding:2px 4px;margin-left:2px;transition:color .12s}
+.logout-btn:hover{color:#f87171}
 </style>
 </head>
 <body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">
+      <img src="https://static.sadhguru.org/d/46272/1686731673-isha-logo-main-menu.svg" alt="Isha"/>
+      <div>
+        <span>Electronic City — Program Dashboard</span>
+        <small>Isha Foundation</small>
+      </div>
+    </div>
+    <h2>Welcome</h2>
+    <p>Sign in to access the dashboard</p>
+
+    <!-- Google Sign-In -->
+    <div id="googleBtnWrap"><div class="google-loading" id="gLoading">Loading Google Sign-In…</div></div>
+
+    <div class="or-divider"><span>or sign in with email</span></div>
+
+    <label for="emailInput">Email Address</label>
+    <input type="email" id="emailInput" placeholder="yourname@example.com" autocomplete="email"/>
+    <label for="pwInput" style="margin-top:14px">Password</label>
+    <div style="position:relative">
+      <input type="password" id="pwInput" placeholder="Enter your password" autocomplete="current-password"/>
+      <button id="pwToggle" type="button" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.35);cursor:pointer;font-size:.7rem;padding:4px">Show</button>
+    </div>
+    <div class="login-err" id="loginErr"></div>
+    <button class="login-btn" id="loginBtn">Sign In →</button>
+    <div class="login-hint">Contact your admin if you need access</div>
+  </div>
+</div>
 
 <header>
   <div class="hdr">
@@ -121,7 +187,12 @@ footer{text-align:center;padding:13px;font-size:.54rem;letter-spacing:1px;text-t
       </div>
     </div>
     <div class="hdr-r">
-      <div class="live-pill"><div class="live-dot"></div><span>Live</span></div>
+      <div class="updated-pill"><span class="up-label">Last Updated</span><span class="up-val" id="lastUpdated">—</span></div>
+      <div class="user-pill" id="userPill" style="display:none">
+        <span class="role-badge" id="roleBadge"></span>
+        <span class="user-email" id="userEmail"></span>
+        <button class="logout-btn" id="logoutBtn" title="Sign out">✕</button>
+      </div>
       <button class="exp-btn" id="expBtn">↓ Export CSV</button>
     </div>
   </div>
@@ -388,6 +459,145 @@ const PROGRAMS = [
 ]; // end PROGRAMS
 
 // ══════════════════════════════════════════════════════════════
+//  ROLE MAP  — add/remove emails here to manage access
+//  Roles: 'admin' | 'coordinator'
+// ══════════════════════════════════════════════════════════════
+// ── ROLES MAP ─────────────────────────────────────────────────
+// Format: 'email': { role: 'admin'|'coordinator', password: 'xxx' }
+const ROLES = {
+  // ── Admins (full access + export) ──
+  'niteshkumar.7659@gmail.com':      { role: 'admin',       password: 'Isha@Admin2024' },
+  'admin@ishafoundation.org':        { role: 'admin',       password: 'Isha@Admin2024' },
+  'ecadmin@isha.ec':                 { role: 'admin',       password: 'IshaDash@2026' },
+
+  // ── Center Coordinators (view only, no export) ──
+  'coordinator1@ishafoundation.org': { role: 'coordinator', password: 'Isha@Coord2024' },
+  'coordinator2@ishafoundation.org': { role: 'coordinator', password: 'Isha@Coord2024' },
+};
+
+// ── AUTH ──────────────────────────────────────────────────────
+const GOOGLE_CLIENT_ID='350269138141-6ml3haltgcrv2saes9jtep7v6cfo3ub7.apps.googleusercontent.com';
+
+function getSession(){
+  try{ return JSON.parse(sessionStorage.getItem('ecDash')); }catch(e){ return null; }
+}
+function setSession(email, role){
+  sessionStorage.setItem('ecDash', JSON.stringify({email, role}));
+}
+function clearSession(){
+  sessionStorage.removeItem('ecDash');
+}
+
+function applySession(email, role){
+  document.getElementById('userPill').style.display='flex';
+  document.getElementById('userEmail').textContent=email;
+  const badge=document.getElementById('roleBadge');
+  badge.textContent=role==='admin'?'Admin':'Coordinator';
+  badge.className='role-badge '+(role==='admin'?'role-admin':'role-coord');
+  if(role!=='admin') document.getElementById('expBtn').style.display='none';
+  document.getElementById('loginScreen').classList.add('hidden');
+}
+
+// Decode JWT (to extract email from Google credential)
+function decodeJWT(token){
+  try{
+    const b64=token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
+    return JSON.parse(atob(b64));
+  }catch(e){return null;}
+}
+
+// Called by Google after user selects account
+function onGoogleCredential(response){
+  document.getElementById('loginErr').textContent='';
+  const payload=decodeJWT(response.credential);
+  if(!payload||!payload.email){
+    document.getElementById('loginErr').textContent='Could not retrieve email from Google. Try again.';
+    return;
+  }
+  const email=payload.email.trim().toLowerCase();
+  const entry=ROLES[email];
+  if(!entry){
+    document.getElementById('loginErr').textContent=`"${email}" is not registered for access. Contact your admin.`;
+    return;
+  }
+  setSession(email,entry.role);
+  applySession(email,entry.role);
+}
+
+function setupGoogle(){
+  if(typeof google==='undefined'||!google.accounts){
+    setTimeout(setupGoogle,150);
+    return;
+  }
+  const loading=document.getElementById('gLoading');
+  if(loading) loading.style.display='none';
+  google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    callback: onGoogleCredential,
+    auto_select: false
+  });
+  google.accounts.id.renderButton(
+    document.getElementById('googleBtnWrap'),
+    {theme:'outline', size:'large', width:340, text:'signin_with', logo_alignment:'center'}
+  );
+}
+
+function initAuth(){
+  const sess=getSession();
+  if(sess && ROLES[sess.email]){
+    applySession(sess.email, sess.role);
+    return;
+  }
+  document.getElementById('loginScreen').classList.remove('hidden');
+  setupGoogle();
+
+  const emailEl=document.getElementById('emailInput');
+  const errEl=document.getElementById('loginErr');
+
+  // Show/hide password toggle
+  document.getElementById('pwToggle').addEventListener('click', ()=>{
+    const pw=document.getElementById('pwInput');
+    const isHidden=pw.type==='password';
+    pw.type=isHidden?'text':'password';
+    document.getElementById('pwToggle').textContent=isHidden?'Hide':'Show';
+  });
+
+  function doLogin(){
+    const email=emailEl.value.trim().toLowerCase();
+    const pw=document.getElementById('pwInput').value;
+    const entry=ROLES[email];
+    if(!entry){
+      errEl.textContent='This email is not registered for access.';
+      emailEl.focus();
+      return;
+    }
+    if(pw!==entry.password){
+      errEl.textContent='Incorrect password. Please try again.';
+      document.getElementById('pwInput').focus();
+      return;
+    }
+    setSession(email, entry.role);
+    applySession(email, entry.role);
+  }
+
+  document.getElementById('loginBtn').addEventListener('click', doLogin);
+  document.getElementById('pwInput').addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
+  emailEl.addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('pwInput').focus(); });
+}
+
+document.getElementById('logoutBtn').addEventListener('click', ()=>{
+  clearSession();
+  if(typeof google!=='undefined'&&google.accounts) google.accounts.id.disableAutoSelect();
+  document.getElementById('userPill').style.display='none';
+  document.getElementById('expBtn').style.display='';
+  document.getElementById('emailInput').value='';
+  document.getElementById('pwInput').value='';
+  document.getElementById('loginErr').textContent='';
+  document.getElementById('loginScreen').classList.remove('hidden');
+  setupGoogle();
+});
+
+// ══════════════════════════════════════════════════════════════
 //  ENGINE
 // ══════════════════════════════════════════════════════════════
 const MN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -548,7 +758,28 @@ document.getElementById('expBtn').onclick=()=>{
 };
 
 // BOOT
-buildTabs();initCharts();loadProgram(PROGRAMS[0]);
+buildTabs();initCharts();loadProgram(PROGRAMS[0]);initAuth();
+
+// Last updated — derive from latest year/month in data
+(function(){
+  const monthOrder=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  let latestYear=0, latestMonthIdx=-1;
+  PROGRAMS.forEach(p=>{
+    Object.keys(p.data).forEach(y=>{
+      const yi=parseInt(y);
+      Object.keys(p.data[y]).forEach(m=>{
+        const mi=monthOrder.indexOf(m);
+        if(yi>latestYear||(yi===latestYear&&mi>latestMonthIdx)){
+          latestYear=yi; latestMonthIdx=mi;
+        }
+      });
+    });
+  });
+  const label=latestMonthIdx>=0
+    ? monthOrder[latestMonthIdx]+' '+latestYear
+    : '—';
+  document.getElementById('lastUpdated').textContent=label;
+})();
 </script>
 </body>
 </html>
