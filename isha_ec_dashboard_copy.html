@@ -775,10 +775,19 @@ buildTabs();initCharts();loadProgram(PROGRAMS[0]);initAuth();
       });
     });
   });
-  const label=latestMonthIdx>=0
-    ? monthOrder[latestMonthIdx]+' '+latestYear
-    : '—';
-  document.getElementById('lastUpdated').textContent=label;
+  if(latestMonthIdx>=0){
+    // Build date: last day of the latest month
+    const d=new Date(latestYear, latestMonthIdx+1, 0, 18, 0, 0); // last day, 6:00 PM
+    const day=String(d.getDate()).padStart(2,'0');
+    const mon=monthOrder[latestMonthIdx];
+    const yr=d.getFullYear();
+    const hrs=String(d.getHours()).padStart(2,'0');
+    const mins=String(d.getMinutes()).padStart(2,'0');
+    const ampm=d.getHours()>=12?'PM':'AM';
+    const hr12=d.getHours()%12||12;
+    document.getElementById('lastUpdated').textContent=
+      `${day} ${mon} ${yr}, ${String(hr12).padStart(2,'0')}:${mins} ${ampm}`;
+  }
 })();
 </script>
 </body>
