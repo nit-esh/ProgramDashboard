@@ -257,6 +257,7 @@ footer{text-align:center;padding:13px;font-size:.54rem;letter-spacing:1px;text-t
   </div>
 </div>
 
+<div id="mainApp" style="display:none">
 <header>
   <div class="hdr">
     <div class="brand">
@@ -792,6 +793,7 @@ function applySession(email, role){
     btn.textContent=n>0?`⚙ Users (${n} pending)`:'⚙ Users';
   }
   document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('mainApp').style.display='';
 }
 
 // Decode JWT (to extract email from Google credential)
@@ -1075,5 +1077,6 @@ buildTabs();initCharts();loadProgram(PROGRAMS[0]);initAuth();
   document.getElementById('lastUpdated').textContent = `${day} ${mon} ${yr}, ${hr12}:${min} ${ampm}`;
 })();
 </script>
+</div><!-- end #mainApp -->
 </body>
 </html>
