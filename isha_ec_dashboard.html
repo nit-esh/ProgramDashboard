@@ -761,33 +761,18 @@ document.getElementById('expBtn').onclick=()=>{
 buildTabs();initCharts();loadProgram(PROGRAMS[0]);initAuth();
 
 // Last updated — derive from latest year/month in data
+// ── LAST UPDATED — auto-reads file's actual modification time ──
 (function(){
-  const monthOrder=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  let latestYear=0, latestMonthIdx=-1;
-  PROGRAMS.forEach(p=>{
-    Object.keys(p.data).forEach(y=>{
-      const yi=parseInt(y);
-      Object.keys(p.data[y]).forEach(m=>{
-        const mi=monthOrder.indexOf(m);
-        if(yi>latestYear||(yi===latestYear&&mi>latestMonthIdx)){
-          latestYear=yi; latestMonthIdx=mi;
-        }
-      });
-    });
-  });
-  if(latestMonthIdx>=0){
-    // Build date: last day of the latest month
-    const d=new Date(latestYear, latestMonthIdx+1, 0, 18, 0, 0); // last day, 6:00 PM
-    const day=String(d.getDate()).padStart(2,'0');
-    const mon=monthOrder[latestMonthIdx];
-    const yr=d.getFullYear();
-    const hrs=String(d.getHours()).padStart(2,'0');
-    const mins=String(d.getMinutes()).padStart(2,'0');
-    const ampm=d.getHours()>=12?'PM':'AM';
-    const hr12=d.getHours()%12||12;
-    document.getElementById('lastUpdated').textContent=
-      `${day} ${mon} ${yr}, ${String(hr12).padStart(2,'0')}:${mins} ${ampm}`;
-  }
+  const d = new Date(document.lastModified);
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const day = String(d.getDate()).padStart(2,'0');
+  const mon = months[d.getMonth()];
+  const yr  = d.getFullYear();
+  const hr  = d.getHours();
+  const min = String(d.getMinutes()).padStart(2,'0');
+  const ampm = hr >= 12 ? 'PM' : 'AM';
+  const hr12 = String(hr % 12 || 12).padStart(2,'0');
+  document.getElementById('lastUpdated').textContent = `${day} ${mon} ${yr}, ${hr12}:${min} ${ampm}`;
 })();
 </script>
 </body>
