@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Isha Electronic City — Program Dashboard</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#faf6ef;--surface:#fff;--border:#e8dfc8;--navy:#1e2a45;--gold:#f0c955;--saffron:#d4641a;--text:#2c2c2c;--muted:#7a7060;--green:#1a6b3a;--red:#b83232}
+body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+
+header{background:linear-gradient(135deg,#1e2a45,#2e3f66);padding:0 20px}
+.hdr{max-width:1320px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:12px 0;flex-wrap:wrap;gap:8px}
+.brand{display:flex;align-items:center;gap:11px}
+.logo-ring{width:56px;height:56px;flex-shrink:0}
+.logo-ring img{width:100%;height:100%;object-fit:contain}
+.brand h1{font-size:clamp(.8rem,1.8vw,1.15rem);font-weight:700;color:#fff;line-height:1.2}
+.brand p{font-size:.56rem;color:rgba(255,255,255,.4);letter-spacing:1.8px;text-transform:uppercase;margin-top:2px}
+.hdr-r{display:flex;align-items:center;gap:7px}
+.updated-pill{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.09);padding:4px 11px;border-radius:20px}
+.updated-pill .up-label{font-size:.52rem;color:rgba(255,255,255,.4);letter-spacing:.6px;text-transform:uppercase}
+.updated-pill .up-val{font-size:.57rem;color:rgba(255,255,255,.75);font-weight:600}
+.exp-btn{background:var(--gold);color:var(--navy);border:none;padding:6px 13px;font-size:.65rem;font-weight:700;cursor:pointer;border-radius:5px}
+.exp-btn:hover{background:#fff}
+
+.tabs-wrap{background:#162035;border-bottom:3px solid rgba(240,201,85,.18);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:#2e4060 #162035}
+.tabs-inner{max-width:1320px;margin:0 auto;display:flex;padding:0 10px;gap:1px;min-width:max-content}
+.tab{padding:12px 18px;background:transparent;border:none;color:rgba(255,255,255,.42);font-size:.8rem;font-weight:700;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-3px;white-space:nowrap;transition:color .12s,border-color .12s;display:flex;align-items:center;gap:4px}
+.tab:hover{color:rgba(255,255,255,.8)}
+.tab.active{color:#fff;border-bottom-color:var(--gold)}
+.tab .tc{font-size:.55rem;opacity:.55;font-weight:400;margin-left:1px}
+.badge-crm{font-size:.46rem;font-weight:700;padding:1px 5px;border-radius:3px;background:#f0c955;color:#1e2a45;margin-left:2px}
+.badge-ev{font-size:.46rem;font-weight:700;padding:1px 5px;border-radius:3px;background:#d4641a;color:#fff;margin-left:2px}
+
+main{max-width:1320px;margin:0 auto;padding:14px 12px 50px}
+
+.hero{border-radius:14px;overflow:hidden;margin-bottom:16px;position:relative;min-height:380px;display:flex;flex-direction:column;justify-content:flex-end;padding:0}
+.hero-bg{position:absolute;inset:0;background-size:cover;background-position:center center;filter:brightness(.6)}
+.hero-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(5,8,20,.96) 0%,rgba(5,8,20,.7) 40%,rgba(5,8,20,.15) 80%,transparent 100%)}
+.hero-body{position:relative;z-index:1;padding:32px 36px 0;flex:1;display:flex;flex-direction:column;justify-content:flex-end}
+.hero-body h2{font-size:clamp(1.5rem,3.5vw,2.4rem);font-weight:800;color:#fff;margin-bottom:8px;letter-spacing:-.5px;text-shadow:0 2px 12px rgba(0,0,0,.4)}
+.hero-body p{font-size:.78rem;color:rgba(255,255,255,.65);line-height:1.6;max-width:560px;margin-bottom:24px}
+.hero-stats{position:relative;z-index:1;display:flex;gap:0;flex-shrink:0;background:rgba(0,0,0,.35);backdrop-filter:blur(10px);border-top:1px solid rgba(255,255,255,.1);padding:18px 36px;flex-wrap:wrap}
+.hstat{text-align:center;padding:0 28px 0 0}
+.hstat-v{font-size:1.6rem;font-weight:800;color:var(--gold);line-height:1}
+.hstat-l{font-size:.55rem;color:rgba(255,255,255,.5);letter-spacing:1px;text-transform:uppercase;margin-top:4px}
+.hdiv{width:1px;background:rgba(255,255,255,.15);margin-right:28px;align-self:stretch}
+
+.src-row{display:flex;align-items:center;gap:6px;margin-bottom:10px}
+.src-tag{font-size:.59rem;font-weight:700;padding:3px 9px;border-radius:4px;letter-spacing:.5px}
+.src-crm{background:#fef3c7;color:#92400e;border:1px solid #fde68a}
+.src-ev{background:#ffedd5;color:#9a3412;border:1px solid #fed7aa}
+.src-note{font-size:.61rem;color:var(--muted)}
+
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:12px}
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 12px 10px;box-shadow:0 1px 5px rgba(0,0,0,.05)}
+.kpi-lb{font-size:.52rem;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.kpi-v{font-size:clamp(1.2rem,2vw,1.75rem);font-weight:700;color:var(--navy);line-height:1}
+.kpi-n{font-size:.6rem;color:var(--muted);margin-top:3px}
+.tag-up{display:inline-block;font-size:.56rem;font-weight:700;padding:2px 7px;border-radius:20px;background:#d1fae5;color:#065f46;margin-top:3px}
+.tag-ytd{display:inline-block;font-size:.56rem;font-weight:700;padding:2px 7px;border-radius:20px;background:#fef3c7;color:#92400e;margin-top:3px}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:14px;box-shadow:0 1px 5px rgba(0,0,0,.05);margin-bottom:11px}
+.card-t{font-size:.72rem;font-weight:700;color:var(--navy);margin-bottom:10px}
+.card-hint{font-size:.56rem;color:var(--muted);font-weight:400;margin-left:4px}
+
+.yr-row{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:10px 13px;margin-bottom:11px}
+.yr-lbl{font-size:.52rem;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.yr-btns{display:flex;flex-wrap:wrap;gap:5px}
+.yb{padding:4px 10px;font-size:.64rem;font-weight:700;border:1.5px solid var(--border);background:var(--bg);color:var(--muted);cursor:pointer;border-radius:5px;transition:all .1s}
+.yb:hover{border-color:#b8860b;color:#b8860b}
+.yb.sel{background:var(--navy);border-color:var(--navy);color:#fff}
+.yb.curr{border-color:var(--saffron)}
+.yb.curr.sel{background:var(--saffron);border-color:var(--saffron)}
+
+.two{display:grid;grid-template-columns:3fr 2fr;gap:11px;margin-bottom:11px}
+@media(max-width:760px){.two{grid-template-columns:1fr}}
+
+.mbars{display:flex;flex-direction:column;gap:3px}
+.mbar{display:grid;grid-template-columns:28px 1fr 34px;align-items:center;gap:6px;padding:3px 5px;border-radius:5px}
+.mbar:hover{background:#faf0e0}
+.ml{font-size:.62rem;font-weight:700;color:var(--muted)}
+.mt{height:7px;background:#f0ebe0;border-radius:4px;overflow:hidden}
+.mf{height:100%;border-radius:4px}
+.mv{font-size:.67rem;font-weight:700;text-align:right}
+
+.tbl-wrap{overflow-y:auto;max-height:300px}
+.ann-tbl{width:100%;border-collapse:collapse;font-size:.7rem}
+.ann-tbl th{font-size:.51rem;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;color:var(--muted);padding:5px 7px;border-bottom:2px solid var(--border);text-align:left;background:var(--bg);position:sticky;top:0}
+.ann-tbl tr{border-bottom:1px solid #f0ebe0;cursor:pointer}
+.ann-tbl tr:hover{background:#faf0e0}
+.ann-tbl tr.hi{background:#fff8e8;border-left:3px solid var(--gold)}
+.ann-tbl td{padding:5px 7px;vertical-align:middle}
+.td-y{font-weight:700;color:var(--navy)}
+.bar-cell{height:6px;background:#f0ebe0;border-radius:3px;width:70px}
+.bar-fill{height:100%;border-radius:3px}
+.chg-up{color:var(--green);font-size:.6rem;font-weight:700}
+.chg-dn{color:var(--red);font-size:.6rem;font-weight:700}
+.chg-na{color:var(--muted);font-size:.6rem}
+
+.ins-col{display:flex;flex-direction:column;gap:8px}
+.ins{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:11px 13px}
+.ins-lb{font-size:.51rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.ins-v{font-size:1.2rem;font-weight:700;color:var(--navy)}
+.ins-n{font-size:.6rem;color:var(--muted);margin-top:2px}
+
+footer{text-align:center;padding:13px;font-size:.54rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted);border-top:1px solid var(--border)}
+
+/* ── LOGIN ── */
+#loginScreen{position:fixed;inset:0;background:linear-gradient(135deg,#0f1828 0%,#1e2a45 60%,#2e3f66 100%);display:flex;align-items:center;justify-content:center;z-index:9999}
+#loginScreen.hidden{display:none}
+.login-box{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:44px 40px;width:100%;max-width:420px;backdrop-filter:blur(12px);box-shadow:0 24px 80px rgba(0,0,0,.5)}
+.login-logo{display:flex;align-items:center;gap:12px;margin-bottom:32px}
+.login-logo img{width:44px;height:44px;object-fit:contain}
+.login-logo span{font-size:1rem;font-weight:800;color:#fff;line-height:1.2;white-space:nowrap}
+.login-logo small{display:block;font-size:.52rem;color:rgba(255,255,255,.4);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px}
+.login-box h2{font-size:1.3rem;font-weight:800;color:#fff;margin-bottom:5px}
+.login-box p{font-size:.72rem;color:rgba(255,255,255,.5);margin-bottom:28px}
+.login-box label{display:block;font-size:.6rem;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:7px}
+.login-box input{width:100%;padding:12px 14px;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.15);border-radius:8px;color:#fff;font-size:.85rem;outline:none;transition:border-color .15s}
+.login-box input::placeholder{color:rgba(255,255,255,.25)}
+.login-box input:focus{border-color:var(--gold)}
+.login-err{font-size:.65rem;color:#f87171;margin-top:8px;min-height:18px}
+.login-btn{width:100%;margin-top:20px;padding:13px;background:var(--gold);color:var(--navy);font-size:.82rem;font-weight:800;border:none;border-radius:8px;cursor:pointer;letter-spacing:.3px;transition:background .15s}
+.login-btn:hover{background:#f5d060}
+.login-hint{font-size:.58rem;color:rgba(255,255,255,.25);text-align:center;margin-top:14px}
+/* Google button */
+#googleBtnWrap{width:100%;display:flex;justify-content:center;margin:20px 0 4px}
+#googleBtnWrap>div{width:100%!important}
+.or-divider{display:flex;align-items:center;gap:10px;margin:14px 0}
+.or-divider span{font-size:.6rem;color:rgba(255,255,255,.25);white-space:nowrap}
+.or-divider::before,.or-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.1)}
+.google-loading{font-size:.65rem;color:rgba(255,255,255,.3);text-align:center;padding:12px 0}
+
+/* ── USER PILL ── */
+.user-pill{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.09);padding:5px 12px;border-radius:20px}
+.user-pill .role-badge{font-size:.5rem;font-weight:700;padding:2px 7px;border-radius:10px;text-transform:uppercase;letter-spacing:.6px}
+.role-admin{background:#f0c955;color:#1e2a45}
+.role-coord{background:#d4641a;color:#fff}
+.user-pill .user-email{font-size:.6rem;color:rgba(255,255,255,.7);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.logout-btn{background:none;border:none;color:rgba(255,255,255,.35);font-size:.6rem;cursor:pointer;padding:2px 4px;margin-left:2px;transition:color .12s}
+.logout-btn:hover{color:#f87171}
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">
+      <img src="https://static.sadhguru.org/d/46272/1686731673-isha-logo-main-menu.svg" alt="Isha"/>
+      <div>
+        <span>Electronic City — Program Dashboard</span>
+        <small>Isha Foundation</small>
+      </div>
+    </div>
+    <h2>Welcome</h2>
+    <p>Sign in to access the dashboard</p>
+
+    <!-- Google Sign-In -->
+    <div id="googleBtnWrap"><div class="google-loading" id="gLoading">Loading Google Sign-In…</div></div>
+
+    <div class="or-divider"><span>or sign in with email</span></div>
+
+    <label for="emailInput">Email Address</label>
+    <input type="email" id="emailInput" placeholder="yourname@example.com" autocomplete="email"/>
+    <label for="pwInput" style="margin-top:14px">Password</label>
+    <div style="position:relative">
+      <input type="password" id="pwInput" placeholder="Enter your password" autocomplete="current-password"/>
+      <button id="pwToggle" type="button" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.35);cursor:pointer;font-size:.7rem;padding:4px">Show</button>
+    </div>
+    <div class="login-err" id="loginErr"></div>
+    <button class="login-btn" id="loginBtn">Sign In →</button>
+    <div class="login-hint">Contact your admin if you need access</div>
+  </div>
+</div>
+
+<header>
+  <div class="hdr">
+    <div class="brand">
+      <div class="logo-ring"><img src="https://static.sadhguru.org/d/46272/1686731673-isha-logo-main-menu.svg" alt="Isha"/></div>
+      <div>
+        <h1>Electronic City — Program Dashboard</h1>
+        <p>Isha Foundation · All Programs · Full History</p>
+      </div>
+    </div>
+    <div class="hdr-r">
+      <div class="updated-pill"><span class="up-label">Last Updated</span><span class="up-val" id="lastUpdated">—</span></div>
+      <div class="user-pill" id="userPill" style="display:none">
+        <span class="role-badge" id="roleBadge"></span>
+        <span class="user-email" id="userEmail"></span>
+        <button class="logout-btn" id="logoutBtn" title="Sign out">✕</button>
+      </div>
+      <button class="exp-btn" id="expBtn">↓ Export CSV</button>
+    </div>
+  </div>
+</header>
+
+<div class="tabs-wrap"><div class="tabs-inner" id="tabBar"></div></div>
+
+<main>
+  <div id="heroBox" class="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-ov"></div>
+    <div class="hero-body"><h2 id="hTitle">—</h2><p id="hDesc">—</p></div>
+    <div class="hero-stats">
+      <div class="hstat"><div class="hstat-v" id="hTotal">—</div><div class="hstat-l">Total</div></div>
+      <div class="hdiv"></div>
+      <div class="hstat"><div class="hstat-v" id="hPeak">—</div><div class="hstat-l">Peak Year</div></div>
+      <div class="hdiv"></div>
+      <div class="hstat"><div class="hstat-v" id="hYTD">—</div><div class="hstat-l">2026 YTD</div></div>
+    </div>
+  </div>
+
+  <div class="src-row">
+    <span class="src-tag" id="srcTag">—</span>
+    <span class="src-note" id="srcNote">—</span>
+  </div>
+
+  <div class="kpis" id="kpiRow"></div>
+
+  <div class="card">
+    <div class="card-t">Annual Participants <span class="card-hint">— click bar or table row for monthly detail</span></div>
+    <div style="height:190px;position:relative"><canvas id="annChart"></canvas></div>
+  </div>
+
+  <div class="yr-row">
+    <div class="yr-lbl">Monthly Drill-down — Select Year</div>
+    <div class="yr-btns" id="yrBtns"></div>
+  </div>
+
+  <div class="two">
+    <div class="card" style="margin-bottom:0">
+      <div class="card-t" id="mChartTitle">Monthly</div>
+      <div style="height:220px;position:relative"><canvas id="mChart"></canvas></div>
+    </div>
+    <div class="card" style="margin-bottom:0">
+      <div class="card-t" id="mBarsTitle">Ranked</div>
+      <div class="mbars" id="mBars"></div>
+    </div>
+  </div>
+
+  <div style="height:11px"></div>
+
+  <div class="two">
+    <div class="card" style="margin-bottom:0">
+      <div class="card-t">Year-by-Year Summary</div>
+      <div class="tbl-wrap">
+        <table class="ann-tbl">
+          <thead><tr><th>Year</th><th>Participants</th><th style="width:76px">Trend</th><th>YoY</th></tr></thead>
+          <tbody id="annTbl"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="ins-col" id="insCards"></div>
+  </div>
+</main>
+
+<footer>Isha Foundation · Electronic City Centre · CRM: IE_Ecity, BSP_Ecity, Samyama_Ecity · Events: Ecity_Events.xlsx · Data through Jun 2026</footer>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+//  PROGRAM DATA
+// ══════════════════════════════════════════════════════════════
+const PROGRAMS = [
+
+// ── CRM PIVOT (full history) ──────────────────────────────────
+{id:'ie', name:'Inner Engineering', icon:'🙏', color:'#1e4080',
+ src:'crm', srcNote:'IE_Ecity.xlsx — CRM Pivot · 6,084 unique completers · 1970–2026',
+ bg:"url('https://static.sadhguru.org/d/46272/1700834565-sadhguru-xl-image.png')",
+ desc:'IE 7-Day program completers from Electronic City zone — complete CRM history.',
+ data:{
+  "1970":{"Jan":35},"2000":{"Aug":1},
+  "2003":{"Jan":1,"Mar":1,"Jun":1,"Oct":1},
+  "2004":{"Jan":2,"May":1,"Oct":1},
+  "2005":{"Jan":1,"Jun":1,"Oct":1,"Nov":1,"Dec":1},
+  "2006":{"Mar":2,"Jun":3,"Jul":2,"Aug":1,"Nov":5,"Dec":3},
+  "2007":{"Jan":3,"Feb":1,"Mar":6,"Apr":2,"May":12,"Jun":4,"Jul":1,"Sep":3,"Nov":3,"Dec":1},
+  "2008":{"Jan":4,"Feb":3,"Mar":3,"Apr":1,"May":5,"Jun":6,"Jul":13,"Aug":6,"Sep":2,"Oct":2,"Nov":10,"Dec":6},
+  "2009":{"Jan":11,"Feb":3,"Mar":2,"Apr":4,"May":6,"Jun":4,"Jul":12,"Aug":9,"Sep":11,"Oct":1,"Nov":11,"Dec":7},
+  "2010":{"Jan":3,"Mar":18,"Apr":6,"May":5,"Jun":5,"Jul":8,"Aug":4,"Sep":1,"Oct":12,"Nov":7,"Dec":9},
+  "2011":{"Jan":9,"Feb":10,"Mar":17,"Apr":9,"May":3,"Jun":1,"Jul":86,"Aug":2,"Sep":9,"Oct":8,"Dec":9},
+  "2012":{"Jan":3,"Feb":4,"Mar":10,"Apr":4,"May":10,"Jun":7,"Jul":17,"Aug":6,"Sep":2,"Oct":13,"Nov":2,"Dec":16},
+  "2013":{"Jan":4,"Feb":13,"Mar":7,"Apr":8,"May":3,"Jun":1,"Jul":22,"Aug":26,"Sep":11,"Oct":17,"Nov":2,"Dec":11},
+  "2014":{"Jan":1,"Feb":14,"Mar":15,"Apr":5,"May":16,"Jun":6,"Jul":15,"Aug":23,"Sep":1,"Oct":11,"Nov":33,"Dec":9},
+  "2015":{"Jan":13,"Feb":9,"Mar":6,"Apr":7,"May":16,"Jun":6,"Jul":7,"Aug":3,"Sep":21,"Oct":34,"Nov":12,"Dec":27},
+  "2016":{"Jan":15,"Feb":39,"Mar":17,"Apr":15,"May":29,"Jun":20,"Jul":13,"Aug":24,"Sep":13,"Oct":26,"Nov":23,"Dec":53},
+  "2017":{"Jan":40,"Feb":1,"Mar":55,"Apr":10,"May":6,"Jun":1,"Jul":172,"Aug":9,"Sep":10,"Oct":6,"Nov":34,"Dec":21},
+  "2018":{"Jan":20,"Feb":1,"Mar":25,"Apr":49,"May":17,"Jun":44,"Jul":10,"Aug":30,"Sep":52,"Oct":15,"Nov":8,"Dec":240},
+  "2019":{"Jan":80,"Feb":5,"Mar":11,"Apr":41,"May":26,"Jun":85,"Jul":33,"Aug":3,"Sep":20,"Oct":77,"Nov":27,"Dec":110},
+  "2020":{"Jan":20,"Feb":1,"Jul":1,"Dec":2},
+  "2021":{"Jan":30,"Feb":3,"Mar":5,"Apr":51,"May":59,"Jul":47,"Aug":3,"Sep":44,"Oct":13,"Nov":6,"Dec":43},
+  "2022":{"Jan":7,"Feb":32,"Mar":6,"Apr":22,"May":44,"Jun":6,"Jul":29,"Aug":48,"Sep":11,"Oct":8,"Nov":23,"Dec":9},
+  "2023":{"Jan":22,"Feb":7,"Mar":32,"Apr":30,"May":55,"Jun":33,"Jul":90,"Aug":8,"Sep":19,"Oct":25,"Nov":93,"Dec":31},
+  "2024":{"Jan":55,"Feb":38,"Mar":36,"Apr":105,"May":36,"Jun":86,"Jul":50,"Aug":82,"Sep":39,"Oct":47,"Nov":37,"Dec":30},
+  "2025":{"Jan":11,"Feb":46,"Mar":90,"Apr":50,"May":32,"Jun":62,"Jul":29,"Aug":23,"Sep":34,"Oct":23,"Nov":304,"Dec":188},
+  "2026":{"Jan":78,"Feb":80,"Mar":319,"Apr":296,"May":66}
+}},
+
+{id:'bsp', name:'Bhava Spandana', icon:'❤️', color:'#7a1a1a',
+ src:'crm', srcNote:'BSP_Ecity.xlsx — CRM Pivot · 612 completers · 2002–2026',
+ bg:"url('https://static.sadhguru.org/d/46272/1650519638-website-thumbnail-yogameditation-bsp.jpg')",
+ desc:'Bhava Spandana Program completers from Electronic City — CRM history 2002–2026.',
+ data:{
+  "2002":{"Nov":1},"2003":{"Nov":2},
+  "2006":{"Aug":1,"Sep":1},
+  "2007":{"Jan":1,"Mar":1,"Apr":2,"Jun":4,"Sep":2},
+  "2008":{"Jan":5,"Mar":1,"Jul":1,"Aug":1,"Sep":2,"Oct":1,"Nov":1,"Dec":1},
+  "2009":{"Feb":1,"Mar":1,"Apr":1,"May":3,"Jun":1,"Jul":1,"Aug":4,"Sep":1,"Oct":4,"Nov":2},
+  "2010":{"Jan":2,"Mar":3,"Apr":1,"May":5,"Jun":2,"Jul":1,"Aug":1,"Sep":2,"Oct":1,"Dec":4},
+  "2011":{"Feb":1,"Apr":3,"May":2,"Jun":1,"Aug":1,"Sep":3,"Dec":1},
+  "2012":{"Jan":7,"May":2,"Aug":3,"Sep":2,"Oct":3,"Nov":1},
+  "2013":{"Jan":1,"Feb":3,"Apr":2,"May":1,"Jul":1,"Aug":3,"Sep":1,"Oct":1,"Dec":3},
+  "2014":{"Jan":1,"Mar":1,"Apr":3,"Jul":1,"Aug":2,"Sep":1,"Dec":3},
+  "2015":{"Jan":2,"Mar":1,"Apr":2,"May":1,"Jun":6,"Jul":1,"Sep":2,"Oct":2,"Dec":8},
+  "2016":{"Feb":4,"Mar":4,"Apr":3,"May":1,"Jun":4,"Jul":2,"Aug":3,"Nov":2,"Dec":3},
+  "2017":{"Jan":9,"Apr":6,"Jun":8,"Jul":1,"Aug":3,"Sep":1,"Oct":4,"Dec":9},
+  "2018":{"Jan":1,"Mar":6,"Apr":1,"May":1,"Jul":3,"Aug":1,"Sep":3,"Nov":1,"Dec":2},
+  "2019":{"Jan":4,"Feb":3,"Jun":3,"Jul":2,"Aug":9,"Sep":4,"Oct":7,"Nov":3,"Dec":14},
+  "2020":{"Jan":5},
+  "2021":{"Oct":3,"Nov":4,"Dec":5},
+  "2022":{"Mar":4,"Apr":8,"May":5,"Jul":3,"Aug":9,"Sep":18,"Oct":4,"Nov":4,"Dec":2},
+  "2023":{"Mar":9,"Apr":13,"May":13,"Jun":9,"Jul":13,"Aug":3,"Sep":3,"Oct":14,"Nov":11,"Dec":1},
+  "2024":{"Jan":10,"Feb":1,"Mar":3,"Apr":6,"May":5,"Jun":7,"Jul":5,"Aug":3,"Sep":10,"Oct":2,"Nov":4,"Dec":8},
+  "2025":{"Mar":2,"Apr":2,"May":8,"Jun":16,"Jul":4,"Aug":6,"Sep":5,"Oct":1,"Nov":3,"Dec":6},
+  "2026":{"Jan":1,"Feb":4,"Mar":10,"Apr":9,"May":16,"Jun":5}
+}},
+
+{id:'samyama', name:'Samyama', icon:'🧘', color:'#2d1a5c',
+ src:'crm', srcNote:'Samyama_Ecity.xlsx — CRM Pivot · 215 completers · 2007–2026',
+ bg:"url('https://static.sadhguru.org/d/46272/1650517087-website-thumbnail-yogameditation-samyama.jpg')",
+ desc:'Samyama Silence Program completers from Electronic City — CRM history 2007–2026.',
+ data:{
+  "2007":{"Feb":3,"Aug":2},"2009":{"Feb":3},
+  "2010":{"Feb":5,"Sep":3},"2012":{"Feb":8},
+  "2013":{"Feb":4,"Jun":2},"2014":{"Feb":5},
+  "2015":{"Feb":8},"2016":{"Feb":2},"2018":{"Feb":8},
+  "2019":{"Mar":27},"2020":{"Mar":18},"2022":{"Dec":21},
+  "2023":{"Feb":1,"Dec":20},"2024":{"Jan":22},
+  "2025":{"Jan":21,"Mar":14,"Dec":7},"2026":{"Jan":11}
+}},
+
+// ── EVENTS: Ecity_Events.xlsx ─────────────────────────────────
+{id:'satsang', name:'Monthly Satsang', icon:'🕉️', color:'#1e2a45',
+ src:'events', srcNote:'Ecity_Events.xlsx · 446 participants · 2023–2026',
+ bg:"url('https://static.sadhguru.org/d/46272/1720293007-satsang_desk.jpg')",
+ desc:'Monthly Satsang gatherings across Electronic City zones (E-City, Singasandra, Begur, Chandapura).',
+ data:{
+  "2023":{"Oct":17,"Dec":3},
+  "2024":{"Jan":19,"Feb":31,"Mar":22,"Apr":19,"May":19,"Jun":15,"Jul":21,"Aug":21,"Sep":16,"Oct":3,"Nov":20,"Dec":16},
+  "2025":{"Jan":19,"Feb":16,"Mar":8,"Apr":31,"May":12,"Jul":15,"Aug":7,"Oct":3},
+  "2026":{"Feb":9,"Mar":13,"May":24,"Jun":47}
+}},
+
+
+{id:'ananda_ale', name:'Ananda Ale', icon:'🌊', color:'#1a4a6b',
+ src:'events', srcNote:'Ecity_Events.xlsx · 82 participants · 2025',
+ bg:"url('https://static.sadhguru.org/d/46272/1700834565-sadhguru-xl-image.png')",
+ desc:'Ananda Ale Meets and Satsangs at Electronic City (Phase 1, Phase 2 and Transform Cricket Academy).',
+ data:{
+  "2025":{"Jun":61,"Aug":21}
+}},
+
+{id:'surya_kriya', name:'Surya Kriya', icon:'🌞', color:'#c05000',
+ src:'events', srcNote:'Ecity_Events.xlsx · 42 participants · 2023–2026',
+ bg:"url('https://static.sadhguru.org/d/46272/1650272081-website-thumbnail-yogameditation-suryakriya.jpg')",
+ desc:'Surya Kriya programs conducted at Electronic City.',
+ data:{
+  "2023":{"Dec":1},
+  "2024":{"Aug":12,"Nov":8},
+  "2025":{"Oct":5},
+  "2026":{"May":16}
+}},
+
+{id:'yogasanas', name:'Yogasanas', icon:'🤸', color:'#2d6a4f',
+ src:'events', srcNote:'Ecity_Events.xlsx · 46 participants · 2024–2026',
+ bg:"url('https://static.sadhguru.org/d/46272/1650273649-website-thumbnail-yogameditation-yogasanas.jpg')",
+ desc:'Yogasanas programs at Electronic City.',
+ data:{
+  "2024":{"Aug":10,"Nov":10},
+  "2025":{"Jul":11,"Oct":7},
+  "2026":{"May":8}
+}},
+
+{id:'bhuta_shuddhi', name:'Bhuta Shuddhi', icon:'🔥', color:'#8a1c1c',
+ src:'events', srcNote:'Ecity_Events.xlsx · 60 participants · 2024–2026',
+ bg:"url('https://static.sadhguru.org/d/46272/1650259422-website-thumbnail-yogameditation-bhuddashuddhi.jpg')",
+ desc:'Bhuta Shuddhi programs at Electronic City.',
+ data:{
+  "2024":{"Aug":14,"Nov":7},
+  "2025":{"Jul":13,"Oct":7},
+  "2026":{"May":19}
+}},
+
+{id:'angamardana', name:'Angamardana', icon:'🥋', color:'#4a2800',
+ src:'events', srcNote:'Ecity_Events.xlsx · 23 participants · 2025–2026',
+ bg:"url('https://static.sadhguru.org/d/46272/1650098485-website-thumbnail-yogameditation-angamardhana.jpg')",
+ desc:'Angamardana programs at Electronic City.',
+ data:{
+  "2025":{"Jul":11},
+  "2026":{"May":12}
+}},
+
+{id:'guruvin_madiyil', name:'Guruvin Madiyil', icon:'🙌', color:'#5c3a00',
+ src:'events', srcNote:'Ecity_Events.xlsx · 36 participants · 2025',
+ bg:"url('https://static.sadhguru.org/d/46272/1652128648-guru-purnima-2019-1.jpg')",
+ desc:'Guruvin Madiyil program at Electronic City.',
+ data:{"2025":{"Aug":36}}
+},
+
+{id:'guru_purnima', name:'Guru Purnima', icon:'🌕', color:'#7a5c00',
+ src:'events', srcNote:'Ecity_Events.xlsx · 6 participants · 2025',
+ bg:"url('https://static.sadhguru.org/d/46272/1652128648-guru-purnima-2019-1.jpg')",
+ desc:'Guru Purnima celebration at Electronic City.',
+ data:{"2025":{"Jul":6}}
+},
+
+{id:'sadhana_day', name:'Sadhana Day', icon:'☀️', color:'#b85c00',
+ src:'events', srcNote:'Ecity_Events.xlsx · 17 participants · 2024',
+ bg:"url('https://static.sadhguru.org/d/46272/1650436260-sgogi.jpg')",
+ desc:'Sadhana Day event at Electronic City.',
+ data:{"2024":{"Dec":17}}
+},
+
+{id:'ie_events', name:'IE — Event Registrations', icon:'📋', color:'#2a5090',
+ src:'events', srcNote:'Ecity_Events.xlsx · 309 participants · 2023–2026 (event registrations)',
+ bg:"url('https://static.sadhguru.org/d/46272/1700834565-sadhguru-xl-image.png')",
+ desc:'IE 7-Day and Completion event registrations at E-City (Ecity_Events.xlsx). Distinct from CRM completers count.',
+ data:{
+  "2023":{"Jun":47,"Jul":1},
+  "2024":{"Apr":71,"Jun":43,"Aug":41},
+  "2025":{"Mar":24,"Apr":29,"Jun":21},
+  "2026":{"May":32}
+}},
+
+{id:'ie_youth', name:'IE — Youth', icon:'🌱', color:'#1a5a2a',
+ src:'events', srcNote:'Ecity_Events.xlsx · 11 participants · 2025',
+ bg:"url('https://static.sadhguru.org/d/46272/1700834565-sadhguru-xl-image.png')",
+ desc:'Inner Engineering for Youth program near Electronic City zone.',
+ data:{"2025":{"Nov":11}}
+},
+
+{id:'volunteers_meet', name:'Volunteers Meet', icon:'🤝', color:'#1a4a1a',
+ src:'events', srcNote:'Ecity_Events.xlsx · 44 participants · 2026',
+ bg:"url('https://static.sadhguru.org/d/46272/1667888064-volunteer-glimpses-2.jpg')",
+ desc:'All Karnataka Volunteers Meet at Electronic City (Incture Technologies).',
+ data:{"2026":{"May":44}}
+},
+
+{id:'hatha_children', name:'Hatha Yoga — Children', icon:'👶', color:'#1a3a6b',
+ src:'events', srcNote:'Ecity_Events.xlsx · 20 participants · 2026',
+ bg:"url('https://static.sadhguru.org/d/46272/1650507416-website-thumbnail-yogameditation-childrens-hatha.jpg')",
+ desc:'Hatha Yoga for Children program at Electronic City.',
+ data:{"2026":{"May":20}}
+}
+
+]; // end PROGRAMS
+
+// ══════════════════════════════════════════════════════════════
+//  ROLE MAP  — add/remove emails here to manage access
+//  Roles: 'admin' | 'coordinator'
+// ══════════════════════════════════════════════════════════════
+// ── ROLES MAP ─────────────────────────────────────────────────
+// Format: 'email': { role: 'admin'|'coordinator', password: 'xxx' }
+const ROLES = {
+  // ── Admins (full access + export) ──
+  'niteshkumar.7659@gmail.com':      { role: 'admin',       password: 'Isha@Admin2024' },
+  'admin@ishafoundation.org':        { role: 'admin',       password: 'Isha@Admin2024' },
+  'ecadmin@isha.ec':                 { role: 'admin',       password: 'IshaDash@2026' },
+
+  // ── Center Coordinators (view only, no export) ──
+  'coordinator1@ishafoundation.org': { role: 'coordinator', password: 'Isha@Coord2024' },
+  'coordinator2@ishafoundation.org': { role: 'coordinator', password: 'Isha@Coord2024' },
+};
+
+// ── AUTH ──────────────────────────────────────────────────────
+const GOOGLE_CLIENT_ID='350269138141-6ml3haltgcrv2saes9jtep7v6cfo3ub7.apps.googleusercontent.com';
+
+function getSession(){
+  try{ return JSON.parse(sessionStorage.getItem('ecDash')); }catch(e){ return null; }
+}
+function setSession(email, role){
+  sessionStorage.setItem('ecDash', JSON.stringify({email, role}));
+}
+function clearSession(){
+  sessionStorage.removeItem('ecDash');
+}
+
+function applySession(email, role){
+  document.getElementById('userPill').style.display='flex';
+  document.getElementById('userEmail').textContent=email;
+  const badge=document.getElementById('roleBadge');
+  badge.textContent=role==='admin'?'Admin':'Coordinator';
+  badge.className='role-badge '+(role==='admin'?'role-admin':'role-coord');
+  if(role!=='admin') document.getElementById('expBtn').style.display='none';
+  document.getElementById('loginScreen').classList.add('hidden');
+}
+
+// Decode JWT (to extract email from Google credential)
+function decodeJWT(token){
+  try{
+    const b64=token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
+    return JSON.parse(atob(b64));
+  }catch(e){return null;}
+}
+
+// Called by Google after user selects account
+function onGoogleCredential(response){
+  document.getElementById('loginErr').textContent='';
+  const payload=decodeJWT(response.credential);
+  if(!payload||!payload.email){
+    document.getElementById('loginErr').textContent='Could not retrieve email from Google. Try again.';
+    return;
+  }
+  const email=payload.email.trim().toLowerCase();
+  const entry=ROLES[email];
+  if(!entry){
+    document.getElementById('loginErr').textContent=`"${email}" is not registered for access. Contact your admin.`;
+    return;
+  }
+  setSession(email,entry.role);
+  applySession(email,entry.role);
+}
+
+function setupGoogle(){
+  if(typeof google==='undefined'||!google.accounts){
+    setTimeout(setupGoogle,150);
+    return;
+  }
+  const loading=document.getElementById('gLoading');
+  if(loading) loading.style.display='none';
+  google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    callback: onGoogleCredential,
+    auto_select: false
+  });
+  google.accounts.id.renderButton(
+    document.getElementById('googleBtnWrap'),
+    {theme:'outline', size:'large', width:340, text:'signin_with', logo_alignment:'center'}
+  );
+}
+
+function initAuth(){
+  const sess=getSession();
+  if(sess && ROLES[sess.email]){
+    applySession(sess.email, sess.role);
+    return;
+  }
+  document.getElementById('loginScreen').classList.remove('hidden');
+  setupGoogle();
+
+  const emailEl=document.getElementById('emailInput');
+  const errEl=document.getElementById('loginErr');
+
+  // Show/hide password toggle
+  document.getElementById('pwToggle').addEventListener('click', ()=>{
+    const pw=document.getElementById('pwInput');
+    const isHidden=pw.type==='password';
+    pw.type=isHidden?'text':'password';
+    document.getElementById('pwToggle').textContent=isHidden?'Hide':'Show';
+  });
+
+  function doLogin(){
+    const email=emailEl.value.trim().toLowerCase();
+    const pw=document.getElementById('pwInput').value;
+    const entry=ROLES[email];
+    if(!entry){
+      errEl.textContent='This email is not registered for access.';
+      emailEl.focus();
+      return;
+    }
+    if(pw!==entry.password){
+      errEl.textContent='Incorrect password. Please try again.';
+      document.getElementById('pwInput').focus();
+      return;
+    }
+    setSession(email, entry.role);
+    applySession(email, entry.role);
+  }
+
+  document.getElementById('loginBtn').addEventListener('click', doLogin);
+  document.getElementById('pwInput').addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
+  emailEl.addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('pwInput').focus(); });
+}
+
+document.getElementById('logoutBtn').addEventListener('click', ()=>{
+  clearSession();
+  if(typeof google!=='undefined'&&google.accounts) google.accounts.id.disableAutoSelect();
+  document.getElementById('userPill').style.display='none';
+  document.getElementById('expBtn').style.display='';
+  document.getElementById('emailInput').value='';
+  document.getElementById('pwInput').value='';
+  document.getElementById('loginErr').textContent='';
+  document.getElementById('loginScreen').classList.remove('hidden');
+  setupGoogle();
+});
+
+// ══════════════════════════════════════════════════════════════
+//  ENGINE
+// ══════════════════════════════════════════════════════════════
+const MN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const CY = '2026';
+
+const PD = {};
+PROGRAMS.forEach(p=>{
+  const a={};
+  for(const y in p.data) a[y]=Object.values(p.data[y]).reduce((s,v)=>s+v,0);
+  const yrs=Object.keys(p.data).sort();
+  const total=Object.values(a).reduce((s,v)=>s+v,0);
+  const maxA=Math.max(...Object.values(a));
+  const pkYr=yrs.reduce((b,y)=>a[y]>a[b]?y:b,yrs[0]);
+  let pkMv=0,pkMl='—';
+  yrs.forEach(y=>Object.entries(p.data[y]).forEach(([m,v])=>{if(v>pkMv){pkMv=v;pkMl=m+' '+y;}}));
+  PD[p.id]={a,yrs,total,maxA,pkYr,pkMv,pkMl};
+});
+
+let CUR=PROGRAMS[0], CUR_YR=null, annChart=null, mChart=null;
+
+// TABS
+function buildTabs(){
+  const bar=document.getElementById('tabBar');
+  PROGRAMS.forEach((p,i)=>{
+    const d=PD[p.id];
+    const btn=document.createElement('button');
+    btn.className='tab'+(i===0?' active':'');
+    btn.id='tab-'+p.id;
+    const badge=p.src==='crm'?'<span class="badge-crm">CRM</span>':'<span class="badge-ev">Events</span>';
+    btn.innerHTML=`${p.name}${badge}<span class="tc">(${d.total.toLocaleString()})</span>`;
+    btn.onclick=()=>{
+      document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+      btn.classList.add('active');
+      loadProgram(p);
+    };
+    bar.appendChild(btn);
+  });
+}
+
+// CHARTS
+function initCharts(){
+  const commonTooltip={backgroundColor:'#fff',borderColor:'#e8dfc8',borderWidth:1,titleColor:'#1e2a45',bodyColor:'#2c2c2c',padding:10};
+  annChart=new Chart(document.getElementById('annChart'),{
+    type:'bar',
+    data:{labels:[],datasets:[{data:[],borderRadius:4,borderSkipped:false}]},
+    options:{responsive:true,maintainAspectRatio:false,animation:{duration:280},
+      onClick(_,els){if(els.length){const yr=annChart.data.labels[els[0].index].replace('*','');selectYear(yr);}},
+      plugins:{legend:{display:false},tooltip:{...commonTooltip,callbacks:{label:c=>` ${c.raw.toLocaleString()} participants`}}},
+      scales:{x:{grid:{display:false},ticks:{color:'#7a7060',font:{size:10},maxRotation:45}},
+              y:{grid:{color:'#f0ebe0'},ticks:{color:'#7a7060',font:{size:9}},beginAtZero:true}}}
+  });
+  mChart=new Chart(document.getElementById('mChart'),{
+    type:'bar',
+    data:{labels:[],datasets:[{data:[],borderRadius:4,borderSkipped:false}]},
+    options:{responsive:true,maintainAspectRatio:false,animation:{duration:220},
+      plugins:{legend:{display:false},tooltip:{...commonTooltip,callbacks:{label:c=>` ${c.raw} participants`}}},
+      scales:{x:{grid:{display:false},ticks:{color:'#7a7060',font:{size:11}}},
+              y:{grid:{color:'#f0ebe0'},ticks:{color:'#7a7060',font:{size:9}},beginAtZero:true}}}
+  });
+}
+
+// LOAD
+function loadProgram(prog){
+  CUR=prog;
+  const d=PD[prog.id];
+  document.getElementById('heroBg').style.backgroundImage=prog.bg;
+  document.getElementById('hTitle').textContent=prog.name;
+  document.getElementById('hDesc').textContent=prog.desc;
+  document.getElementById('hTotal').textContent=d.total.toLocaleString();
+  document.getElementById('hPeak').textContent=d.pkYr+'  ('+d.a[d.pkYr]+')';
+  document.getElementById('hYTD').textContent=(d.a[CY]||0).toString();
+
+  const st=document.getElementById('srcTag');
+  st.className='src-tag '+(prog.src==='crm'?'src-crm':'src-ev');
+  st.textContent=prog.src==='crm'?'CRM DATA':'EVENTS DATA';
+  document.getElementById('srcNote').textContent=prog.srcNote;
+
+  const lastFull=d.yrs.filter(y=>y!==CY).at(-1)||d.yrs.at(-1);
+  const prevFull=d.yrs.filter(y=>y!==CY).at(-2);
+  const lastC=d.a[lastFull]||0, prevC=prevFull?(d.a[prevFull]||0):0;
+  const yoy=prevC?((lastC-prevC)/prevC*100).toFixed(1):null;
+  document.getElementById('kpiRow').innerHTML=`
+    <div class="kpi"><div class="kpi-lb">All-Time Total</div><div class="kpi-v">${d.total.toLocaleString()}</div><div class="kpi-n">${d.yrs[0]}–${d.yrs.at(-1)}</div></div>
+    <div class="kpi"><div class="kpi-lb">${lastFull} Total</div><div class="kpi-v">${lastC.toLocaleString()}</div>${yoy!==null?`<div class="tag-up">${Number(yoy)>0?'↑':'↓'} ${Math.abs(yoy)}% vs ${prevFull}</div>`:''}</div>
+    <div class="kpi"><div class="kpi-lb">2026 YTD</div><div class="kpi-v">${d.a[CY]||0}</div><div class="tag-ytd">Partial year</div></div>
+    <div class="kpi"><div class="kpi-lb">Peak Month</div><div class="kpi-v">${d.pkMv}</div><div class="kpi-n">${d.pkMl}</div></div>
+    <div class="kpi"><div class="kpi-lb">Avg / Year</div><div class="kpi-v">${Math.round(d.total/d.yrs.length)}</div><div class="kpi-n">${d.yrs.length} active years</div></div>
+  `;
+
+  annChart.data.labels=d.yrs.map(y=>y===CY?y+'*':y);
+  annChart.data.datasets[0].data=d.yrs.map(y=>d.a[y]);
+  annChart.data.datasets[0].backgroundColor=d.yrs.map(y=>y===CY?'#d4641a':prog.color+'99');
+  annChart.data.datasets[0].hoverBackgroundColor=prog.color;
+  annChart.update();
+
+  document.getElementById('yrBtns').innerHTML=d.yrs.map(y=>`<button class="yb${y===CY?' curr':''}" data-yr="${y}">${y===CY?y+' ★':y}</button>`).join('');
+  document.querySelectorAll('#yrBtns .yb').forEach(b=>b.onclick=()=>selectYear(b.dataset.yr));
+
+  buildAnnTable(prog);
+  document.getElementById('insCards').innerHTML=`
+    <div class="ins"><div class="ins-lb">All-Time Total</div><div class="ins-v">${d.total.toLocaleString()}</div><div class="ins-n">participants at E-City</div></div>
+    <div class="ins"><div class="ins-lb">Best Year</div><div class="ins-v">${d.pkYr}</div><div class="ins-n">${d.a[d.pkYr].toLocaleString()} participants</div></div>
+    <div class="ins"><div class="ins-lb">Peak Month</div><div class="ins-v">${d.pkMv}</div><div class="ins-n">${d.pkMl}</div></div>
+    <div class="ins"><div class="ins-lb">Years on Record</div><div class="ins-v">${d.yrs.length}</div><div class="ins-n">${d.yrs[0]} → ${d.yrs.at(-1)}</div></div>
+  `;
+  selectYear(d.yrs.filter(y=>y!==CY).at(-1)||d.yrs[0]);
+}
+
+function buildAnnTable(prog){
+  const d=PD[prog.id];
+  document.getElementById('annTbl').innerHTML=[...d.yrs].reverse().map(y=>{
+    const c=d.a[y], w=((c/d.maxA)*100).toFixed(1);
+    const idx=d.yrs.indexOf(y), prev=idx>0?d.yrs[idx-1]:null;
+    let chg='<span class="chg-na">—</span>';
+    if(prev&&d.a[prev]){const pct=((c-d.a[prev])/d.a[prev]*100).toFixed(1);chg=`<span class="${Number(pct)>0?'chg-up':'chg-dn'}">${Number(pct)>0?'+':''}${pct}%</span>`;}
+    return `<tr data-yr="${y}"><td class="td-y">${y}${y===CY?' ★':''}</td><td>${c.toLocaleString()}</td><td><div class="bar-cell"><div class="bar-fill" style="width:${w}%;background:${prog.color}"></div></div></td><td>${chg}</td></tr>`;
+  }).join('');
+  document.querySelectorAll('#annTbl tr').forEach(r=>r.onclick=()=>selectYear(r.dataset.yr));
+}
+
+function selectYear(yr){
+  CUR_YR=yr;
+  const prog=CUR, d=PD[prog.id];
+  document.querySelectorAll('#yrBtns .yb').forEach(b=>b.classList.toggle('sel',b.dataset.yr===yr));
+  annChart.data.datasets[0].backgroundColor=d.yrs.map(y=>y===yr?prog.color:y===CY?'#d4641a':prog.color+'44');
+  annChart.update('none');
+  document.querySelectorAll('#annTbl tr').forEach(r=>r.classList.toggle('hi',r.dataset.yr===yr));
+  document.getElementById('mChartTitle').textContent=`Monthly — ${yr}${yr===CY?' (partial)':''}`;
+  document.getElementById('mBarsTitle').textContent=`${yr} · Ranked`;
+  const md=prog.data[yr]||{};
+  const mkeys=MN.filter(m=>md[m]!==undefined), mvals=mkeys.map(m=>md[m]);
+  const mmax=mvals.length?Math.max(...mvals):1;
+  mChart.data.labels=mkeys;
+  mChart.data.datasets[0].data=mvals;
+  mChart.data.datasets[0].backgroundColor=mvals.map(v=>v===mmax?prog.color:prog.color+'77');
+  mChart.data.datasets[0].hoverBackgroundColor=prog.color;
+  mChart.update();
+  const sorted=Object.entries(md).sort((a,b)=>b[1]-a[1]);
+  document.getElementById('mBars').innerHTML=sorted.length
+    ?sorted.map(([m,v])=>{
+      const w=((v/mmax)*100).toFixed(1),isPeak=v===mmax;
+      return `<div class="mbar"><span class="ml">${m}</span><div class="mt"><div class="mf" style="width:${w}%;background:${isPeak?'linear-gradient(90deg,#d4641a,#e8a060)':`linear-gradient(90deg,${prog.color},${prog.color}99)`}"></div></div><span class="mv" style="color:${isPeak?'#d4641a':prog.color}">${v}</span></div>`;
+    }).join('')
+    :'<div style="padding:18px;color:var(--muted);font-size:.72rem">No data for this year</div>';
+}
+
+// EXPORT
+document.getElementById('expBtn').onclick=()=>{
+  let csv='Program,Source,Year,Month,Participants\n';
+  PROGRAMS.forEach(p=>{
+    Object.keys(p.data).sort().forEach(y=>{
+      MN.forEach(m=>{if(p.data[y][m])csv+=`"${p.name}","${p.src.toUpperCase()}",${y},${m},${p.data[y][m]}\n`;});
+    });
+  });
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download='ecity_programs.csv';a.click();
+};
+
+// BOOT
+buildTabs();initCharts();loadProgram(PROGRAMS[0]);initAuth();
+
+// Last updated — derive from latest year/month in data
+(function(){
+  const monthOrder=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  let latestYear=0, latestMonthIdx=-1;
+  PROGRAMS.forEach(p=>{
+    Object.keys(p.data).forEach(y=>{
+      const yi=parseInt(y);
+      Object.keys(p.data[y]).forEach(m=>{
+        const mi=monthOrder.indexOf(m);
+        if(yi>latestYear||(yi===latestYear&&mi>latestMonthIdx)){
+          latestYear=yi; latestMonthIdx=mi;
+        }
+      });
+    });
+  });
+  const label=latestMonthIdx>=0
+    ? monthOrder[latestMonthIdx]+' '+latestYear
+    : '—';
+  document.getElementById('lastUpdated').textContent=label;
+})();
+</script>
+</body>
+</html>
