@@ -109,9 +109,10 @@ main{max-width:1320px;margin:0 auto;padding:14px 12px 50px}
 footer{text-align:center;padding:13px;font-size:.54rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted);border-top:1px solid var(--border)}
 
 /* ── LOGIN ── */
-#loginScreen{position:fixed;inset:0;background:linear-gradient(135deg,#0f1828 0%,#1e2a45 60%,#2e3f66 100%);display:flex;align-items:center;justify-content:center;z-index:9999}
+#loginScreen{position:fixed;inset:0;background:url('IMG_3217.JPG') center center/cover no-repeat;display:flex;align-items:center;justify-content:center;z-index:9999}
+#loginScreen::before{content:'';position:absolute;inset:0;background:rgba(5,10,25,.65);backdrop-filter:blur(2px)}
 #loginScreen.hidden{display:none}
-.login-box{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:44px 40px;width:100%;max-width:420px;backdrop-filter:blur(12px);box-shadow:0 24px 80px rgba(0,0,0,.5)}
+.login-box{position:relative;z-index:1;background:rgba(5,10,25,.55);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:44px 40px;width:100%;max-width:420px;backdrop-filter:blur(16px);box-shadow:0 24px 80px rgba(0,0,0,.6)}
 .login-logo{display:flex;align-items:center;gap:12px;margin-bottom:32px}
 .login-logo img{width:44px;height:44px;object-fit:contain}
 .login-logo span{font-size:1rem;font-weight:800;color:#fff;line-height:1.2;white-space:nowrap}
@@ -142,6 +143,56 @@ footer{text-align:center;padding:13px;font-size:.54rem;letter-spacing:1px;text-t
 .user-pill .user-email{font-size:.6rem;color:rgba(255,255,255,.7);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .logout-btn{background:none;border:none;color:rgba(255,255,255,.35);font-size:.6rem;cursor:pointer;padding:2px 4px;margin-left:2px;transition:color .12s}
 .logout-btn:hover{color:#f87171}
+.mgmt-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;padding:5px 12px;font-size:.62rem;font-weight:700;cursor:pointer;border-radius:5px;letter-spacing:.3px;transition:background .15s}
+.mgmt-btn:hover{background:rgba(255,255,255,.2)}
+
+/* ── USER MANAGEMENT MODAL ── */
+#umOverlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:8000;display:none;align-items:center;justify-content:center}
+#umOverlay.open{display:flex}
+#umModal{background:#1a2540;border:1px solid rgba(255,255,255,.12);border-radius:14px;width:100%;max-width:580px;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 24px 80px rgba(0,0,0,.6)}
+.um-head{padding:20px 24px;border-bottom:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:space-between}
+.um-head h3{font-size:.95rem;font-weight:800;color:#fff}
+.um-close{background:none;border:none;color:rgba(255,255,255,.4);font-size:1.1rem;cursor:pointer;line-height:1;padding:4px}
+.um-close:hover{color:#f87171}
+.um-body{padding:20px 24px;overflow-y:auto;flex:1}
+.um-section{font-size:.58rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.35);margin:0 0 10px}
+.um-table{width:100%;border-collapse:collapse;margin-bottom:20px}
+.um-table th{font-size:.54rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.35);padding:6px 8px;border-bottom:1px solid rgba(255,255,255,.08);text-align:left}
+.um-table td{font-size:.7rem;color:rgba(255,255,255,.8);padding:8px 8px;border-bottom:1px solid rgba(255,255,255,.06);vertical-align:middle}
+.um-table tr:last-child td{border-bottom:none}
+.um-badge{font-size:.5rem;font-weight:700;padding:2px 7px;border-radius:10px;text-transform:uppercase}
+.um-del{background:none;border:1px solid rgba(248,113,113,.3);color:#f87171;font-size:.6rem;padding:3px 9px;border-radius:5px;cursor:pointer;transition:background .12s}
+.um-del:hover{background:rgba(248,113,113,.15)}
+.um-del:disabled{opacity:.3;cursor:not-allowed}
+.um-add{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:16px}
+.um-add h4{font-size:.7rem;font-weight:700;color:#fff;margin-bottom:14px}
+.um-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.um-field label{display:block;font-size:.55rem;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px}
+.um-field input,.um-field select{width:100%;padding:9px 11px;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.12);border-radius:7px;color:#fff;font-size:.75rem;outline:none;transition:border-color .15s}
+.um-field input:focus,.um-field select:focus{border-color:var(--gold)}
+.um-field select option{background:#1a2540;color:#fff}
+.um-save{width:100%;margin-top:12px;padding:10px;background:var(--gold);color:var(--navy);font-size:.75rem;font-weight:800;border:none;border-radius:7px;cursor:pointer;transition:background .15s}
+.um-save:hover{background:#f5d060}
+.um-msg{font-size:.65rem;margin-top:8px;min-height:18px;text-align:center}
+.um-msg.ok{color:#4ade80}
+.um-msg.err{color:#f87171}
+/* Request access panel inside login box */
+#reqPanel{display:none}
+#reqPanel.show{display:block}
+#loginPanel{display:block}
+#loginPanel.hide{display:none}
+.req-back{background:none;border:none;color:rgba(255,255,255,.4);font-size:.65rem;cursor:pointer;padding:0;margin-bottom:16px;display:flex;align-items:center;gap:4px}
+.req-back:hover{color:#fff}
+.req-sent{text-align:center;padding:10px 0}
+.req-sent .req-icon{font-size:2rem;margin-bottom:8px}
+.req-sent p{font-size:.75rem;color:rgba(255,255,255,.6);line-height:1.6}
+/* Pending requests in UM panel */
+.pending-badge{display:inline-block;background:#f87171;color:#fff;font-size:.5rem;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:6px;vertical-align:middle}
+.um-approve{background:none;border:1px solid rgba(74,222,128,.4);color:#4ade80;font-size:.6rem;padding:3px 9px;border-radius:5px;cursor:pointer;margin-right:4px;transition:background .12s}
+.um-approve:hover{background:rgba(74,222,128,.15)}
+.um-deny{background:none;border:1px solid rgba(248,113,113,.3);color:#f87171;font-size:.6rem;padding:3px 9px;border-radius:5px;cursor:pointer;transition:background .12s}
+.um-deny:hover{background:rgba(248,113,113,.15)}
+.approve-role{font-size:.65rem;padding:3px 6px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:5px;color:#fff;margin-right:4px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -149,6 +200,8 @@ footer{text-align:center;padding:13px;font-size:.54rem;letter-spacing:1px;text-t
 <!-- LOGIN SCREEN -->
 <div id="loginScreen">
   <div class="login-box">
+
+    <!-- Logo (always visible) -->
     <div class="login-logo">
       <img src="https://static.sadhguru.org/d/46272/1686731673-isha-logo-main-menu.svg" alt="Isha"/>
       <div>
@@ -156,24 +209,51 @@ footer{text-align:center;padding:13px;font-size:.54rem;letter-spacing:1px;text-t
         <small>Isha Foundation</small>
       </div>
     </div>
-    <h2>Welcome</h2>
-    <p>Sign in to access the dashboard</p>
 
-    <!-- Google Sign-In -->
-    <div id="googleBtnWrap"><div class="google-loading" id="gLoading">Loading Google Sign-In…</div></div>
+    <!-- ── PANEL 1: Sign In ── -->
+    <div id="loginPanel">
+      <h2>Welcome</h2>
+      <p style="font-size:.72rem;color:rgba(255,255,255,.5);margin-bottom:20px">Sign in to access the dashboard</p>
 
-    <div class="or-divider"><span>or sign in with email</span></div>
+      <div id="googleBtnWrap"><div class="google-loading" id="gLoading">Loading Google Sign-In…</div></div>
+      <div class="or-divider"><span>or sign in with email</span></div>
 
-    <label for="emailInput">Email Address</label>
-    <input type="email" id="emailInput" placeholder="yourname@example.com" autocomplete="email"/>
-    <label for="pwInput" style="margin-top:14px">Password</label>
-    <div style="position:relative">
-      <input type="password" id="pwInput" placeholder="Enter your password" autocomplete="current-password"/>
-      <button id="pwToggle" type="button" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.35);cursor:pointer;font-size:.7rem;padding:4px">Show</button>
+      <label for="emailInput">Email Address</label>
+      <input type="email" id="emailInput" placeholder="yourname@example.com" autocomplete="email"/>
+      <label for="pwInput" style="margin-top:14px">Password</label>
+      <div style="position:relative">
+        <input type="password" id="pwInput" placeholder="Enter your password" autocomplete="current-password"/>
+        <button id="pwToggle" type="button" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.35);cursor:pointer;font-size:.7rem;padding:4px">Show</button>
+      </div>
+      <div class="login-err" id="loginErr"></div>
+      <button class="login-btn" id="loginBtn">Sign In →</button>
+      <div style="text-align:center;margin-top:14px">
+        <button id="goReqBtn" style="background:none;border:none;color:rgba(255,255,255,.3);font-size:.62rem;cursor:pointer;text-decoration:underline;text-underline-offset:3px">Don't have access? Request it →</button>
+      </div>
     </div>
-    <div class="login-err" id="loginErr"></div>
-    <button class="login-btn" id="loginBtn">Sign In →</button>
-    <div class="login-hint">Contact your admin if you need access</div>
+
+    <!-- ── PANEL 2: Request Access ── -->
+    <div id="reqPanel" style="display:none">
+      <button class="req-back" id="goBackBtn">← Back to Sign In</button>
+      <h2>Request Access</h2>
+      <p style="font-size:.72rem;color:rgba(255,255,255,.5);margin-bottom:24px">Submit your details and an admin will grant you access.</p>
+
+      <div id="reqForm">
+        <label for="reqName">Your Name</label>
+        <input type="text" id="reqName" placeholder="Full name" style="margin-bottom:14px"/>
+        <label for="reqEmail">Email Address</label>
+        <input type="email" id="reqEmail" placeholder="yourname@example.com"/>
+        <div class="login-err" id="reqErr"></div>
+        <button class="login-btn" id="reqSubmitBtn" style="margin-top:16px">Submit Request →</button>
+      </div>
+
+      <div id="reqSuccess" style="display:none;text-align:center;padding:10px 0">
+        <div style="font-size:2rem;margin-bottom:10px">✅</div>
+        <p style="font-size:.75rem;color:rgba(255,255,255,.6);line-height:1.7">Your request has been submitted.<br>An admin will review and grant you access shortly.</p>
+        <button id="reqBackBtn2" style="margin-top:16px;background:none;border:1px solid rgba(255,255,255,.2);color:#fff;padding:8px 20px;border-radius:7px;cursor:pointer;font-size:.72rem">Back to Sign In</button>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -188,6 +268,7 @@ footer{text-align:center;padding:13px;font-size:.54rem;letter-spacing:1px;text-t
     </div>
     <div class="hdr-r">
       <div class="updated-pill"><span class="up-label">Last Updated</span><span class="up-val" id="lastUpdated">—</span></div>
+      <button class="mgmt-btn" id="manageUsersBtn" style="display:none" onclick="openUM()">⚙ Users</button>
       <div class="user-pill" id="userPill" style="display:none">
         <span class="role-badge" id="roleBadge"></span>
         <span class="user-email" id="userEmail"></span>
@@ -259,6 +340,52 @@ footer{text-align:center;padding:13px;font-size:.54rem;letter-spacing:1px;text-t
 </main>
 
 <footer>Isha Foundation · Electronic City Centre · CRM: IE_Ecity, BSP_Ecity, Samyama_Ecity · Events: Ecity_Events.xlsx · Data through Jun 2026</footer>
+
+<!-- USER MANAGEMENT MODAL -->
+<div id="umOverlay" onclick="if(event.target===this)closeUM()">
+  <div id="umModal">
+    <div class="um-head">
+      <h3>⚙ User Management</h3>
+      <button class="um-close" onclick="closeUM()">✕</button>
+    </div>
+    <div class="um-body">
+      <div class="um-section" id="umPendingSection" style="display:none">Pending Requests <span class="pending-badge" id="umPendingCount"></span></div>
+      <table class="um-table" id="umPendingTable" style="display:none">
+        <thead><tr><th>Name</th><th>Email</th><th>Requested</th><th>Action</th></tr></thead>
+        <tbody id="umPendingList"></tbody>
+      </table>
+
+      <div class="um-section">Current Users</div>
+      <table class="um-table">
+        <thead><tr><th>Email</th><th>Role</th><th>Type</th><th></th></tr></thead>
+        <tbody id="umUserList"></tbody>
+      </table>
+
+      <div class="um-add">
+        <h4>Add New User</h4>
+        <div class="um-grid">
+          <div class="um-field">
+            <label>Email Address</label>
+            <input type="email" id="umEmail" placeholder="user@example.com"/>
+          </div>
+          <div class="um-field">
+            <label>Password</label>
+            <input type="text" id="umPassword" placeholder="SetAPassword"/>
+          </div>
+          <div class="um-field">
+            <label>Role</label>
+            <select id="umRole">
+              <option value="coordinator">Coordinator</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+        </div>
+        <button class="um-save" onclick="umAddUser()">+ Add User</button>
+        <div class="um-msg" id="umMsg"></div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
 // ══════════════════════════════════════════════════════════════
@@ -475,6 +602,168 @@ const ROLES = {
   'coordinator2@ishafoundation.org': { role: 'coordinator', password: 'Isha@Coord2024' },
 };
 
+// ══════════════════════════════════════════════════════════════
+//  USER MANAGEMENT — dynamic users stored in localStorage
+// ══════════════════════════════════════════════════════════════
+// ── Request Access ────────────────────────────────────────────
+function showReqPanel(){
+  document.getElementById('loginPanel').style.display='none';
+  document.getElementById('reqPanel').style.display='block';
+  document.getElementById('reqSuccess').style.display='none';
+  document.getElementById('reqForm').style.display='block';
+  document.getElementById('reqErr').textContent='';
+}
+function showLoginPanel(){
+  document.getElementById('reqPanel').style.display='none';
+  document.getElementById('loginPanel').style.display='block';
+}
+
+// Wire request panel buttons after DOM ready
+document.getElementById('goReqBtn').onclick    = showReqPanel;
+document.getElementById('goBackBtn').onclick   = showLoginPanel;
+document.getElementById('reqBackBtn2').onclick = showLoginPanel;
+document.getElementById('reqSubmitBtn').onclick = submitRequest;
+
+function submitRequest(){
+  const name=document.getElementById('reqName').value.trim();
+  const email=document.getElementById('reqEmail').value.trim().toLowerCase();
+  const err=document.getElementById('reqErr');
+  if(!name){ err.textContent='Please enter your name.'; return; }
+  if(!email||!email.includes('@')){ err.textContent='Please enter a valid email.'; return; }
+  if(getAllUsers()[email]){ err.textContent='This email already has access. Please sign in.'; return; }
+  const pending=getPending();
+  if(pending.find(r=>r.email===email)){ err.textContent='A request for this email is already pending.'; return; }
+  pending.push({name, email, requestedAt: new Date().toLocaleString()});
+  savePending(pending);
+  document.getElementById('reqForm').style.display='none';
+  document.getElementById('reqSuccess').style.display='block';
+}
+
+function getPending(){
+  try{ return JSON.parse(localStorage.getItem('ecDashPending'))||[]; }catch(e){ return []; }
+}
+function savePending(arr){
+  localStorage.setItem('ecDashPending', JSON.stringify(arr));
+}
+
+function renderPendingRequests(){
+  const pending=getPending();
+  const section=document.getElementById('umPendingSection');
+  const table=document.getElementById('umPendingTable');
+  const badge=document.getElementById('umPendingCount');
+  const tbody=document.getElementById('umPendingList');
+  if(!pending.length){ section.style.display='none'; table.style.display='none'; return; }
+  section.style.display=''; table.style.display='';
+  badge.textContent=pending.length;
+  tbody.innerHTML='';
+  pending.forEach(req=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td>${req.name}</td>
+      <td>${req.email}</td>
+      <td style="font-size:.6rem;color:rgba(255,255,255,.35)">${req.requestedAt}</td>
+      <td>
+        <select class="approve-role" id="role_${req.email}">
+          <option value="coordinator">Coordinator</option>
+          <option value="admin">Admin</option>
+        </select>
+        <button class="um-approve" onclick="approveRequest('${req.email}','${req.name}')">Approve</button>
+        <button class="um-deny" onclick="denyRequest('${req.email}')">Deny</button>
+      </td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function approveRequest(email, name){
+  const role=document.getElementById('role_'+email).value;
+  // Auto-generate a password
+  const pw='Isha@'+Math.random().toString(36).slice(2,7).toUpperCase();
+  const users=getDynamicUsers();
+  users[email]={role, password:pw, name};
+  saveDynamicUsers(users);
+  // Remove from pending
+  savePending(getPending().filter(r=>r.email!==email));
+  // Show password to admin
+  const msg=document.getElementById('umMsg');
+  msg.className='um-msg ok';
+  msg.textContent=`✓ ${email} approved. Share password: ${pw}`;
+  renderUMTable();
+}
+
+function denyRequest(email){
+  savePending(getPending().filter(r=>r.email!==email));
+  renderUMTable();
+}
+
+function getDynamicUsers(){
+  try{ return JSON.parse(localStorage.getItem('ecDashUsers'))||{}; }catch(e){ return {}; }
+}
+function saveDynamicUsers(users){
+  localStorage.setItem('ecDashUsers', JSON.stringify(users));
+}
+
+// Merge hardcoded ROLES + dynamic localStorage users
+function getAllUsers(){
+  return Object.assign({}, ROLES, getDynamicUsers());
+}
+
+function openUM(){
+  renderUMTable();
+  document.getElementById('umOverlay').classList.add('open');
+}
+function closeUM(){
+  document.getElementById('umOverlay').classList.remove('open');
+  document.getElementById('umMsg').textContent='';
+}
+
+function renderUMTable(){
+  renderPendingRequests();
+  const all=getAllUsers();
+  const dyn=getDynamicUsers();
+  const tbody=document.getElementById('umUserList');
+  tbody.innerHTML='';
+  Object.entries(all).forEach(([email,entry])=>{
+    const isDynamic=!!dyn[email];
+    const tr=document.createElement('tr');
+    tr.innerHTML=`
+      <td>${email}</td>
+      <td><span class="um-badge ${entry.role==='admin'?'role-admin':'role-coord'}">${entry.role}</span></td>
+      <td style="font-size:.6rem;color:rgba(255,255,255,.35)">${isDynamic?'Added':'Built-in'}</td>
+      <td><button class="um-del" ${isDynamic?'':'disabled'} onclick="umDeleteUser('${email}')">Remove</button></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function umAddUser(){
+  const email=document.getElementById('umEmail').value.trim().toLowerCase();
+  const password=document.getElementById('umPassword').value.trim();
+  const role=document.getElementById('umRole').value;
+  const msg=document.getElementById('umMsg');
+
+  if(!email||!email.includes('@')){
+    msg.className='um-msg err'; msg.textContent='Enter a valid email address.'; return;
+  }
+  if(!password||password.length<4){
+    msg.className='um-msg err'; msg.textContent='Password must be at least 4 characters.'; return;
+  }
+  const users=getDynamicUsers();
+  users[email]={role, password};
+  saveDynamicUsers(users);
+
+  document.getElementById('umEmail').value='';
+  document.getElementById('umPassword').value='';
+  msg.className='um-msg ok';
+  msg.textContent=`✓ ${email} added as ${role}.`;
+  renderUMTable();
+}
+
+function umDeleteUser(email){
+  const users=getDynamicUsers();
+  delete users[email];
+  saveDynamicUsers(users);
+  renderUMTable();
+}
+
 // ── AUTH ──────────────────────────────────────────────────────
 const GOOGLE_CLIENT_ID='350269138141-6ml3haltgcrv2saes9jtep7v6cfo3ub7.apps.googleusercontent.com';
 
@@ -495,6 +784,13 @@ function applySession(email, role){
   badge.textContent=role==='admin'?'Admin':'Coordinator';
   badge.className='role-badge '+(role==='admin'?'role-admin':'role-coord');
   if(role!=='admin') document.getElementById('expBtn').style.display='none';
+  // Show manage users button only for admins
+  if(role==='admin'){
+    const btn=document.getElementById('manageUsersBtn');
+    btn.style.display='';
+    const n=getPending().length;
+    btn.textContent=n>0?`⚙ Users (${n} pending)`:'⚙ Users';
+  }
   document.getElementById('loginScreen').classList.add('hidden');
 }
 
@@ -515,7 +811,7 @@ function onGoogleCredential(response){
     return;
   }
   const email=payload.email.trim().toLowerCase();
-  const entry=ROLES[email];
+  const entry=getAllUsers()[email];
   if(!entry){
     document.getElementById('loginErr').textContent=`"${email}" is not registered for access. Contact your admin.`;
     return;
@@ -529,66 +825,70 @@ function setupGoogle(){
     setTimeout(setupGoogle,150);
     return;
   }
-  const loading=document.getElementById('gLoading');
-  if(loading) loading.style.display='none';
-  google.accounts.id.initialize({
-    client_id: GOOGLE_CLIENT_ID,
-    callback: onGoogleCredential,
-    auto_select: false
-  });
-  google.accounts.id.renderButton(
-    document.getElementById('googleBtnWrap'),
-    {theme:'outline', size:'large', width:340, text:'signin_with', logo_alignment:'center'}
-  );
+  try{
+    const loading=document.getElementById('gLoading');
+    if(loading) loading.style.display='none';
+    google.accounts.id.initialize({
+      client_id: GOOGLE_CLIENT_ID,
+      callback: onGoogleCredential,
+      auto_select: false
+    });
+    google.accounts.id.renderButton(
+      document.getElementById('googleBtnWrap'),
+      {theme:'outline', size:'large', width:340, text:'signin_with', logo_alignment:'center'}
+    );
+  }catch(e){
+    // Google Sign-In unavailable — email/password login still works
+    const wrap=document.getElementById('googleBtnWrap');
+    if(wrap) wrap.style.display='none';
+  }
 }
+
+// ── Email/password login — independent of Google ──
+function doLogin(){
+  const email=document.getElementById('emailInput').value.trim().toLowerCase();
+  const pw=document.getElementById('pwInput').value;
+  const errEl=document.getElementById('loginErr');
+  const entry=getAllUsers()[email];
+  if(!entry){
+    errEl.textContent='This email is not registered for access.';
+    document.getElementById('emailInput').focus();
+    return;
+  }
+  if(pw!==entry.password){
+    errEl.textContent='Incorrect password. Please try again.';
+    document.getElementById('pwInput').focus();
+    return;
+  }
+  errEl.textContent='';
+  setSession(email, entry.role);
+  applySession(email, entry.role);
+}
+document.getElementById('loginBtn').onclick = doLogin;
+document.getElementById('pwInput').addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
+document.getElementById('emailInput').addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('pwInput').focus(); });
+document.getElementById('pwToggle').onclick = ()=>{
+  const pw=document.getElementById('pwInput');
+  const hide=pw.type==='password';
+  pw.type=hide?'text':'password';
+  document.getElementById('pwToggle').textContent=hide?'Hide':'Show';
+};
 
 function initAuth(){
   const sess=getSession();
-  if(sess && ROLES[sess.email]){
+  if(sess && getAllUsers()[sess.email]){
     applySession(sess.email, sess.role);
     return;
   }
   document.getElementById('loginScreen').classList.remove('hidden');
   setupGoogle();
-
-  const emailEl=document.getElementById('emailInput');
-  const errEl=document.getElementById('loginErr');
-
-  // Show/hide password toggle
-  document.getElementById('pwToggle').addEventListener('click', ()=>{
-    const pw=document.getElementById('pwInput');
-    const isHidden=pw.type==='password';
-    pw.type=isHidden?'text':'password';
-    document.getElementById('pwToggle').textContent=isHidden?'Hide':'Show';
-  });
-
-  function doLogin(){
-    const email=emailEl.value.trim().toLowerCase();
-    const pw=document.getElementById('pwInput').value;
-    const entry=ROLES[email];
-    if(!entry){
-      errEl.textContent='This email is not registered for access.';
-      emailEl.focus();
-      return;
-    }
-    if(pw!==entry.password){
-      errEl.textContent='Incorrect password. Please try again.';
-      document.getElementById('pwInput').focus();
-      return;
-    }
-    setSession(email, entry.role);
-    applySession(email, entry.role);
-  }
-
-  document.getElementById('loginBtn').addEventListener('click', doLogin);
-  document.getElementById('pwInput').addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
-  emailEl.addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('pwInput').focus(); });
 }
 
 document.getElementById('logoutBtn').addEventListener('click', ()=>{
   clearSession();
   if(typeof google!=='undefined'&&google.accounts) google.accounts.id.disableAutoSelect();
   document.getElementById('userPill').style.display='none';
+  document.getElementById('manageUsersBtn').style.display='none';
   document.getElementById('expBtn').style.display='';
   document.getElementById('emailInput').value='';
   document.getElementById('pwInput').value='';
