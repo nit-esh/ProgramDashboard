@@ -3495,6 +3495,7 @@ const _EXTRA_CENTRE_KEYS = {
 
 function _normCentreKey(s){
   const raw = (s||'').toLowerCase()
+    .replace(/\s*\([^)]+\)\s*/g,' ')                // strip sub-location suffix e.g. "(Electronic City)"
     .replace(/isha\s+(yoga\s+)?cent(?:er|re)/g,'')  // "Isha Yoga Center/Centre"
     .replace(/isha\s+place/g,'')                     // "Isha Place" venue suffix
     .replace(/isha\s+yoga/g,'')                      // standalone "Isha Yoga"
@@ -6866,18 +6867,34 @@ async function fetchLivePrograms(){
         const centreKey=Object.entries(PLACE_CENTRE).find(([k])=>combined.includes(k))?.[1];
         if(!centreKey){
           // Capture for extended satsang view (all KA centres, not just the 26 in dashboard)
-          const realUrl=s.register_url||`https://isha.sadhguru.org/in/en/program-details?id=${s.program_id}`;
+          const _rawUrlEx=s.register_url||`https://isha.sadhguru.org/in/en/program-details?id=${s.program_id}`;
+          const realUrl=_rawUrlEx.replace(/([?&]event=)(\d+)[^&]*/,'$1$2');
           const centreName=s.address_title||s.address||'Karnataka Centre';
           ALL_EXTRA_SATSANG.push({ name:s.title||'Monthly Satsang', progLabel:'Monthly Satsang', centre:centreName, fr, to:fr, url:realUrl, date:s.date||'', startDate:fr||'', endDate:fr||'', confirmed:null, lang:'English' });
           console.log('[Dashboard] Extra satsang captured:',centreName);
           continue;
         }
         if(!ALL_UPCOMING[centreKey]) ALL_UPCOMING[centreKey]=[];
-        // Replace generic fallback entry with real program-ID URL
-        const realUrl=s.register_url||`https://isha.sadhguru.org/in/en/program-details?id=${s.program_id}`;
+        // Replace generic fallback entry with real program-ID URL; trim event slug to just numeric ID
+        const _rawUrl=s.register_url||`https://isha.sadhguru.org/in/en/program-details?id=${s.program_id}`;
+        const realUrl=_rawUrl.replace(/([?&]event=)(\d+)[^&]*/,'$1$2');
         const existing=ALL_UPCOMING[centreKey].find(e=>(e.name||'').toLowerCase().includes('satsang'));
-        if(existing){ existing.url=realUrl; existing.date=s.date||existing.date; if(fr) existing.fr=fr; }
-        else ALL_UPCOMING[centreKey].push({ name:s.title||'Monthly Satsang', date:s.date||'', fr, to:fr, url:realUrl, loc:s.address||'', img:'', place:s.address_title||'', city:'Bengaluru', state:'Karnataka', pin:'' });
+        if(existing){ existing.url=realUrl; existing.date=s.date||existing.date; if(fr) existing.fr=fr; console.log(`[Dashboard] Satsang URL set for ${centreKey} → ${realUrl}`); }
+        else { ALL_UPCOMING[centreKey].push({ name:s.title||'Monthly Satsang', date:s.date||'', fr, to:fr, url:realUrl, loc:s.address||'', img:'', place:s.address_title||'', city:'Bengaluru', state:'Karnataka', pin:'' }); console.log(`[Dashboard] Satsang added for ${centreKey} → ${realUrl}`); }
+        // Propagate to sub-location centres (e.g. "Chandapura (Electronic City)", "Begur (Electronic City)")
+        for(const subKey of Object.keys(ALL_UPCOMING).filter(k=>k.endsWith(`(${centreKey})`))){
+          if(!ALL_UPCOMING[subKey]) ALL_UPCOMING[subKey]=[];
+          const subSat = ALL_UPCOMING[subKey].find(e=>(e.name||'').toLowerCase().includes('satsang'));
+          if(!subSat){
+            // Sub-centre has no satsang entry at all — create one inherited from parent
+            ALL_UPCOMING[subKey].push({ name:s.title||'Monthly Satsang', progLabel:'Monthly Satsang', date:s.date||'', fr, to:fr, url:realUrl, loc:s.address||'', img:'', place:subKey, city:'Bengaluru', state:'Karnataka', pin:'' });
+            console.log(`[Dashboard] Satsang entry created for sub-centre ${subKey}`);
+          } else if(!subSat.url || subSat.url.includes('#upcoming') || subSat.url.includes('events/monthly')){
+            subSat.url = realUrl;
+            if(fr && !subSat.fr) subSat.fr = fr;
+            console.log(`[Dashboard] Satsang URL propagated to sub-centre ${subKey} → ${realUrl}`);
+          }
+        }
       }
       console.log('[Dashboard] Satsang API: upgraded programme URLs where available');
     }
@@ -9386,6 +9403,19 @@ function _buildCentreMsg(c, plain, type){
       else if(nl.includes('guru pooja')||nl.includes('guru puja')) lbl='Guru Pooja';
       const ds=p.fr?fmtDate(p.fr)+(p.to&&p.to!==p.fr?' – '+fmtDate(p.to):''):'';
       regRows.push(`• ${lbl}${ds?' ('+ds+')':''}: ${reg.confirmed} confirmed`);
+    }
+  }
+  // Include sub-centre satsang reg counts (e.g. Chandapura, Begur under Electronic City)
+  const _subCentreKeys = Object.keys(ALL_UPCOMING).filter(k => k.endsWith(`(${c})`));
+  for(const sk of _subCentreKeys){
+    const subName = sk.replace(/\s*\([^)]+\)$/, '').trim();
+    for(const p of (ALL_UPCOMING[sk]||[])){
+      if(!(p.name||'').toLowerCase().includes('satsang')) continue;
+      const reg = _getRegInfo(p.name, sk, p.fr);
+      if(reg!==null&&reg.confirmed!==null){
+        const ds = p.fr ? fmtDate(p.fr)+(p.to&&p.to!==p.fr?' – '+fmtDate(p.to):'') : '';
+        regRows.push(`• Monthly Satsang – ${subName}${ds?' ('+ds+')':''}: ${reg.confirmed} confirmed`);
+      }
     }
   }
   // Build upcoming program lines — each with name, date range, and registration link
