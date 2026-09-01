@@ -7098,11 +7098,14 @@ async function _exportRegCountsPNG(filename, elId){
   if(filterBar) filterBar.style.display = 'none';
   // Wrap content in a padded container for left/right whitespace
   const wrapper = document.createElement('div');
-  wrapper.style.cssText = 'position:fixed;top:-9999px;left:-9999px;background:#ffffff;padding:20px 32px;width:'+(el.offsetWidth+64)+'px;box-sizing:border-box;font-family:inherit';
+  const fullW = Math.max(el.offsetWidth, el.scrollWidth, 600);
+  wrapper.style.cssText = 'position:fixed;top:-9999px;left:-9999px;background:#ffffff;padding:20px 32px;width:'+(fullW+64)+'px;box-sizing:border-box;font-family:inherit;overflow:visible;';
   wrapper.innerHTML = el.innerHTML;
   document.body.appendChild(wrapper);
+  // Let content expand to natural height before capture
+  await new Promise(r => setTimeout(r, 80));
   try {
-    const canvas = await html2canvas(wrapper,{scale:2,backgroundColor:'#ffffff',useCORS:true,logging:false});
+    const canvas = await html2canvas(wrapper,{scale:2,backgroundColor:'#ffffff',useCORS:true,logging:false,width:wrapper.scrollWidth,height:wrapper.scrollHeight});
     const dataUrl = canvas.toDataURL('image/png');
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     if(isMobile){
