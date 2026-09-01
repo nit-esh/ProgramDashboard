@@ -7103,7 +7103,16 @@ async function _exportRegCountsPNG(filename, elId){
   document.body.appendChild(wrapper);
   try {
     const canvas = await html2canvas(wrapper,{scale:2,backgroundColor:'#ffffff',useCORS:true,logging:false});
-    const a=document.createElement('a'); a.href=canvas.toDataURL('image/png'); a.download=filename||'reg_counts.png'; a.click();
+    const dataUrl = canvas.toDataURL('image/png');
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if(isMobile){
+      const overlay = document.createElement('div');
+      overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;';
+      overlay.innerHTML = `<p style="color:#fff;margin:0 0 12px;font-size:14px;text-align:center;line-height:1.5;">Long-press the image and choose<br><strong>Save Image</strong> to download</p><img src="${dataUrl}" style="max-width:100%;max-height:72vh;border-radius:8px;box-shadow:0 4px 24px rgba(0,0,0,0.5);" /><button onclick="this.closest('div').remove()" style="margin-top:16px;padding:10px 28px;background:#fff;border:none;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;">Close</button>`;
+      document.body.appendChild(overlay);
+    } else {
+      const a=document.createElement('a'); a.href=dataUrl; a.download=filename||'reg_counts.png'; a.click();
+    }
   } finally {
     if(filterBar) filterBar.style.display = prevDisplay;
     document.body.removeChild(wrapper);
