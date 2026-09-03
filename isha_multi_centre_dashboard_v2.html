@@ -891,6 +891,7 @@ footer{text-align:center;padding:13px;font-size:.54rem;letter-spacing:1px;text-t
       <button id="ovNavInsights" class="ov-nav-btn" onclick="showOvPage('insights')">Karnataka Insights</button>
       <button id="ovNavRegCounts" class="ov-nav-btn" onclick="showOvPage('regcounts')">Reg Counts</button>
       <button id="ovNavIeOnline" class="ov-nav-btn" onclick="showOvPage('ieonline')">IE Online</button>
+      <button id="ovNavProgUpdates" class="ov-nav-btn" onclick="showOvPage('programupdates')">Program Updates</button>
     </div>
     <div id="ovOverviewPage">
     <div style="margin-bottom:14px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
@@ -1014,8 +1015,13 @@ footer{text-align:center;padding:13px;font-size:.54rem;letter-spacing:1px;text-t
       </div>
     </div>
 
+    <!-- Program Updates page -->
+    <div id="ovProgUpdatesPage" style="display:none">
+      <div id="ovProgUpdatesContent"></div>
+    </div>
+
     <!-- Karnataka Insights page -->
-    
+
     <div id="ovInsightsPage" style="display:none">
       <div style="margin-bottom:16px">
         <div style="font-size:1.1rem;font-weight:800;color:var(--navy);margin-bottom:3px">Karnataka Region — Insights</div>
@@ -3620,6 +3626,9 @@ const RESERVED_SEATS = {"Bhuta Shuddhi|Bannerghatta Road|2026-09": 0, "Jala Neti
 /* __XLSX_LANG_START__ */
 const XLSX_LANG = {"Bhuta Shuddhi|Bannerghatta Road|2026-09": "English", "Jala Neti|Bannerghatta Road|2026-09": "English", "Inner Engineering|Electronic City|2026-10": "English", "Inner Engineering|Hebbal|2026-10": "English", "Inner Engineering|Hubbali|2026-09": "Kannada", "Bhuta Shuddhi|Indiranagar|2026-09": "English", "Jala Neti|Indiranagar|2026-09": "English", "Shanmukhi Mudra|Indiranagar|2026-09": "English", "Surya Kriya|Indiranagar|2026-09": "English", "Yogasanas|Indiranagar|2026-09": "English", "Angamardana|IP - Jayanagar|2026-09": "English", "Surya Kriya|IP - Jayanagar|2026-09": "English", "Yogasanas|IP - Jayanagar|2026-09": "English", "Angamardana|HSR Layout|2026-09": "English", "Surya Kriya|HSR Layout|2026-09": "English", "Yogasanas|HSR Layout|2026-09": "English", "Bhuta Shuddhi|IP - Malleswaram|2026-09": "English", "Inner Engineering|IP - Malleswaram|2026-10": "English", "Inner Engineering|IP - Malleswaram|2026-09": "English", "Surya Kriya|IP - Malleswaram|2026-09": "English", "Yogasanas|IP - Malleswaram|2026-09": "English", "Angamardana|IP - Marathahalli|2026-08": "English", "Inner Engineering|IP - Marathahalli|2026-11": "English", "Shanmukhi Mudra|IP - Marathahalli|2026-09": "English", "Surya Kriya|IP - Marathahalli|2026-09": "English", "Inner Engineering|Mysuru|2026-10": "English", "Bhuta Shuddhi|IP - Vijayanagar|2026-09": "English", "Guru Pooja|IP - Vijayanagar|2026-10": "English", "Shanmukhi Mudra|IP - Vijayanagar|2026-09": "English", "Yogasanas|IP - Vijayanagar|2026-09": "English", "Angamardana|Kanakapura Road|2026-09": "English", "Inner Engineering|Kanakapura Road|2026-10": "English", "Surya Kriya|Kanakapura Road|2026-09": "English", "Bhuta Shuddhi|Kanakapura Road|2026-09": "English"};
 /* __XLSX_LANG_END__ */
+/* __PROG_UPDATES_START__ */
+const PROGRAM_UPDATES = {"2026-08": {"total": 1234, "month": "August", "year": 2026, "rows": [{"progLabel": "Angamardana", "centre": "HSR Layout", "count": 1, "name": "Angamardana (English), HSR Layout 23-27 August 2026"}, {"progLabel": "Angamardana", "centre": "IP - Malleswaram", "count": 12, "name": "Angamardana (English), Malleshwaram, 15-16 Aug, 2026"}, {"progLabel": "Angamardana", "centre": "IP - Marathahalli", "count": 13, "name": "Angamardana (English), Marathahalli  17-21 August 2026"}, {"progLabel": "Angamardana", "centre": "IP - Marathahalli", "count": 10, "name": "Angamardana (English), Marathahalli  31 Aug - 4 Sept 2026"}, {"progLabel": "Angamardana", "centre": "IP - Vijayanagar", "count": 18, "name": "Angamardana (English), Vijayanagar 22-23 August 2026"}, {"progLabel": "Bhuta Shuddhi", "centre": "IP - Jayanagar", "count": 20, "name": "Bhuta Shuddhi (English), Jayanagar, 16-Aug-2026"}, {"progLabel": "Bhuta Shuddhi", "centre": "IP - Malleswaram", "count": 9, "name": "Bhuta Shuddhi (English), Malleshwaram,16 Aug 2026"}, {"progLabel": "Bhuta Shuddhi", "centre": "IP - Marathahalli", "count": 18, "name": "Bhuta Shuddhi (English), Marathahalli 30 August 2026"}, {"progLabel": "Guru Pooja", "centre": "IP - Malleswaram", "count": 32, "name": "Guru Pooja (English), Malleswaram 7-9 August 2026"}, {"progLabel": "Inner Engineering", "centre": "Bannerghatta Road", "count": 26, "name": "Inner Engineering 4 Days (English), Bannerghatta Road 6-9 August 2026"}, {"progLabel": "Inner Engineering", "centre": "Budigere Cross", "count": 20, "name": "Inner Engineering 4 Days (English), Budigere Cross 20-23 Aug 2026"}, {"progLabel": "Inner Engineering", "centre": "Electronic City", "count": 29, "name": "Inner Engineering 4 Days (English), Electronic City 20-23 Aug 2026"}, {"progLabel": "Inner Engineering", "centre": "IP - Jayanagar", "count": 53, "name": "Inner Engineering 4 Days (English), Jayanagar 20-23 Aug 2026"}, {"progLabel": "Inner Engineering", "centre": "IP - Marathahalli", "count": 42, "name": "Inner Engineering 4 Days (English), Marathahalli, 6-9 Aug 2026"}, {"progLabel": "Inner Engineering", "centre": "IP - Vijayanagar", "count": 87, "name": "Inner Engineering 7 Days (Kannada), Vijayanagar 05-11 Aug 2026"}, {"progLabel": "Monthly Satsang", "centre": "Banaswadi", "count": 17, "name": "Monthly Satsang, Banaswadi, 02-Aug-2026"}, {"progLabel": "Monthly Satsang", "centre": "Begur", "count": 4, "name": "Monthly Satsang, Begur, 02-Aug-2026"}, {"progLabel": "Monthly Satsang", "centre": "Other", "count": 0, "name": "Monthly Satsang, BG Road, 02-Aug-2026"}, {"progLabel": "Monthly Satsang", "centre": "Budigere Cross", "count": 16, "name": "Monthly Satsang, Budigere Cross, 02-Aug-2026"}, {"progLabel": "Monthly Satsang", "centre": "Chandapura", "count": 6, "name": "Monthly Satsang, Chandapura, 02-Aug-2026"}, {"progLabel": "Monthly Satsang", "centre": "Chikkaballapura", "count": 0, "name": "Monthly Satsang,  Chikkaballapura, 02-Aug-2026"}, {"progLabel": "Monthly Satsang", "centre": "Electronic City", "count": 3, "name": "Monthly Satsang, Electronic City, 02-Aug-2026"}, {"progLabel": "Monthly Satsang", "centre": "Girinagar", "count": 16, "name": "Monthly Satsang, Girinagar, 02-Aug-2026"}, {"progLabel": "Monthly Satsang", "centre": "Hebbal", "count": 9, "name": "Monthly Satsang, Hebbal, 02-Aug-2026"}, {"progLabel": "Monthly Satsang", "centre": "Hubbali", "count": 0, "name": "Monthly Satsang, Hubballi, 02-Aug-2026"}, {"progLabel": "Monthly Satsang", "centre": "Indiranagar", "count": 7, "name": "Monthly Satsang, Indiranagar, 02-Aug-2026"}, {"progLabel": "Monthly Satsang", "centre": "IP - Jayanagar", "count": 19, "name": "Monthly Satsang, Jayanagar, 02-Aug-2026"}, {"progLabel": "Monthly Satsang", "centre": "Kanakapura Road", "count": 25, "name": "Monthly Satsang, Kanakapura Road, 02-Aug-2026"}, {"progLabel": "Monthly Satsang", "centre": "Tumkur", "count": 0, "name": "Monthly Satsang (Kannada), Tumkur, 02-Aug-2026"}, {"progLabel": "Monthly Satsang", "centre": "Koramangala", "count": 6, "name": "Monthly Satsang, Koramangala, 02-Aug-2026"}, {"progLabel": "Monthly Satsang", "centre": "IP - Malleswaram", "count": 8, "name": "Monthly Satsang, Malleshwaram, 02-Aug-2026"}, {"progLabel": "Monthly Satsang", "centre": "Mangalore", "count": 5, "name": "Monthly Satsang, Mangaluru, 02-Aug-2026"}, {"progLabel": "Monthly Satsang", "centre": "IP - Marathahalli", "count": 25, "name": "Monthly Satsang, Marathahalli, 02-Aug-2026"}, {"progLabel": "Monthly Satsang", "centre": "Mysuru", "count": 4, "name": "Monthly Satsang, Mysuru, 02-Aug-2026"}, {"progLabel": "Monthly Satsang", "centre": "Peenya", "count": 12, "name": "Monthly Satsang, Peenya, 02-Aug-2026"}, {"progLabel": "Monthly Satsang", "centre": "Sarjapur Road", "count": 3, "name": "Monthly Satsang, Sarjapur Road, 02-Aug-2026"}, {"progLabel": "Monthly Satsang", "centre": "Singasandra", "count": 3, "name": "Monthly Satsang, Singasandra, 02-Aug-2026"}, {"progLabel": "Monthly Satsang", "centre": "Udupi", "count": 0, "name": "Monthly Satsang, Udupi, 02-Aug-2026"}, {"progLabel": "Monthly Satsang", "centre": "IP - Vijayanagar", "count": 34, "name": "Monthly Satsang, Vijayanagar, 02-Aug-2026"}, {"progLabel": "Monthly Satsang", "centre": "Whitefield", "count": 0, "name": "Monthly Satsang, Whitefield, 02-Aug-2026"}, {"progLabel": "Monthly Satsang", "centre": "Yelahanka", "count": 13, "name": "Monthly Satsang, Yelahanka, 02-Aug-2026"}, {"progLabel": "Naga Panchami", "centre": "Sadhguru Sannidhi", "count": 371, "name": "Naga Panchami at Sadhguru Sannidhi, Bengaluru - Aug 17, 2026"}, {"progLabel": "Naga Panchami", "centre": "Sadhguru Sannidhi", "count": 2, "name": "Naga Panchami at Sadhguru Sannidhi, Bengaluru - Overseas - Aug 17, 2026"}, {"progLabel": "Other", "centre": "Other", "count": 0, "name": "Shambhavi Practice Correction Session, BG Road, Aug 16, 2026"}, {"progLabel": "Other", "centre": "IP - Malleswaram", "count": 0, "name": "Shambhavi Practice Correction Session, Malleshwaram, Aug 22, 2026"}, {"progLabel": "Shanmukhi Mudra", "centre": "IP - Malleswaram", "count": 11, "name": "Shanmukhi Mudra (English), Malleswaram 15 Aug 2026"}, {"progLabel": "Shoonya Intensive", "centre": "Sadhguru Sannidhi", "count": 89, "name": "Shoonya Intensive Program (English), Sadhguru Sannidhi Bengaluru, Aug 6 - 9, 2026"}, {"progLabel": "Surya Kriya", "centre": "HSR Layout", "count": 6, "name": "Surya Kriya (English), HSR Layout 19-22 August 2026"}, {"progLabel": "Surya Kriya", "centre": "IP - Vijayanagar", "count": 15, "name": "Surya Kriya (English), Vijayanagar 27-30 August 2026"}, {"progLabel": "Surya Kriya", "centre": "IP - Marathahalli", "count": 11, "name": "Surya Kriya Weekend (English) Marathahalli, 22-23 August 2026"}, {"progLabel": "Yogasanas", "centre": "HSR Layout", "count": 12, "name": "Yogasanas (English) HSR Layout, 10-14 August 2026"}, {"progLabel": "Yogasanas", "centre": "IP - Jayanagar", "count": 21, "name": "Yogasanas (English), Jayanagar, 12-16 Aug 2026"}, {"progLabel": "Yogasanas", "centre": "Kanakapura Road", "count": 15, "name": "Yogasanas (English) Kanakapura Road, 5-9 August 2026"}, {"progLabel": "Yogasanas", "centre": "IP - Malleswaram", "count": 16, "name": "Yogasanas (English) Malleshwaram, 26-30 Aug 2026"}, {"progLabel": "Yogasanas", "centre": "IP - Marathahalli", "count": 23, "name": "Yogasanas (English) Marathahalli, 24-28 August 2026"}, {"progLabel": "Yogasanas", "centre": "Yelahanka", "count": 17, "name": "Yogasanas (English), Yelahanka, 20-24 August 2026"}]}, "2026-07": {"total": 994, "month": "July", "year": 2026, "rows": [{"progLabel": "Angamardana", "centre": "Sadhguru Sannidhi", "count": 24, "name": "Angamardana (2 days Residential Program), Sadhguru Sannidhi Bengaluru - Jul 11 - 12, 2026"}, {"progLabel": "Angamardana", "centre": "Sadhguru Sannidhi", "count": 21, "name": "Angamardana (2 days Residential Program), Sadhguru Sannidhi Bengaluru - Jul 25 - 26, 2026"}, {"progLabel": "Angamardana", "centre": "HSR Layout", "count": 10, "name": "Angamardana (English), HSR Layout 25-29 July 2026"}, {"progLabel": "Angamardana", "centre": "IP - Jayanagar", "count": 12, "name": "Angamardana (English), Jayanagar 8-12 July 2026"}, {"progLabel": "Angamardana", "centre": "Koramangala", "count": 10, "name": "Angamardana (English), KSRP Madivala 27-30 July 2026"}, {"progLabel": "Angamardana", "centre": "IP - Malleswaram", "count": 0, "name": "Angamardana (English), Malleswaram 11-15 July, 2026"}, {"progLabel": "Angamardana", "centre": "IP - Marathahalli", "count": 7, "name": "Angamardana (English), Marathahalli  6-10 July 2026"}, {"progLabel": "Angamardana", "centre": "Mysuru", "count": 7, "name": "Angamardana (English), Mysuru 15-19 July 2026"}, {"progLabel": "Bhastrika Kriya", "centre": "HSR Layout", "count": 1, "name": "Bhastrika Kriya(English), HSR Layout 25 July 2026"}, {"progLabel": "Bhastrika Kriya", "centre": "Sadhguru Sannidhi", "count": 2, "name": "Bhastrika Kriya, Sadhguru Sannidhi Bengaluru - Jul 12, 2026"}, {"progLabel": "Bhuta Shuddhi", "centre": "Kanakapura Road", "count": 10, "name": "Bhuta Shuddhi (English), Kanakapura Road 19 July 2026"}, {"progLabel": "Bhuta Shuddhi", "centre": "IP - Malleswaram", "count": 12, "name": "Bhuta Shuddhi (English), Malleswaram 19 July 2026"}, {"progLabel": "Bhuta Shuddhi", "centre": "IP - Marathahalli", "count": 14, "name": "Bhuta Shuddhi (English), Marathahalli 19 July 2026"}, {"progLabel": "Bhuta Shuddhi", "centre": "Sadhguru Sannidhi", "count": 15, "name": "Bhuta Shuddhi, Sadhguru Sannidhi Bengaluru - Jul 19, 2026"}, {"progLabel": "Eye Care", "centre": "Sadhguru Sannidhi", "count": 4, "name": "Eye Care, Sadhguru Sannidhi Bengaluru - Jul 5, 2026"}, {"progLabel": "Shanmukhi Mudra", "centre": "IP - Jayanagar", "count": 6, "name": "Eye Care Yoga & Shanmukhi Mudra (English), Jayanagar 4-5 July 2026"}, {"progLabel": "Guru Pooja", "centre": "Electronic City", "count": 35, "name": "Guru Pooja (English), Electronic City, 17-19 July 2026"}, {"progLabel": "Hatha Yoga", "centre": "IP - Vijayanagar", "count": 4, "name": "Hatha Yoga for Children (English), Vijayanagar 18-22 July 2026"}, {"progLabel": "Inner Engineering", "centre": "Kanakapura Road", "count": 16, "name": "Inner Engineering 4 Days (English), Kanakapura Road 23-26 July 2026"}, {"progLabel": "Inner Engineering", "centre": "IP - Malleswaram", "count": 31, "name": "Inner Engineering 4 Days (English), Malleswaram 23-26 July 2026"}, {"progLabel": "Inner Engineering", "centre": "Sarjapur Road", "count": 31, "name": "Inner Engineering 4 Days (English), Sarjapur Road 16-19 July 2026"}, {"progLabel": "Isha Janani", "centre": "IP - Jayanagar", "count": 0, "name": "Isha Janani Program (English), Jayanagar 17-26 July 2026"}, {"progLabel": "Jala Neti", "centre": "Sadhguru Sannidhi", "count": 0, "name": "Jala Neti, Sadhguru Sannidhi Bengaluru - Jul 19, 2026"}, {"progLabel": "Monthly Satsang", "centre": "Banaswadi", "count": 29, "name": "Monthly Satsang, Banaswadi, 05-Jul-2026"}, {"progLabel": "Monthly Satsang", "centre": "Begur", "count": 6, "name": "Monthly Satsang, Begur, 05-Jul-2026"}, {"progLabel": "Monthly Satsang", "centre": "Other", "count": 10, "name": "Monthly Satsang, BG Road, 05-Jul-2026"}, {"progLabel": "Monthly Satsang", "centre": "Budigere Cross", "count": 33, "name": "Monthly Satsang, Budigere Cross, 05-Jul-2026"}, {"progLabel": "Monthly Satsang", "centre": "Chandapura", "count": 7, "name": "Monthly Satsang, Chandapura, 05-Jul-2026"}, {"progLabel": "Monthly Satsang", "centre": "Chikkaballapura", "count": 5, "name": "Monthly Satsang,  Chikkaballapura, 05-Jul-2026"}, {"progLabel": "Monthly Satsang", "centre": "Electronic City", "count": 19, "name": "Monthly Satsang, Electronic City, 05-Jul-2026"}, {"progLabel": "Monthly Satsang", "centre": "Girinagar", "count": 15, "name": "Monthly Satsang, Girinagar, 05-Jul-2026"}, {"progLabel": "Monthly Satsang", "centre": "Hebbal", "count": 21, "name": "Monthly Satsang, Hebbal, 05-Jul-2026"}, {"progLabel": "Monthly Satsang", "centre": "Hubbali", "count": 0, "name": "Monthly Satsang, Hubballi, 05-Jul-2026"}, {"progLabel": "Monthly Satsang", "centre": "Indiranagar", "count": 36, "name": "Monthly Satsang, Indiranagar, 05-Jul-2026"}, {"progLabel": "Monthly Satsang", "centre": "IP - Jayanagar", "count": 27, "name": "Monthly Satsang, Jayanagar, 05-Jul-2026"}, {"progLabel": "Monthly Satsang", "centre": "Kanakapura Road", "count": 16, "name": "Monthly Satsang, Kanakapura Road, 05-Jul-2026"}, {"progLabel": "Monthly Satsang", "centre": "Tumkur", "count": 0, "name": "Monthly Satsang (Kannada), Tumkur, 05-Jul-2026"}, {"progLabel": "Monthly Satsang", "centre": "Kengeri", "count": 13, "name": "Monthly Satsang, Kengeri, 05-Jul-2026"}, {"progLabel": "Monthly Satsang", "centre": "Koramangala", "count": 0, "name": "Monthly Satsang, Koramangala, 05-Jul-2026"}, {"progLabel": "Monthly Satsang", "centre": "IP - Malleswaram", "count": 26, "name": "Monthly Satsang, Malleshwaram, 05-Jul-2026"}, {"progLabel": "Monthly Satsang", "centre": "Mangalore", "count": 8, "name": "Monthly Satsang, Mangalore, 05-Jul-2026"}, {"progLabel": "Monthly Satsang", "centre": "IP - Marathahalli", "count": 31, "name": "Monthly Satsang, Marathahalli, 05-Jul-2026"}, {"progLabel": "Monthly Satsang", "centre": "Mysuru", "count": 11, "name": "Monthly Satsang, Mysuru, 05-Jul-2026"}, {"progLabel": "Monthly Satsang", "centre": "Peenya", "count": 0, "name": "Monthly Satsang, Peenya, 05-Jul-2026"}, {"progLabel": "Monthly Satsang", "centre": "Sarjapur Road", "count": 0, "name": "Monthly Satsang, Sarjapur Road, 05-Jul-2026"}, {"progLabel": "Monthly Satsang", "centre": "Singasandra", "count": 0, "name": "Monthly Satsang, Singasandra, 05-Jul-2026"}, {"progLabel": "Monthly Satsang", "centre": "IP - Vijayanagar", "count": 39, "name": "Monthly Satsang, Vijayanagar, 05-Jul-2026"}, {"progLabel": "Monthly Satsang", "centre": "Whitefield", "count": 0, "name": "Monthly Satsang, Whitefield, 05-Jul-2026"}, {"progLabel": "Monthly Satsang", "centre": "Yelahanka", "count": 27, "name": "Monthly Satsang, Yelahanka, 05-Jul-2026"}, {"progLabel": "Shanmukhi Mudra", "centre": "IP - Marathahalli", "count": 15, "name": "Shanmukhi Mudra (English), Marathahalli 5 July 2026"}, {"progLabel": "Shanmukhi Mudra", "centre": "Sadhguru Sannidhi", "count": 4, "name": "Shanmukhi Mudra, Sadhguru Sannidhi Bengaluru - Jul 5, 2026"}, {"progLabel": "Shoonya Intensive", "centre": "Sadhguru Sannidhi", "count": 62, "name": "Shoonya Intensive Program (English), Sadhguru Sannidhi Bengaluru, Jul 16 - 19, 2026"}, {"progLabel": "Shoonya Intensive", "centre": "Sadhguru Sannidhi", "count": 88, "name": "Shoonya Intensive Program (English), Sadhguru Sannidhi Bengaluru, Jul 23 - 26, 2026"}, {"progLabel": "Shoonya Intensive", "centre": "Sadhguru Sannidhi", "count": 45, "name": "Shoonya Intensive Program (English), Sadhguru Sannidhi Bengaluru, Jul 2 - 5, 2026"}, {"progLabel": "Surya Kriya", "centre": "HSR Layout", "count": 4, "name": "Surya Kriya (English), HSR Layout 20-23 July 2026"}, {"progLabel": "Surya Kriya", "centre": "IP - Jayanagar", "count": 10, "name": "Surya Kriya (English), Jayanagar, 9-12 July, 2026"}, {"progLabel": "Surya Kriya", "centre": "Kanakapura Road", "count": 13, "name": "Surya Kriya (English), Kanakapura Road 12-15 July 2026"}, {"progLabel": "Surya Kriya", "centre": "Sadhguru Sannidhi", "count": 0, "name": "Surya Kriya Review, Sadhguru Sannidhi Bengaluru - Jul 10, 2026"}, {"progLabel": "Surya Kriya", "centre": "Sadhguru Sannidhi", "count": 19, "name": "Surya Kriya & Surya Shakti (2 days Residential Program), Sadhguru Sannidhi Bengaluru - July 4 - 5, 2026"}, {"progLabel": "Surya Kriya", "centre": "IP - Malleswaram", "count": 11, "name": "Surya Kriya Weekend (English), Malleswaram 18-19 July 2026"}, {"progLabel": "Surya Kriya", "centre": "IP - Marathahalli", "count": 17, "name": "Surya Kriya Weekend (English) Marathahalli, 11-12 July 2026"}, {"progLabel": "Other", "centre": "Sadhguru Sannidhi", "count": 0, "name": "Thoppukarnam, Sadhguru Sannidhi Bengaluru - Jul 12, 2026"}, {"progLabel": "Yogasanas", "centre": "Sadhguru Sannidhi", "count": 2, "name": "Yogasanas Advanced, Sadhguru Sannidhi Bengaluru - Jul 26, 2026"}, {"progLabel": "Yogasanas", "centre": "Sadhguru Sannidhi", "count": 35, "name": "Yogasanas Beginner (2 days Residential Program), Sadhguru Sannidhi Bengaluru - Jul 18-19, 2026"}, {"progLabel": "Yogasanas", "centre": "HSR Layout", "count": 6, "name": "Yogasanas (English) HSR Layout, 15-19 July 2026"}, {"progLabel": "Yogasanas", "centre": "IP - Marathahalli", "count": 11, "name": "Yogasanas (English) Marathahalli, 13-17 July 2026"}, {"progLabel": "Yogasanas", "centre": "Sadhguru Sannidhi", "count": 1, "name": "Yogasanas Review, Sadhguru Sannidhi Bengaluru - Jul 17, 2026"}]}};
+/* __PROG_UPDATES_END__ */
 
 // ════════════════════════════════════════════════════════════
 //  PROGRAMME CONFIG
@@ -3846,130 +3855,336 @@ async function fetchSheetRegistrations(){
 /* __LIVE_REGS_START__ */
 const LIVE_REGS = {
   "sadhguru sannidhi": {
+    "angamardana|2026-07-11": 24,
+    "angamardana|2026-07-25": 21,
+    "bhastrika|2026-07-12": 2,
+    "bhuta shuddhi|2026-07-19": 15,
+    "eye care|2026-07-05": 4,
+    "guru purnima|2026-07-29": 0,
+    "jala neti|2026-07-19": 0,
+    "shanmukhi|2026-07-05": 4,
+    "shoonya intensive|2026-07-16": 62,
+    "shoonya intensive|2026-07-23": 88,
+    "shoonya intensive|2026-07-02": 45,
+    "volunteers meet|2026-06-11": 0,
+    "surya kriya|2026-07-10": 0,
+    "surya kriya surya shakti|2026-07-04": 19,
+    "thoppukarnam|2026-07-12": 0,
+    "volunteers meet|2026-07-11": 138,
+    "yogasanas|2026-07-26": 2,
+    "yogasanas|2026-07-18": 35,
+    "yogasanas|2026-07-17": 1,
+    "shoonya intensive|2026-08-06": 89,
+    "volunteers meet|2026-08-01": 38,
     "samyama": 235,
     "shoonya intensive|2026-10-15": 91,
     "shoonya intensive|2026-10-22": 90,
     "shoonya intensive|2026-10-29": 87,
     "upa yoga": 2278
   },
-  "girinagar": {
-    "satsang": 20
-  },
-  "banaswadi": {
-    "satsang": 18
-  },
-  "bg road": {
-    "bhuta shuddhi|2026-09-20": 0,
-    "jala neti|2026-09-20": 0,
-    "satsang": 22
-  },
-  "electronic": {
-    "inner engineering|2026-10-29": 0,
-    "satsang": 21
-  },
-  "begur": {
-    "satsang": 5
-  },
-  "chandapura": {
-    "satsang": 15
-  },
-  "hebbal": {
-    "inner engineering|2026-10-29": 5,
-    "satsang": 10
-  },
-  "hubbali": {
-    "inner engineering|2026-09-23": 4,
-    "satsang": 1
-  },
-  "indiranagar": {
-    "bhuta shuddhi|2026-09-05": 6,
-    "jala neti|2026-09-05": 3,
-    "satsang": 18,
-    "shanmukhi|2026-09-05": 6,
-    "surya kriya|2026-09-02": 0,
-    "yogasanas|2026-09-02": 1
-  },
-  "budigere cross": {
-    "satsang": 10
-  },
-  "jayanagar": {
-    "angamardana|2026-09-02": 0,
-    "satsang": 37,
-    "surya kriya": 12,
-    "yogasanas|2026-09-16": 17
-  },
   "hsr": {
+    "angamardana|2026-07-25": 10,
+    "bhastrika|2026-07-25": 1,
+    "guru purnima|2026-07-29": 32,
+    "surya kriya|2026-07-20": 4,
+    "yogasanas|2026-07-15": 6,
+    "angamardana|2026-08-23": 1,
+    "volunteers meet": 0,
+    "surya kriya|2026-08-19": 6,
+    "yogasanas|2026-08-10": 12,
     "angamardana|2026-09-25": 0,
     "surya kriya|2026-09-21": 1,
     "yogasanas|2026-09-16": 2
   },
-  "koramangala": {
-    "satsang": 14
-  },
-  "sarjapur": {
-    "satsang": 12
+  "jayanagar": {
+    "angamardana|2026-07-08": 12,
+    "eye care shanmukhi|2026-07-04": 6,
+    "guru purnima|2026-07-29": 47,
+    "isha janani|2026-07-17": 0,
+    "satsang": 83,
+    "surya kriya": 22,
+    "bhuta shuddhi": 20,
+    "inner engineering|2026-08-20": 53,
+    "volunteers meet": 0,
+    "yogasanas|2026-08-12": 21,
+    "angamardana|2026-09-02": 0,
+    "yogasanas|2026-09-16": 17
   },
   "malleswaram": {
+    "angamardana": 12,
+    "bhuta shuddhi|2026-07-19": 12,
+    "guru purnima|2026-07-29": 85,
+    "inner engineering|2026-07-23": 31,
+    "satsang": 47,
+    "surya kriya|2026-07-18": 11,
+    "bhuta shuddhi|2026-08-16": 9,
+    "guru pooja|2026-08-07": 32,
+    "volunteers meet": 0,
+    "shanmukhi|2026-08-15": 11,
+    "yogasanas|2026-08-26": 16,
     "bhuta shuddhi|2026-09-20": 1,
     "inner engineering|2026-10-08": 0,
     "inner engineering|2026-09-10": 14,
-    "satsang": 13,
     "surya kriya|2026-09-19": 2,
     "yogasanas|2026-09-21": 2
   },
-  "peenya": {
-    "satsang": 12
-  },
-  "mangalore": {
-    "satsang": 6
-  },
   "marathahalli": {
+    "angamardana|2026-07-06": 7,
+    "bhuta shuddhi|2026-07-19": 14,
+    "guru purnima|2026-07-29": 19,
+    "satsang": 76,
+    "shanmukhi|2026-07-05": 15,
+    "surya kriya|2026-07-11": 17,
+    "yogasanas|2026-07-13": 11,
+    "angamardana|2026-08-17": 13,
     "angamardana|2026-08-31": 2,
+    "bhuta shuddhi|2026-08-30": 18,
+    "inner engineering|2026-08-06": 42,
+    "volunteers meet": 0,
+    "surya kriya|2026-08-22": 11,
+    "yogasanas|2026-08-24": 23,
     "inner engineering|2026-11-12": 3,
-    "satsang": 20,
     "shanmukhi|2026-09-06": 4,
     "surya kriya|2026-09-02": 2
   },
   "mysuru": {
-    "inner engineering|2026-10-22": 2,
-    "satsang": 5
-  },
-  "vijayanagar": {
-    "bhuta shuddhi|2026-09-12": 5,
-    "guru pooja|2026-10-23": 3,
-    "satsang": 21,
-    "shanmukhi|2026-09-12": 5,
-    "yogasanas|2026-09-16": 4
-  },
-  "kengeri": {
-    "satsang": 0
-  },
-  "tumkur": {
-    "satsang": 1
+    "angamardana|2026-07-15": 7,
+    "guru purnima|2026-07-29": 26,
+    "satsang": 20,
+    "volunteers meet": 0,
+    "inner engineering|2026-10-22": 2
   },
   "kanakapura": {
+    "bhuta shuddhi|2026-07-19": 10,
+    "guru purnima|2026-07-29": 57,
+    "inner engineering|2026-07-23": 16,
+    "satsang": 74,
+    "surya kriya|2026-07-12": 13,
+    "volunteers meet": 0,
+    "yogasanas|2026-08-05": 15,
     "angamardana|2026-09-12": 7,
     "inner engineering|2026-10-29": 2,
     "surya kriya|2026-09-01": 0,
+    "bhuta shuddhi|2026-09-12": 5
+  },
+  "electronic": {
+    "guru pooja|2026-07-17": 35,
+    "guru purnima|2026-07-29": 23,
+    "satsang": 43,
+    "inner engineering|2026-08-20": 29,
+    "volunteers meet": 0,
+    "inner engineering|2026-10-29": 0
+  },
+  "ballari": {
+    "guru purnima|2026-07-29": 8
+  },
+  "banaswadi": {
+    "guru purnima|2026-07-29": 14,
+    "satsang": 64,
+    "volunteers meet": 0
+  },
+  "belagavi": {
+    "guru purnima|2026-07-29": 33
+  },
+  "bg road": {
+    "guru purnima|2026-07-29": 8,
+    "satsang": 32,
+    "inner engineering|2026-08-06": 26,
+    "volunteers meet": 0,
+    "bhuta shuddhi|2026-09-20": 0,
+    "jala neti|2026-09-20": 0
+  },
+  "budigere cross": {
+    "guru purnima|2026-07-29": 56,
+    "satsang": 59,
+    "inner engineering|2026-08-20": 20,
+    "volunteers meet": 0
+  },
+  "hubbali": {
+    "guru purnima|2026-07-29": 26,
+    "satsang": 1,
+    "volunteers meet": 0,
+    "inner engineering|2026-09-23": 4
+  },
+  "indiranagar": {
+    "guru purnima|2026-07-29": 17,
+    "satsang": 61,
+    "bhuta shuddhi|2026-09-05": 6,
+    "jala neti|2026-09-05": 3,
+    "shanmukhi|2026-09-05": 6,
+    "surya kriya|2026-09-02": 0,
+    "yogasanas|2026-09-02": 1
+  },
+  "sarjapur": {
+    "guru purnima|2026-07-29": 15,
+    "inner engineering|2026-07-16": 31,
+    "satsang": 15,
+    "volunteers meet": 0
+  },
+  "mangalore": {
+    "guru purnima|2026-07-29": 39,
+    "satsang": 19
+  },
+  "tumkur": {
+    "guru purnima|2026-07-29": 0,
+    "satsang": 1
+  },
+  "vijayanagar": {
+    "guru purnima|2026-07-29": 99,
+    "hatha children|2026-07-18": 4,
+    "satsang": 94,
+    "angamardana|2026-08-22": 18,
+    "inner engineering|2026-08-05": 87,
+    "volunteers meet": 0,
+    "surya kriya|2026-08-27": 15,
     "bhuta shuddhi|2026-09-12": 5,
-    "satsang": 33
+    "guru pooja|2026-10-23": 3,
+    "shanmukhi|2026-09-12": 5,
+    "yogasanas|2026-09-16": 4
   },
   "yelahanka": {
-    "satsang": 10
+    "guru purnima|2026-07-29": 50,
+    "satsang": 50,
+    "yogasanas|2026-08-20": 17
+  },
+  "begur": {
+    "satsang": 15,
+    "volunteers meet": 0
+  },
+  "chandapura": {
+    "satsang": 28,
+    "volunteers meet": 0
+  },
+  "chikkaballapur": {
+    "satsang": 5
+  },
+  "girinagar": {
+    "satsang": 51
+  },
+  "hebbal": {
+    "satsang": 40,
+    "inner engineering|2026-10-29": 5
+  },
+  "kengeri": {
+    "satsang": 13,
+    "volunteers meet": 0
+  },
+  "koramangala": {
+    "satsang": 20
+  },
+  "peenya": {
+    "satsang": 24
+  },
+  "singasandra": {
+    "satsang": 3
+  },
+  "whitefield": {
+    "satsang": 0
   }
 };
 const LIVE_REGS_LANG = {
+  "hsr": {
+    "angamardana|2026-07-25": "English",
+    "bhastrika|2026-07-25": "English",
+    "surya kriya|2026-07-20": "English",
+    "yogasanas|2026-07-15": "English",
+    "angamardana|2026-08-23": "English",
+    "surya kriya|2026-08-19": "English",
+    "yogasanas|2026-08-10": "English",
+    "angamardana|2026-09-25": "English",
+    "surya kriya|2026-09-21": "English",
+    "yogasanas|2026-09-16": "English"
+  },
+  "jayanagar": {
+    "angamardana|2026-07-08": "English",
+    "eye care shanmukhi|2026-07-04": "English",
+    "isha janani|2026-07-17": "English",
+    "inner engineering|2026-08-20": "English",
+    "yogasanas|2026-08-12": "English",
+    "angamardana|2026-09-02": "English",
+    "yogasanas|2026-09-16": "English"
+  },
+  "marathahalli": {
+    "angamardana|2026-07-06": "English",
+    "bhuta shuddhi|2026-07-19": "English",
+    "shanmukhi|2026-07-05": "English",
+    "surya kriya|2026-07-11": "English",
+    "yogasanas|2026-07-13": "English",
+    "angamardana|2026-08-17": "English",
+    "angamardana|2026-08-31": "English",
+    "bhuta shuddhi|2026-08-30": "English",
+    "inner engineering|2026-08-06": "English",
+    "surya kriya|2026-08-22": "English",
+    "yogasanas|2026-08-24": "English",
+    "inner engineering|2026-11-12": "English",
+    "shanmukhi|2026-09-06": "English",
+    "surya kriya|2026-09-02": "English"
+  },
+  "mysuru": {
+    "angamardana|2026-07-15": "English",
+    "inner engineering|2026-10-22": "English"
+  },
+  "kanakapura": {
+    "bhuta shuddhi|2026-07-19": "English",
+    "inner engineering|2026-07-23": "English",
+    "surya kriya|2026-07-12": "English",
+    "yogasanas|2026-08-05": "English",
+    "angamardana|2026-09-12": "English",
+    "inner engineering|2026-10-29": "English",
+    "surya kriya|2026-09-01": "English",
+    "bhuta shuddhi|2026-09-12": "English"
+  },
+  "malleswaram": {
+    "bhuta shuddhi|2026-07-19": "English",
+    "inner engineering|2026-07-23": "English",
+    "surya kriya|2026-07-18": "English",
+    "bhuta shuddhi|2026-08-16": "English",
+    "guru pooja|2026-08-07": "English",
+    "shanmukhi|2026-08-15": "English",
+    "yogasanas|2026-08-26": "English",
+    "bhuta shuddhi|2026-09-20": "English",
+    "inner engineering|2026-10-08": "English",
+    "inner engineering|2026-09-10": "English",
+    "surya kriya|2026-09-19": "English",
+    "yogasanas|2026-09-21": "English"
+  },
+  "electronic": {
+    "guru pooja|2026-07-17": "English",
+    "inner engineering|2026-08-20": "English",
+    "inner engineering|2026-10-29": "English"
+  },
+  "vijayanagar": {
+    "hatha children|2026-07-18": "English",
+    "angamardana|2026-08-22": "English",
+    "inner engineering|2026-08-05": "Kannada",
+    "surya kriya|2026-08-27": "English",
+    "bhuta shuddhi|2026-09-12": "English",
+    "guru pooja|2026-10-23": "English",
+    "shanmukhi|2026-09-12": "English",
+    "yogasanas|2026-09-16": "English"
+  },
+  "sarjapur": {
+    "inner engineering|2026-07-16": "English"
+  },
   "sadhguru sannidhi": {
+    "shoonya intensive|2026-07-16": "English",
+    "shoonya intensive|2026-07-23": "English",
+    "shoonya intensive|2026-07-02": "English",
+    "shoonya intensive|2026-08-06": "English",
     "shoonya intensive|2026-10-15": "English",
     "shoonya intensive|2026-10-22": "English",
     "shoonya intensive|2026-10-29": "English"
   },
   "bg road": {
+    "inner engineering|2026-08-06": "English",
     "bhuta shuddhi|2026-09-20": "English",
     "jala neti|2026-09-20": "English"
   },
-  "electronic": {
-    "inner engineering|2026-10-29": "English"
+  "budigere cross": {
+    "inner engineering|2026-08-20": "English"
+  },
+  "yelahanka": {
+    "yogasanas|2026-08-20": "English"
   },
   "hebbal": {
     "inner engineering|2026-10-29": "English"
@@ -3983,50 +4198,13 @@ const LIVE_REGS_LANG = {
     "shanmukhi|2026-09-05": "English",
     "surya kriya|2026-09-02": "English",
     "yogasanas|2026-09-02": "English"
-  },
-  "jayanagar": {
-    "angamardana|2026-09-02": "English",
-    "yogasanas|2026-09-16": "English"
-  },
-  "hsr": {
-    "angamardana|2026-09-25": "English",
-    "surya kriya|2026-09-21": "English",
-    "yogasanas|2026-09-16": "English"
-  },
-  "malleswaram": {
-    "bhuta shuddhi|2026-09-20": "English",
-    "inner engineering|2026-10-08": "English",
-    "inner engineering|2026-09-10": "English",
-    "surya kriya|2026-09-19": "English",
-    "yogasanas|2026-09-21": "English"
-  },
-  "marathahalli": {
-    "angamardana|2026-08-31": "English",
-    "inner engineering|2026-11-12": "English",
-    "shanmukhi|2026-09-06": "English",
-    "surya kriya|2026-09-02": "English"
-  },
-  "mysuru": {
-    "inner engineering|2026-10-22": "English"
-  },
-  "vijayanagar": {
-    "bhuta shuddhi|2026-09-12": "English",
-    "guru pooja|2026-10-23": "English",
-    "shanmukhi|2026-09-12": "English",
-    "yogasanas|2026-09-16": "English"
-  },
-  "kanakapura": {
-    "angamardana|2026-09-12": "English",
-    "inner engineering|2026-10-29": "English",
-    "surya kriya|2026-09-01": "English",
-    "bhuta shuddhi|2026-09-12": "English"
   }
 };
-const LIVE_REGS_UPDATED = "03 Sep 2026, 12:44 PM";
+const LIVE_REGS_UPDATED = "03 Sep 2026, 02:07 PM";
 /* __LIVE_REGS_END__ */
 
 /* __REGS_HISTORY_START__ */
-const LIVE_REGS_HISTORY = [{"date": "2026-08-03", "regs": {"sadhguru sannidhi": {"samyama": 195, "shoonya intensive|2026-08-06": 94, "shoonya intensive|2026-10-15": 64, "shoonya intensive|2026-10-22": 56, "shoonya intensive|2026-10-29": 24, "upa yoga": 1635}, "bg road": {"inner engineering": 23}, "electronic": {"inner engineering": 6}, "jayanagar": {"angamardana": 4, "bhuta shuddhi": 10, "inner engineering": 13, "surya kriya": 1, "yogasanas": 18}, "hsr": {"angamardana": 1, "surya kriya": 1, "yogasanas": 6}, "malleswaram": {"angamardana": 7, "bhuta shuddhi": 1, "guru pooja": 35, "inner engineering": 0, "shanmukhi": 1, "yogasanas": 5}, "marathahalli": {"angamardana|2026-03-17": 7, "angamardana|2026-03-31": 0, "bhuta shuddhi|2026-03-30": 4, "inner engineering": 39, "shanmukhi|2026-03-06": 0, "surya kriya": 3, "yogasanas": 11}, "vijayanagar": {"angamardana": 4, "inner engineering": 86, "surya kriya": 0}, "budigere cross": {"inner engineering": 6}, "kanakapura": {"yogasanas": 15}, "yelahanka": {"yogasanas": 8}}}, {"date": "2026-08-06", "regs": {"sadhguru sannidhi": {"samyama": 195, "shoonya intensive|2026-08-06": 50, "shoonya intensive|2026-10-15": 79, "shoonya intensive|2026-10-22": 69, "shoonya intensive|2026-10-29": 34, "upa yoga": 1683}, "bg road": {"inner engineering": 26}, "electronic": {"inner engineering": 8}, "hebbal": {"inner engineering": 0}, "indiranagar": {"bhuta shuddhi": 0, "shanmukhi": 0, "surya kriya": 0, "yogasanas": 0}, "jayanagar": {"angamardana": 4, "bhuta shuddhi": 14, "inner engineering": 17, "surya kriya": 2, "yogasanas": 23}, "hsr": {"angamardana": 1, "surya kriya": 3, "yogasanas": 6}, "malleswaram": {"angamardana": 11, "bhuta shuddhi": 2, "guru pooja": 35, "inner engineering": 0, "shanmukhi": 1, "yogasanas": 8}, "marathahalli": {"angamardana|2026-03-17": 7, "angamardana|2026-03-31": 0, "bhuta shuddhi|2026-03-30": 5, "inner engineering|2026-03-12": 0, "inner engineering": 42, "shanmukhi|2026-03-06": 0, "surya kriya": 4, "yogasanas": 12}, "mysuru": {"inner engineering": 0}, "vijayanagar": {"angamardana": 4, "inner engineering": 6, "surya kriya": 0}, "budigere cross": {"inner engineering": 6}, "kanakapura": {"yogasanas": 1}, "yelahanka": {"yogasanas": 12}}}, {"date": "2026-08-18", "regs": {"sadhguru sannidhi": {"samyama": 200, "shoonya intensive|2026-10-15": 88, "shoonya intensive|2026-10-22": 89, "shoonya intensive|2026-10-29": 86, "upa yoga": 1845}, "banaswadi": {"volunteers meet": 0}, "bg road": {"volunteers meet": 0}, "electronic": {"inner engineering": 24, "volunteers meet": 0}, "begur": {"volunteers meet": 0}, "chandapura": {"volunteers meet": 0}, "hebbal": {"inner engineering": 2}, "indiranagar": {"bhuta shuddhi": 1, "jala neti": 2, "shanmukhi": 0, "surya kriya": 3, "yogasanas": 5}, "jayanagar": {"angamardana": 8, "inner engineering": 50, "volunteers meet": 0, "surya kriya": 7, "yogasanas": 12}, "hsr": {"angamardana": 3, "volunteers meet": 0, "surya kriya": 6}, "sarjapur": {"volunteers meet": 0}, "malleswaram": {"bhuta shuddhi": 0, "inner engineering": 2, "volunteers meet": 0, "surya kriya": 0, "yogasanas": 15}, "marathahalli": {"angamardana|2026-03-17": 4, "angamardana|2026-03-31": 0, "bhuta shuddhi|2026-03-30": 8, "inner engineering|2026-03-12": 0, "volunteers meet": 0, "shanmukhi|2026-03-06": 0, "surya kriya": 9, "yogasanas": 18}, "mysuru": {"inner engineering": 1, "volunteers meet": 0}, "vijayanagar": {"angamardana": 12, "bhuta shuddhi": 0, "volunteers meet": 0, "shanmukhi": 0, "surya kriya": 8, "yogasanas": 1}, "kengeri": {"volunteers meet": 0}, "kanakapura": {"angamardana": 2, "surya kriya": 2, "bhuta shuddhi": 2, "volunteers meet": 0}, "budigere cross": {"inner engineering": 14, "volunteers meet": 0}, "yelahanka": {"yogasanas": 18}}}, {"date": "2026-08-19", "regs": {"sadhguru sannidhi": {"samyama": 200, "shoonya intensive|2026-10-15": 88, "shoonya intensive|2026-10-22": 89, "shoonya intensive|2026-10-29": 86, "upa yoga": 1845}, "banaswadi": {"volunteers meet": 0}, "bg road": {"volunteers meet": 0}, "electronic": {"inner engineering": 25, "volunteers meet": 0}, "begur": {"volunteers meet": 0}, "chandapura": {"volunteers meet": 0}, "hebbal": {"inner engineering": 2}, "indiranagar": {"bhuta shuddhi": 1, "jala neti": 2, "shanmukhi": 0, "surya kriya": 3, "yogasanas": 5}, "jayanagar": {"angamardana": 8, "inner engineering": 52, "volunteers meet": 0, "surya kriya": 7, "yogasanas": 12}, "hsr": {"angamardana": 3, "volunteers meet": 0, "surya kriya": 6}, "sarjapur": {"volunteers meet": 0}, "malleswaram": {"bhuta shuddhi": 0, "inner engineering": 2, "volunteers meet": 0, "surya kriya": 0, "yogasanas": 15}, "marathahalli": {"angamardana|2026-03-17": 4, "angamardana|2026-03-31": 0, "bhuta shuddhi|2026-03-30": 9, "inner engineering|2026-03-12": 0, "volunteers meet": 0, "shanmukhi|2026-03-06": 0, "surya kriya": 9, "yogasanas": 19}, "mysuru": {"inner engineering": 1, "volunteers meet": 0}, "vijayanagar": {"angamardana": 12, "bhuta shuddhi": 0, "volunteers meet": 0, "shanmukhi": 0, "surya kriya": 8, "yogasanas": 1}, "kengeri": {"volunteers meet": 0}, "kanakapura": {"angamardana": 3, "surya kriya": 2, "bhuta shuddhi": 2, "volunteers meet": 0}, "budigere cross": {"inner engineering": 14, "volunteers meet": 0}, "yelahanka": {"yogasanas": 19}}}, {"date": "2026-08-20", "regs": {"sadhguru sannidhi": {"samyama": 202, "shoonya intensive|2026-10-15": 88, "shoonya intensive|2026-10-22": 89, "shoonya intensive|2026-10-29": 86, "upa yoga": 1850}, "banaswadi": {"volunteers meet": 0}, "bg road": {"volunteers meet": 0}, "electronic": {"inner engineering|2026-08-20": 30, "volunteers meet": 0}, "chandapura": {"volunteers meet": 0}, "begur": {"volunteers meet": 0}, "hebbal": {"inner engineering|2026-10-29": 2}, "indiranagar": {"bhuta shuddhi|2026-09-05": 1, "jala neti|2026-09-05": 0, "shanmukhi|2026-09-05": 0, "surya kriya|2026-09-02": 4, "yogasanas|2026-09-02": 6}, "jayanagar": {"angamardana|2026-09-02": 8, "inner engineering|2026-08-20": 52, "volunteers meet": 0, "surya kriya": 7, "yogasanas|2026-09-16": 12}, "hsr": {"angamardana|2026-08-23": 3, "volunteers meet": 0, "surya kriya|2026-08-19": 0}, "sarjapur": {"volunteers meet": 0}, "malleswaram": {"bhuta shuddhi|2026-09-20": 0, "inner engineering|2026-09-10": 3, "volunteers meet": 0, "surya kriya|2026-09-19": 0, "yogasanas|2026-08-26": 15, "yogasanas|2026-09-21": 0}, "marathahalli": {"angamardana|2026-08-17": 4, "angamardana|2026-08-31": 0, "bhuta shuddhi|2026-08-30": 10, "inner engineering|2026-11-12": 1, "volunteers meet": 0, "shanmukhi|2026-09-06": 0, "surya kriya|2026-09-02": 2, "surya kriya|2026-08-22": 7, "yogasanas|2026-08-24": 19}, "mysuru": {"inner engineering|2026-10-22": 1, "volunteers meet": 0}, "vijayanagar": {"angamardana|2026-08-22": 14, "bhuta shuddhi|2026-09-12": 0, "volunteers meet": 0, "shanmukhi|2026-09-12": 0, "surya kriya|2026-08-27": 8, "yogasanas|2026-09-16": 1}, "kengeri": {"volunteers meet": 0}, "kanakapura": {"angamardana|2026-09-12": 3, "surya kriya|2026-09-01": 2, "bhuta shuddhi|2026-09-12": 3, "volunteers meet": 0}, "budigere cross": {"inner engineering|2026-08-20": 19, "volunteers meet": 1}, "yelahanka": {"yogasanas|2026-08-20": 3}}}, {"date": "2026-08-22", "regs": {"sadhguru sannidhi": {"samyama": 202, "shoonya intensive|2026-10-15": 90, "shoonya intensive|2026-10-22": 90, "shoonya intensive|2026-10-29": 85, "upa yoga": 1868}, "banaswadi": {"volunteers meet": 0}, "bg road": {"volunteers meet": 0}, "electronic": {"inner engineering|2026-08-20": 3, "volunteers meet": 0}, "chandapura": {"volunteers meet": 0}, "begur": {"volunteers meet": 0}, "hebbal": {"inner engineering|2026-10-29": 2}, "hubbali": {"volunteers meet": 0}, "indiranagar": {"bhuta shuddhi|2026-09-05": 2, "jala neti|2026-09-05": 0, "shanmukhi|2026-09-05": 0, "surya kriya|2026-09-02": 5, "yogasanas|2026-09-02": 6}, "jayanagar": {"angamardana|2026-09-02": 8, "inner engineering|2026-08-20": 5, "volunteers meet": 0, "surya kriya": 7, "yogasanas|2026-09-16": 12}, "hsr": {"angamardana|2026-08-23": 3, "volunteers meet": 0, "surya kriya|2026-08-19": 0}, "sarjapur": {"volunteers meet": 0}, "malleswaram": {"bhuta shuddhi|2026-09-20": 0, "inner engineering|2026-09-10": 3, "volunteers meet": 0, "surya kriya|2026-09-19": 0, "yogasanas|2026-08-26": 16, "yogasanas|2026-09-21": 0}, "marathahalli": {"angamardana|2026-08-17": 4, "angamardana|2026-08-31": 0, "bhuta shuddhi|2026-08-30": 10, "inner engineering|2026-11-12": 1, "volunteers meet": 0, "shanmukhi|2026-09-06": 0, "surya kriya|2026-09-02": 3, "surya kriya|2026-08-22": 12, "yogasanas|2026-08-24": 20}, "mysuru": {"inner engineering|2026-10-22": 2, "volunteers meet": 0}, "vijayanagar": {"angamardana|2026-08-22": 20, "bhuta shuddhi|2026-09-12": 0, "volunteers meet": 0, "shanmukhi|2026-09-12": 0, "surya kriya|2026-08-27": 10, "yogasanas|2026-09-16": 1}, "kengeri": {"volunteers meet": 0}, "kanakapura": {"angamardana|2026-09-12": 3, "surya kriya|2026-09-01": 3, "bhuta shuddhi|2026-09-12": 3, "volunteers meet": 0}, "budigere cross": {"inner engineering|2026-08-20": 2, "volunteers meet": 1}, "yelahanka": {"yogasanas|2026-08-20": 3}}}, {"date": "2026-08-23", "regs": {"sadhguru sannidhi": {"samyama": 202, "shoonya intensive|2026-10-15": 90, "shoonya intensive|2026-10-22": 90, "shoonya intensive|2026-10-29": 86, "upa yoga": 1890}, "girinagar": {"satsang": 0}, "banaswadi": {"volunteers meet": 0, "satsang": 0}, "bg road": {"volunteers meet": 0, "satsang": 0}, "electronic": {"inner engineering|2026-08-20": 3, "volunteers meet": 0, "satsang": 0}, "chandapura": {"volunteers meet": 0, "satsang": 0}, "begur": {"volunteers meet": 0}, "hebbal": {"inner engineering|2026-10-29": 3, "satsang": 0}, "hubbali": {"volunteers meet": 0, "satsang": 0}, "indiranagar": {"bhuta shuddhi|2026-09-05": 2, "jala neti|2026-09-05": 0, "satsang": 0, "shanmukhi|2026-09-05": 0, "surya kriya|2026-09-02": 6, "yogasanas|2026-09-02": 7}, "budigere cross": {"satsang": 0, "inner engineering|2026-08-20": 0, "volunteers meet": 1}, "jayanagar": {"angamardana|2026-09-02": 10, "inner engineering|2026-08-20": 2, "volunteers meet": 0, "satsang": 0, "surya kriya": 9, "yogasanas|2026-09-16": 13}, "hsr": {"angamardana|2026-08-23": 2, "volunteers meet": 0}, "sarjapur": {"volunteers meet": 0, "satsang": 0}, "koramangala": {"satsang": 0}, "malleswaram": {"bhuta shuddhi|2026-09-20": 0, "inner engineering|2026-10-08": 0, "inner engineering|2026-09-10": 4, "volunteers meet": 0, "satsang": 0, "surya kriya|2026-09-19": 0, "yogasanas|2026-08-26": 16, "yogasanas|2026-09-21": 2}, "mangalore": {"satsang": 0}, "marathahalli": {"angamardana|2026-08-31": 0, "bhuta shuddhi|2026-08-30": 12, "inner engineering|2026-11-12": 1, "volunteers meet": 0, "satsang": 0, "shanmukhi|2026-09-06": 0, "surya kriya|2026-09-02": 3, "surya kriya|2026-08-22": 3, "yogasanas|2026-08-24": 27}, "mysuru": {"inner engineering|2026-10-22": 2, "volunteers meet": 0, "satsang": 0}, "vijayanagar": {"angamardana|2026-08-22": 2, "bhuta shuddhi|2026-09-12": 1, "volunteers meet": 0, "satsang": 0, "shanmukhi|2026-09-12": 2, "surya kriya|2026-08-27": 10, "yogasanas|2026-09-16": 1}, "kengeri": {"volunteers meet": 0}, "tumkur": {"satsang": 0}, "kanakapura": {"angamardana|2026-09-12": 4, "inner engineering|2026-10-29": 0, "surya kriya|2026-09-01": 5, "bhuta shuddhi|2026-09-12": 4, "volunteers meet": 0, "satsang": 0}, "yelahanka": {"satsang": 0, "yogasanas|2026-08-20": 3}}}, {"date": "2026-08-24", "regs": {"sadhguru sannidhi": {"samyama": 202, "shoonya intensive|2026-10-15": 90, "shoonya intensive|2026-10-22": 90, "shoonya intensive|2026-10-29": 86, "upa yoga": 1908}, "girinagar": {"satsang": 0}, "banaswadi": {"volunteers meet": 0, "satsang": 2}, "bg road": {"volunteers meet": 0, "satsang": 0}, "chandapura": {"volunteers meet": 0, "satsang": 0}, "begur": {"volunteers meet": 0}, "electronic": {"volunteers meet": 0, "satsang": 0}, "hebbal": {"inner engineering|2026-10-29": 3, "satsang": 1}, "hubbali": {"inner engineering|2026-09-23": 0, "volunteers meet": 0, "satsang": 0}, "indiranagar": {"bhuta shuddhi|2026-09-05": 2, "jala neti|2026-09-05": 0, "satsang": 0, "shanmukhi|2026-09-05": 0, "surya kriya|2026-09-02": 6, "yogasanas|2026-09-02": 9}, "budigere cross": {"satsang": 0, "volunteers meet": 1}, "jayanagar": {"angamardana|2026-09-02": 10, "volunteers meet": 0, "satsang": 0, "surya kriya": 9, "yogasanas|2026-09-16": 13}, "hsr": {"angamardana|2026-08-23": 2, "volunteers meet": 0}, "sarjapur": {"volunteers meet": 0, "satsang": 1}, "koramangala": {"satsang": 2}, "malleswaram": {"bhuta shuddhi|2026-09-20": 0, "inner engineering|2026-10-08": 0, "inner engineering|2026-09-10": 4, "volunteers meet": 0, "satsang": 1, "surya kriya|2026-09-19": 1, "yogasanas|2026-08-26": 18, "yogasanas|2026-09-21": 2}, "mangalore": {"satsang": 0}, "marathahalli": {"angamardana|2026-08-31": 0, "bhuta shuddhi|2026-08-30": 14, "inner engineering|2026-11-12": 1, "volunteers meet": 0, "satsang": 1, "shanmukhi|2026-09-06": 0, "surya kriya|2026-09-02": 4, "yogasanas|2026-08-24": 4}, "mysuru": {"inner engineering|2026-10-22": 2, "volunteers meet": 0, "satsang": 0}, "vijayanagar": {"bhuta shuddhi|2026-09-12": 1, "volunteers meet": 0, "satsang": 1, "shanmukhi|2026-09-12": 2, "surya kriya|2026-08-27": 10, "yogasanas|2026-09-16": 1}, "kengeri": {"volunteers meet": 0}, "tumkur": {"satsang": 0}, "kanakapura": {"angamardana|2026-09-12": 4, "inner engineering|2026-10-29": 0, "surya kriya|2026-09-01": 5, "bhuta shuddhi|2026-09-12": 4, "volunteers meet": 0, "satsang": 0}, "yelahanka": {"satsang": 0, "yogasanas|2026-08-20": 3}}}, {"date": "2026-08-25", "regs": {"sadhguru sannidhi": {"samyama": 202, "shoonya intensive|2026-10-15": 90, "shoonya intensive|2026-10-22": 90, "shoonya intensive|2026-10-29": 86, "upa yoga": 1946}, "girinagar": {"satsang": 4}, "banaswadi": {"volunteers meet": 0, "satsang": 8}, "bg road": {"volunteers meet": 0, "satsang": 0}, "chandapura": {"volunteers meet": 0, "satsang": 1}, "begur": {"volunteers meet": 0, "satsang": 0}, "electronic": {"volunteers meet": 0, "satsang": 0}, "hebbal": {"inner engineering|2026-10-29": 3, "satsang": 1}, "hubbali": {"inner engineering|2026-09-23": 0, "volunteers meet": 0, "satsang": 0}, "indiranagar": {"bhuta shuddhi|2026-09-05": 2, "jala neti|2026-09-05": 0, "satsang": 1, "shanmukhi|2026-09-05": 0, "surya kriya|2026-09-02": 7, "yogasanas|2026-09-02": 11}, "budigere cross": {"satsang": 2, "volunteers meet": 1}, "jayanagar": {"angamardana|2026-09-02": 11, "volunteers meet": 0, "satsang": 0, "surya kriya": 9, "yogasanas|2026-09-16": 13}, "hsr": {"angamardana|2026-08-23": 2, "volunteers meet": 0}, "sarjapur": {"volunteers meet": 0, "satsang": 1}, "koramangala": {"satsang": 2}, "malleswaram": {"bhuta shuddhi|2026-09-20": 0, "inner engineering|2026-10-08": 0, "inner engineering|2026-09-10": 5, "volunteers meet": 0, "satsang": 1, "surya kriya|2026-09-19": 1, "yogasanas|2026-08-26": 18, "yogasanas|2026-09-21": 2}, "peenya": {"satsang": 0}, "mangalore": {"satsang": 1}, "marathahalli": {"angamardana|2026-08-31": 2, "bhuta shuddhi|2026-08-30": 15, "inner engineering|2026-11-12": 1, "volunteers meet": 0, "satsang": 1, "shanmukhi|2026-09-06": 0, "surya kriya|2026-09-02": 4, "yogasanas|2026-08-24": 4}, "mysuru": {"inner engineering|2026-10-22": 2, "volunteers meet": 0, "satsang": 0}, "vijayanagar": {"bhuta shuddhi|2026-09-12": 1, "volunteers meet": 0, "satsang": 1, "shanmukhi|2026-09-12": 2, "surya kriya|2026-08-27": 12, "yogasanas|2026-09-16": 1}, "kengeri": {"volunteers meet": 0, "satsang": 0}, "tumkur": {"satsang": 0}, "kanakapura": {"angamardana|2026-09-12": 4, "inner engineering|2026-10-29": 0, "surya kriya|2026-09-01": 5, "bhuta shuddhi|2026-09-12": 6, "volunteers meet": 0, "satsang": 3}, "yelahanka": {"satsang": 1}}}, {"date": "2026-08-26", "regs": {"sadhguru sannidhi": {"samyama": 204, "shoonya intensive|2026-10-15": 90, "shoonya intensive|2026-10-22": 90, "shoonya intensive|2026-10-29": 86, "upa yoga": 1954}, "girinagar": {"satsang": 4}, "banaswadi": {"volunteers meet": 0, "satsang": 8}, "bg road": {"volunteers meet": 0, "satsang": 0}, "chandapura": {"volunteers meet": 0, "satsang": 3}, "begur": {"volunteers meet": 0, "satsang": 0}, "electronic": {"volunteers meet": 0, "satsang": 1}, "hebbal": {"inner engineering|2026-10-29": 4, "satsang": 1}, "hubbali": {"inner engineering|2026-09-23": 0, "volunteers meet": 0, "satsang": 0}, "indiranagar": {"bhuta shuddhi|2026-09-05": 2, "jala neti|2026-09-05": 0, "satsang": 3, "shanmukhi|2026-09-05": 0, "surya kriya|2026-09-02": 7, "yogasanas|2026-09-02": 11}, "budigere cross": {"satsang": 2, "volunteers meet": 1}, "jayanagar": {"angamardana|2026-09-02": 11, "volunteers meet": 0, "satsang": 0, "surya kriya": 9, "yogasanas|2026-09-16": 13}, "hsr": {"angamardana|2026-08-23": 2, "volunteers meet": 0}, "sarjapur": {"volunteers meet": 0, "satsang": 2}, "koramangala": {"satsang": 3}, "malleswaram": {"bhuta shuddhi|2026-09-20": 0, "inner engineering|2026-10-08": 0, "inner engineering|2026-09-10": 9, "volunteers meet": 0, "satsang": 1, "surya kriya|2026-09-19": 1, "yogasanas|2026-08-26": 2, "yogasanas|2026-09-21": 2}, "peenya": {"satsang": 0}, "mangalore": {"satsang": 1}, "marathahalli": {"angamardana|2026-08-31": 2, "bhuta shuddhi|2026-08-30": 18, "inner engineering|2026-11-12": 2, "volunteers meet": 0, "satsang": 2, "shanmukhi|2026-09-06": 0, "surya kriya|2026-09-02": 4, "yogasanas|2026-08-24": 4}, "mysuru": {"inner engineering|2026-10-22": 2, "volunteers meet": 0, "satsang": 0}, "vijayanagar": {"bhuta shuddhi|2026-09-12": 2, "volunteers meet": 0, "satsang": 2, "shanmukhi|2026-09-12": 3, "surya kriya|2026-08-27": 18, "yogasanas|2026-09-16": 1}, "kengeri": {"volunteers meet": 0, "satsang": 0}, "tumkur": {"satsang": 0}, "kanakapura": {"angamardana|2026-09-12": 4, "inner engineering|2026-10-29": 1, "surya kriya|2026-09-01": 5, "bhuta shuddhi|2026-09-12": 6, "volunteers meet": 0, "satsang": 3}, "yelahanka": {"satsang": 1}}}, {"date": "2026-08-27", "regs": {"sadhguru sannidhi": {"samyama": 210, "shoonya intensive|2026-10-15": 90, "shoonya intensive|2026-10-22": 90, "shoonya intensive|2026-10-29": 86, "upa yoga": 1968}, "girinagar": {"satsang": 4}, "banaswadi": {"volunteers meet": 0, "satsang": 9}, "bg road": {"volunteers meet": 0, "satsang": 1}, "chandapura": {"volunteers meet": 0, "satsang": 3}, "begur": {"volunteers meet": 0, "satsang": 1}, "electronic": {"volunteers meet": 0, "satsang": 1}, "hebbal": {"inner engineering|2026-10-29": 4, "satsang": 1}, "hubbali": {"inner engineering|2026-09-23": 0, "volunteers meet": 0, "satsang": 1}, "indiranagar": {"bhuta shuddhi|2026-09-05": 2, "jala neti|2026-09-05": 0, "satsang": 4, "shanmukhi|2026-09-05": 0, "surya kriya|2026-09-02": 7, "yogasanas|2026-09-02": 11}, "budigere cross": {"satsang": 2, "volunteers meet": 1}, "jayanagar": {"angamardana|2026-09-02": 11, "volunteers meet": 0, "satsang": 1, "surya kriya": 9, "yogasanas|2026-09-16": 13}, "hsr": {"angamardana|2026-08-23": 2, "angamardana|2026-09-25": 0, "volunteers meet": 0, "surya kriya|2026-09-21": 0, "yogasanas|2026-09-16": 0}, "sarjapur": {"volunteers meet": 0, "satsang": 3}, "koramangala": {"satsang": 3}, "malleswaram": {"bhuta shuddhi|2026-09-20": 0, "inner engineering|2026-10-08": 0, "inner engineering|2026-09-10": 10, "volunteers meet": 0, "satsang": 1, "surya kriya|2026-09-19": 1, "yogasanas|2026-08-26": 2, "yogasanas|2026-09-21": 2}, "peenya": {"satsang": 1}, "mangalore": {"satsang": 1}, "marathahalli": {"angamardana|2026-08-31": 2, "bhuta shuddhi|2026-08-30": 18, "inner engineering|2026-11-12": 2, "volunteers meet": 0, "satsang": 2, "shanmukhi|2026-09-06": 1, "surya kriya|2026-09-02": 4, "yogasanas|2026-08-24": 4}, "mysuru": {"inner engineering|2026-10-22": 2, "volunteers meet": 0, "satsang": 1}, "vijayanagar": {"bhuta shuddhi|2026-09-12": 2, "volunteers meet": 0, "satsang": 2, "shanmukhi|2026-09-12": 3, "surya kriya|2026-08-27": 3, "yogasanas|2026-09-16": 2}, "kengeri": {"volunteers meet": 0, "satsang": 0}, "tumkur": {"satsang": 0}, "kanakapura": {"angamardana|2026-09-12": 4, "inner engineering|2026-10-29": 1, "surya kriya|2026-09-01": 5, "bhuta shuddhi|2026-09-12": 6, "volunteers meet": 0, "satsang": 3}, "yelahanka": {"satsang": 1}}}, {"date": "2026-08-28", "regs": {"sadhguru sannidhi": {"samyama": 211, "shoonya intensive|2026-10-15": 90, "shoonya intensive|2026-10-22": 90, "shoonya intensive|2026-10-29": 86, "upa yoga": 1981}, "girinagar": {"satsang": 4}, "banaswadi": {"volunteers meet": 0, "satsang": 9}, "bg road": {"volunteers meet": 0, "satsang": 1}, "chandapura": {"volunteers meet": 0, "satsang": 3}, "begur": {"volunteers meet": 0, "satsang": 1}, "electronic": {"volunteers meet": 0, "satsang": 2}, "hebbal": {"inner engineering|2026-10-29": 4, "satsang": 1}, "hubbali": {"inner engineering|2026-09-23": 1, "volunteers meet": 0, "satsang": 1}, "indiranagar": {"bhuta shuddhi|2026-09-05": 2, "jala neti|2026-09-05": 0, "satsang": 5, "shanmukhi|2026-09-05": 0, "surya kriya|2026-09-02": 7, "yogasanas|2026-09-02": 11}, "budigere cross": {"satsang": 2, "volunteers meet": 1}, "jayanagar": {"angamardana|2026-09-02": 11, "volunteers meet": 0, "satsang": 1, "surya kriya": 9, "yogasanas|2026-09-16": 13}, "hsr": {"angamardana|2026-09-25": 0, "volunteers meet": 0, "surya kriya|2026-09-21": 0, "yogasanas|2026-09-16": 0}, "sarjapur": {"volunteers meet": 0, "satsang": 3}, "koramangala": {"satsang": 3}, "malleswaram": {"bhuta shuddhi|2026-09-20": 0, "inner engineering|2026-10-08": 0, "inner engineering|2026-09-10": 10, "volunteers meet": 0, "satsang": 1, "surya kriya|2026-09-19": 1, "yogasanas|2026-08-26": 2, "yogasanas|2026-09-21": 2}, "peenya": {"satsang": 1}, "mangalore": {"satsang": 1}, "marathahalli": {"angamardana|2026-08-31": 2, "bhuta shuddhi|2026-08-30": 18, "inner engineering|2026-11-12": 2, "volunteers meet": 0, "satsang": 2, "shanmukhi|2026-09-06": 1, "surya kriya|2026-09-02": 6, "yogasanas|2026-08-24": 4}, "mysuru": {"inner engineering|2026-10-22": 2, "volunteers meet": 0, "satsang": 1}, "vijayanagar": {"bhuta shuddhi|2026-09-12": 2, "volunteers meet": 0, "satsang": 2, "shanmukhi|2026-09-12": 3, "surya kriya|2026-08-27": 4, "yogasanas|2026-09-16": 3}, "kengeri": {"volunteers meet": 0, "satsang": 0}, "tumkur": {"satsang": 1}, "kanakapura": {"angamardana|2026-09-12": 4, "inner engineering|2026-10-29": 1, "surya kriya|2026-09-01": 5, "bhuta shuddhi|2026-09-12": 6, "volunteers meet": 0, "satsang": 3}, "yelahanka": {"satsang": 2}}}, {"date": "2026-08-29", "regs": {"girinagar": {"satsang": 5}, "banaswadi": {"volunteers meet": 0, "satsang": 12}, "bg road": {"bhuta shuddhi|2026-09-20": 0, "jala neti|2026-09-20": 0, "volunteers meet": 0, "satsang": 1}, "chandapura": {"volunteers meet": 0, "satsang": 3}, "begur": {"volunteers meet": 0, "satsang": 1}, "electronic": {"volunteers meet": 0, "satsang": 2}, "hebbal": {"inner engineering|2026-10-29": 4, "satsang": 1}, "hubbali": {"inner engineering|2026-09-23": 1, "volunteers meet": 0, "satsang": 1}, "indiranagar": {"bhuta shuddhi|2026-09-05": 2, "jala neti|2026-09-05": 3, "satsang": 5, "shanmukhi|2026-09-05": 0, "surya kriya|2026-09-02": 9, "yogasanas|2026-09-02": 11}, "budigere cross": {"satsang": 2, "volunteers meet": 1}, "jayanagar": {"angamardana|2026-09-02": 11, "volunteers meet": 0, "satsang": 1, "surya kriya": 9, "yogasanas|2026-09-16": 13}, "hsr": {"angamardana|2026-09-25": 0, "volunteers meet": 0, "surya kriya|2026-09-21": 0, "yogasanas|2026-09-16": 0}, "sarjapur": {"volunteers meet": 0, "satsang": 3}, "koramangala": {"satsang": 3}, "malleswaram": {"bhuta shuddhi|2026-09-20": 0, "inner engineering|2026-10-08": 0, "inner engineering|2026-09-10": 10, "volunteers meet": 0, "satsang": 2, "surya kriya|2026-09-19": 1, "yogasanas|2026-08-26": 2, "yogasanas|2026-09-21": 2}, "peenya": {"satsang": 2}, "mangalore": {"satsang": 1}, "marathahalli": {"angamardana|2026-08-31": 5, "bhuta shuddhi|2026-08-30": 19, "inner engineering|2026-11-12": 2, "volunteers meet": 0, "satsang": 3, "shanmukhi|2026-09-06": 1, "surya kriya|2026-09-02": 6}, "mysuru": {"inner engineering|2026-10-22": 2, "volunteers meet": 0, "satsang": 2}, "vijayanagar": {"bhuta shuddhi|2026-09-12": 2, "volunteers meet": 0, "satsang": 4, "shanmukhi|2026-09-12": 3, "surya kriya|2026-08-27": 4, "yogasanas|2026-09-16": 3}, "kengeri": {"volunteers meet": 0, "satsang": 0}, "tumkur": {"satsang": 1}, "kanakapura": {"angamardana|2026-09-12": 4, "inner engineering|2026-10-29": 1, "surya kriya|2026-09-01": 5, "bhuta shuddhi|2026-09-12": 6, "volunteers meet": 0, "satsang": 4}, "yelahanka": {"satsang": 2}}}, {"date": "2026-08-30", "regs": {"girinagar": {"satsang": 8}, "banaswadi": {"volunteers meet": 0, "satsang": 14}, "bg road": {"bhuta shuddhi|2026-09-20": 0, "jala neti|2026-09-20": 0, "volunteers meet": 0, "satsang": 11}, "chandapura": {"volunteers meet": 0, "satsang": 3}, "begur": {"volunteers meet": 0, "satsang": 1}, "electronic": {"volunteers meet": 0, "satsang": 6}, "hebbal": {"inner engineering|2026-10-29": 4, "satsang": 6}, "hubbali": {"inner engineering|2026-09-23": 1, "volunteers meet": 0, "satsang": 1}, "indiranagar": {"bhuta shuddhi|2026-09-05": 2, "jala neti|2026-09-05": 3, "satsang": 9, "shanmukhi|2026-09-05": 1, "surya kriya|2026-09-02": 9, "yogasanas|2026-09-02": 15}, "budigere cross": {"satsang": 2, "volunteers meet": 1}, "jayanagar": {"angamardana|2026-09-02": 13, "volunteers meet": 0, "satsang": 2, "surya kriya": 9, "yogasanas|2026-09-16": 13}, "hsr": {"angamardana|2026-09-25": 0, "volunteers meet": 0, "surya kriya|2026-09-21": 0, "yogasanas|2026-09-16": 1}, "sarjapur": {"volunteers meet": 0, "satsang": 3}, "koramangala": {"satsang": 3}, "malleswaram": {"bhuta shuddhi|2026-09-20": 0, "inner engineering|2026-10-08": 0, "inner engineering|2026-09-10": 11, "volunteers meet": 0, "satsang": 7, "surya kriya|2026-09-19": 2, "yogasanas|2026-08-26": 2, "yogasanas|2026-09-21": 2}, "peenya": {"satsang": 2}, "mangalore": {"satsang": 3}, "marathahalli": {"angamardana|2026-08-31": 10, "bhuta shuddhi|2026-08-30": 1, "inner engineering|2026-11-12": 2, "volunteers meet": 0, "satsang": 12, "shanmukhi|2026-09-06": 1, "surya kriya|2026-09-02": 7}, "mysuru": {"inner engineering|2026-10-22": 2, "volunteers meet": 0, "satsang": 5}, "vijayanagar": {"bhuta shuddhi|2026-09-12": 2, "volunteers meet": 0, "satsang": 7, "shanmukhi|2026-09-12": 4, "surya kriya|2026-08-27": 4, "yogasanas|2026-09-16": 3}, "kengeri": {"volunteers meet": 0, "satsang": 0}, "tumkur": {"satsang": 1}, "kanakapura": {"angamardana|2026-09-12": 4, "inner engineering|2026-10-29": 1, "surya kriya|2026-09-01": 5, "bhuta shuddhi|2026-09-12": 6, "volunteers meet": 0, "satsang": 6}, "yelahanka": {"satsang": 3}}}, {"date": "2026-08-31", "regs": {"girinagar": {"satsang": 12}, "banaswadi": {"satsang": 15}, "bg road": {"bhuta shuddhi|2026-09-20": 0, "jala neti|2026-09-20": 0, "satsang": 16}, "begur": {"satsang": 1}, "chandapura": {"satsang": 5}, "electronic": {"satsang": 7}, "hebbal": {"inner engineering|2026-10-29": 4, "satsang": 9}, "hubbali": {"inner engineering|2026-09-23": 1, "satsang": 1}, "indiranagar": {"bhuta shuddhi|2026-09-05": 2, "jala neti|2026-09-05": 3, "satsang": 13, "shanmukhi|2026-09-05": 1, "surya kriya|2026-09-02": 9, "yogasanas|2026-09-02": 16}, "budigere cross": {"satsang": 2}, "jayanagar": {"angamardana|2026-09-02": 13, "satsang": 19, "surya kriya": 9, "yogasanas|2026-09-16": 13}, "hsr": {"angamardana|2026-09-25": 0, "surya kriya|2026-09-21": 0, "yogasanas|2026-09-16": 2}, "koramangala": {"satsang": 3}, "sarjapur": {"satsang": 3}, "malleswaram": {"bhuta shuddhi|2026-09-20": 0, "inner engineering|2026-10-08": 0, "inner engineering|2026-09-10": 11, "satsang": 7, "surya kriya|2026-09-19": 2, "yogasanas|2026-09-21": 2}, "peenya": {"satsang": 2}, "mangalore": {"satsang": 5}, "marathahalli": {"angamardana|2026-08-31": 2, "inner engineering|2026-11-12": 2, "satsang": 13, "shanmukhi|2026-09-06": 2, "surya kriya|2026-09-02": 9}, "mysuru": {"inner engineering|2026-10-22": 2, "satsang": 5}, "vijayanagar": {"bhuta shuddhi|2026-09-12": 2, "satsang": 8, "shanmukhi|2026-09-12": 5, "yogasanas|2026-09-16": 3}, "kengeri": {"satsang": 0}, "tumkur": {"satsang": 1}, "kanakapura": {"angamardana|2026-09-12": 4, "inner engineering|2026-10-29": 2, "surya kriya|2026-09-01": 7, "bhuta shuddhi|2026-09-12": 6, "satsang": 8}, "yelahanka": {"satsang": 10}}}, {"date": "2026-09-01", "regs": {"sadhguru sannidhi": {"samyama": 227, "shoonya intensive|2026-10-15": 91, "shoonya intensive|2026-10-22": 90, "shoonya intensive|2026-10-29": 87, "upa yoga": 2216}, "girinagar": {"satsang": 18}, "banaswadi": {"satsang": 17}, "bg road": {"bhuta shuddhi|2026-09-20": 0, "jala neti|2026-09-20": 0, "satsang": 17}, "begur": {"satsang": 1}, "chandapura": {"satsang": 6}, "electronic": {"satsang": 11}, "hebbal": {"inner engineering|2026-10-29": 4, "satsang": 9}, "hubbali": {"inner engineering|2026-09-23": 3, "satsang": 1}, "indiranagar": {"bhuta shuddhi|2026-09-05": 2, "jala neti|2026-09-05": 3, "satsang": 17, "shanmukhi|2026-09-05": 1, "surya kriya|2026-09-02": 10, "yogasanas|2026-09-02": 17}, "budigere cross": {"satsang": 8}, "jayanagar": {"angamardana|2026-09-02": 13, "satsang": 29, "surya kriya": 9, "yogasanas|2026-09-16": 13}, "hsr": {"angamardana|2026-09-25": 0, "surya kriya|2026-09-21": 1, "yogasanas|2026-09-16": 2}, "koramangala": {"satsang": 3}, "sarjapur": {"satsang": 3}, "malleswaram": {"bhuta shuddhi|2026-09-20": 1, "inner engineering|2026-10-08": 0, "inner engineering|2026-09-10": 12, "satsang": 8, "surya kriya|2026-09-19": 2, "yogasanas|2026-09-21": 2}, "peenya": {"satsang": 6}, "mangalore": {"satsang": 5}, "marathahalli": {"angamardana|2026-08-31": 2, "inner engineering|2026-11-12": 2, "satsang": 13, "shanmukhi|2026-09-06": 3, "surya kriya|2026-09-02": 11}, "mysuru": {"inner engineering|2026-10-22": 2, "satsang": 5}, "vijayanagar": {"bhuta shuddhi|2026-09-12": 2, "satsang": 9, "shanmukhi|2026-09-12": 5, "yogasanas|2026-09-16": 3}, "kengeri": {"satsang": 0}, "tumkur": {"satsang": 1}, "kanakapura": {"angamardana|2026-09-12": 6, "inner engineering|2026-10-29": 2, "surya kriya|2026-09-01": 0, "bhuta shuddhi|2026-09-12": 6, "satsang": 11}, "yelahanka": {"satsang": 10}}}, {"date": "2026-09-02", "regs": {"sadhguru sannidhi": {"samyama": 233, "shoonya intensive|2026-10-15": 91, "shoonya intensive|2026-10-22": 90, "shoonya intensive|2026-10-29": 87, "upa yoga": 2277}, "girinagar": {"satsang": 18}, "banaswadi": {"satsang": 18}, "bg road": {"bhuta shuddhi|2026-09-20": 0, "jala neti|2026-09-20": 0, "satsang": 22}, "electronic": {"inner engineering|2026-10-29": 0, "satsang": 20}, "begur": {"satsang": 3}, "chandapura": {"satsang": 10}, "hebbal": {"inner engineering|2026-10-29": 4, "satsang": 10}, "hubbali": {"inner engineering|2026-09-23": 4, "satsang": 1}, "indiranagar": {"bhuta shuddhi|2026-09-05": 3, "jala neti|2026-09-05": 3, "satsang": 17, "shanmukhi|2026-09-05": 3, "surya kriya|2026-09-02": 0, "yogasanas|2026-09-02": 4}, "budigere cross": {"satsang": 9}, "jayanagar": {"angamardana|2026-09-02": 0, "satsang": 35, "surya kriya": 12, "yogasanas|2026-09-16": 17}, "hsr": {"angamardana|2026-09-25": 0, "surya kriya|2026-09-21": 1, "yogasanas|2026-09-16": 2}, "koramangala": {"satsang": 12}, "sarjapur": {"satsang": 9}, "malleswaram": {"bhuta shuddhi|2026-09-20": 1, "inner engineering|2026-10-08": 0, "inner engineering|2026-09-10": 14, "satsang": 12, "surya kriya|2026-09-19": 2, "yogasanas|2026-09-21": 2}, "peenya": {"satsang": 12}, "mangalore": {"satsang": 6}, "marathahalli": {"angamardana|2026-08-31": 2, "inner engineering|2026-11-12": 3, "satsang": 19, "shanmukhi|2026-09-06": 4, "surya kriya|2026-09-02": 2}, "mysuru": {"inner engineering|2026-10-22": 2, "satsang": 5}, "vijayanagar": {"bhuta shuddhi|2026-09-12": 5, "guru pooja|2026-10-23": 1, "satsang": 17, "shanmukhi|2026-09-12": 5, "yogasanas|2026-09-16": 4}, "kengeri": {"satsang": 0}, "tumkur": {"satsang": 1}, "kanakapura": {"angamardana|2026-09-12": 7, "inner engineering|2026-10-29": 2, "surya kriya|2026-09-01": 0, "bhuta shuddhi|2026-09-12": 5, "satsang": 28}, "yelahanka": {"satsang": 10}}}, {"date": "2026-09-03", "regs": {"sadhguru sannidhi": {"samyama": 235, "shoonya intensive|2026-10-15": 91, "shoonya intensive|2026-10-22": 90, "shoonya intensive|2026-10-29": 87, "upa yoga": 2278}, "girinagar": {"satsang": 20}, "banaswadi": {"satsang": 18}, "bg road": {"bhuta shuddhi|2026-09-20": 0, "jala neti|2026-09-20": 0, "satsang": 22}, "electronic": {"inner engineering|2026-10-29": 0, "satsang": 21}, "begur": {"satsang": 5}, "chandapura": {"satsang": 15}, "hebbal": {"inner engineering|2026-10-29": 5, "satsang": 10}, "hubbali": {"inner engineering|2026-09-23": 4, "satsang": 1}, "indiranagar": {"bhuta shuddhi|2026-09-05": 6, "jala neti|2026-09-05": 3, "satsang": 18, "shanmukhi|2026-09-05": 6, "surya kriya|2026-09-02": 0, "yogasanas|2026-09-02": 1}, "budigere cross": {"satsang": 10}, "jayanagar": {"angamardana|2026-09-02": 0, "satsang": 37, "surya kriya": 12, "yogasanas|2026-09-16": 17}, "hsr": {"angamardana|2026-09-25": 0, "surya kriya|2026-09-21": 1, "yogasanas|2026-09-16": 2}, "koramangala": {"satsang": 14}, "sarjapur": {"satsang": 12}, "malleswaram": {"bhuta shuddhi|2026-09-20": 1, "inner engineering|2026-10-08": 0, "inner engineering|2026-09-10": 14, "satsang": 13, "surya kriya|2026-09-19": 2, "yogasanas|2026-09-21": 2}, "peenya": {"satsang": 12}, "mangalore": {"satsang": 6}, "marathahalli": {"angamardana|2026-08-31": 2, "inner engineering|2026-11-12": 3, "satsang": 20, "shanmukhi|2026-09-06": 4, "surya kriya|2026-09-02": 2}, "mysuru": {"inner engineering|2026-10-22": 2, "satsang": 5}, "vijayanagar": {"bhuta shuddhi|2026-09-12": 5, "guru pooja|2026-10-23": 3, "satsang": 21, "shanmukhi|2026-09-12": 5, "yogasanas|2026-09-16": 4}, "kengeri": {"satsang": 0}, "tumkur": {"satsang": 1}, "kanakapura": {"angamardana|2026-09-12": 7, "inner engineering|2026-10-29": 2, "surya kriya|2026-09-01": 0, "bhuta shuddhi|2026-09-12": 5, "satsang": 33}, "yelahanka": {"satsang": 10}}}];
+const LIVE_REGS_HISTORY = [{"date": "2026-08-03", "regs": {"sadhguru sannidhi": {"samyama": 195, "shoonya intensive|2026-08-06": 94, "shoonya intensive|2026-10-15": 64, "shoonya intensive|2026-10-22": 56, "shoonya intensive|2026-10-29": 24, "upa yoga": 1635}, "bg road": {"inner engineering": 23}, "electronic": {"inner engineering": 6}, "jayanagar": {"angamardana": 4, "bhuta shuddhi": 10, "inner engineering": 13, "surya kriya": 1, "yogasanas": 18}, "hsr": {"angamardana": 1, "surya kriya": 1, "yogasanas": 6}, "malleswaram": {"angamardana": 7, "bhuta shuddhi": 1, "guru pooja": 35, "inner engineering": 0, "shanmukhi": 1, "yogasanas": 5}, "marathahalli": {"angamardana|2026-03-17": 7, "angamardana|2026-03-31": 0, "bhuta shuddhi|2026-03-30": 4, "inner engineering": 39, "shanmukhi|2026-03-06": 0, "surya kriya": 3, "yogasanas": 11}, "vijayanagar": {"angamardana": 4, "inner engineering": 86, "surya kriya": 0}, "budigere cross": {"inner engineering": 6}, "kanakapura": {"yogasanas": 15}, "yelahanka": {"yogasanas": 8}}}, {"date": "2026-08-06", "regs": {"sadhguru sannidhi": {"samyama": 195, "shoonya intensive|2026-08-06": 50, "shoonya intensive|2026-10-15": 79, "shoonya intensive|2026-10-22": 69, "shoonya intensive|2026-10-29": 34, "upa yoga": 1683}, "bg road": {"inner engineering": 26}, "electronic": {"inner engineering": 8}, "hebbal": {"inner engineering": 0}, "indiranagar": {"bhuta shuddhi": 0, "shanmukhi": 0, "surya kriya": 0, "yogasanas": 0}, "jayanagar": {"angamardana": 4, "bhuta shuddhi": 14, "inner engineering": 17, "surya kriya": 2, "yogasanas": 23}, "hsr": {"angamardana": 1, "surya kriya": 3, "yogasanas": 6}, "malleswaram": {"angamardana": 11, "bhuta shuddhi": 2, "guru pooja": 35, "inner engineering": 0, "shanmukhi": 1, "yogasanas": 8}, "marathahalli": {"angamardana|2026-03-17": 7, "angamardana|2026-03-31": 0, "bhuta shuddhi|2026-03-30": 5, "inner engineering|2026-03-12": 0, "inner engineering": 42, "shanmukhi|2026-03-06": 0, "surya kriya": 4, "yogasanas": 12}, "mysuru": {"inner engineering": 0}, "vijayanagar": {"angamardana": 4, "inner engineering": 6, "surya kriya": 0}, "budigere cross": {"inner engineering": 6}, "kanakapura": {"yogasanas": 1}, "yelahanka": {"yogasanas": 12}}}, {"date": "2026-08-18", "regs": {"sadhguru sannidhi": {"samyama": 200, "shoonya intensive|2026-10-15": 88, "shoonya intensive|2026-10-22": 89, "shoonya intensive|2026-10-29": 86, "upa yoga": 1845}, "banaswadi": {"volunteers meet": 0}, "bg road": {"volunteers meet": 0}, "electronic": {"inner engineering": 24, "volunteers meet": 0}, "begur": {"volunteers meet": 0}, "chandapura": {"volunteers meet": 0}, "hebbal": {"inner engineering": 2}, "indiranagar": {"bhuta shuddhi": 1, "jala neti": 2, "shanmukhi": 0, "surya kriya": 3, "yogasanas": 5}, "jayanagar": {"angamardana": 8, "inner engineering": 50, "volunteers meet": 0, "surya kriya": 7, "yogasanas": 12}, "hsr": {"angamardana": 3, "volunteers meet": 0, "surya kriya": 6}, "sarjapur": {"volunteers meet": 0}, "malleswaram": {"bhuta shuddhi": 0, "inner engineering": 2, "volunteers meet": 0, "surya kriya": 0, "yogasanas": 15}, "marathahalli": {"angamardana|2026-03-17": 4, "angamardana|2026-03-31": 0, "bhuta shuddhi|2026-03-30": 8, "inner engineering|2026-03-12": 0, "volunteers meet": 0, "shanmukhi|2026-03-06": 0, "surya kriya": 9, "yogasanas": 18}, "mysuru": {"inner engineering": 1, "volunteers meet": 0}, "vijayanagar": {"angamardana": 12, "bhuta shuddhi": 0, "volunteers meet": 0, "shanmukhi": 0, "surya kriya": 8, "yogasanas": 1}, "kengeri": {"volunteers meet": 0}, "kanakapura": {"angamardana": 2, "surya kriya": 2, "bhuta shuddhi": 2, "volunteers meet": 0}, "budigere cross": {"inner engineering": 14, "volunteers meet": 0}, "yelahanka": {"yogasanas": 18}}}, {"date": "2026-08-19", "regs": {"sadhguru sannidhi": {"samyama": 200, "shoonya intensive|2026-10-15": 88, "shoonya intensive|2026-10-22": 89, "shoonya intensive|2026-10-29": 86, "upa yoga": 1845}, "banaswadi": {"volunteers meet": 0}, "bg road": {"volunteers meet": 0}, "electronic": {"inner engineering": 25, "volunteers meet": 0}, "begur": {"volunteers meet": 0}, "chandapura": {"volunteers meet": 0}, "hebbal": {"inner engineering": 2}, "indiranagar": {"bhuta shuddhi": 1, "jala neti": 2, "shanmukhi": 0, "surya kriya": 3, "yogasanas": 5}, "jayanagar": {"angamardana": 8, "inner engineering": 52, "volunteers meet": 0, "surya kriya": 7, "yogasanas": 12}, "hsr": {"angamardana": 3, "volunteers meet": 0, "surya kriya": 6}, "sarjapur": {"volunteers meet": 0}, "malleswaram": {"bhuta shuddhi": 0, "inner engineering": 2, "volunteers meet": 0, "surya kriya": 0, "yogasanas": 15}, "marathahalli": {"angamardana|2026-03-17": 4, "angamardana|2026-03-31": 0, "bhuta shuddhi|2026-03-30": 9, "inner engineering|2026-03-12": 0, "volunteers meet": 0, "shanmukhi|2026-03-06": 0, "surya kriya": 9, "yogasanas": 19}, "mysuru": {"inner engineering": 1, "volunteers meet": 0}, "vijayanagar": {"angamardana": 12, "bhuta shuddhi": 0, "volunteers meet": 0, "shanmukhi": 0, "surya kriya": 8, "yogasanas": 1}, "kengeri": {"volunteers meet": 0}, "kanakapura": {"angamardana": 3, "surya kriya": 2, "bhuta shuddhi": 2, "volunteers meet": 0}, "budigere cross": {"inner engineering": 14, "volunteers meet": 0}, "yelahanka": {"yogasanas": 19}}}, {"date": "2026-08-20", "regs": {"sadhguru sannidhi": {"samyama": 202, "shoonya intensive|2026-10-15": 88, "shoonya intensive|2026-10-22": 89, "shoonya intensive|2026-10-29": 86, "upa yoga": 1850}, "banaswadi": {"volunteers meet": 0}, "bg road": {"volunteers meet": 0}, "electronic": {"inner engineering|2026-08-20": 30, "volunteers meet": 0}, "chandapura": {"volunteers meet": 0}, "begur": {"volunteers meet": 0}, "hebbal": {"inner engineering|2026-10-29": 2}, "indiranagar": {"bhuta shuddhi|2026-09-05": 1, "jala neti|2026-09-05": 0, "shanmukhi|2026-09-05": 0, "surya kriya|2026-09-02": 4, "yogasanas|2026-09-02": 6}, "jayanagar": {"angamardana|2026-09-02": 8, "inner engineering|2026-08-20": 52, "volunteers meet": 0, "surya kriya": 7, "yogasanas|2026-09-16": 12}, "hsr": {"angamardana|2026-08-23": 3, "volunteers meet": 0, "surya kriya|2026-08-19": 0}, "sarjapur": {"volunteers meet": 0}, "malleswaram": {"bhuta shuddhi|2026-09-20": 0, "inner engineering|2026-09-10": 3, "volunteers meet": 0, "surya kriya|2026-09-19": 0, "yogasanas|2026-08-26": 15, "yogasanas|2026-09-21": 0}, "marathahalli": {"angamardana|2026-08-17": 4, "angamardana|2026-08-31": 0, "bhuta shuddhi|2026-08-30": 10, "inner engineering|2026-11-12": 1, "volunteers meet": 0, "shanmukhi|2026-09-06": 0, "surya kriya|2026-09-02": 2, "surya kriya|2026-08-22": 7, "yogasanas|2026-08-24": 19}, "mysuru": {"inner engineering|2026-10-22": 1, "volunteers meet": 0}, "vijayanagar": {"angamardana|2026-08-22": 14, "bhuta shuddhi|2026-09-12": 0, "volunteers meet": 0, "shanmukhi|2026-09-12": 0, "surya kriya|2026-08-27": 8, "yogasanas|2026-09-16": 1}, "kengeri": {"volunteers meet": 0}, "kanakapura": {"angamardana|2026-09-12": 3, "surya kriya|2026-09-01": 2, "bhuta shuddhi|2026-09-12": 3, "volunteers meet": 0}, "budigere cross": {"inner engineering|2026-08-20": 19, "volunteers meet": 1}, "yelahanka": {"yogasanas|2026-08-20": 3}}}, {"date": "2026-08-22", "regs": {"sadhguru sannidhi": {"samyama": 202, "shoonya intensive|2026-10-15": 90, "shoonya intensive|2026-10-22": 90, "shoonya intensive|2026-10-29": 85, "upa yoga": 1868}, "banaswadi": {"volunteers meet": 0}, "bg road": {"volunteers meet": 0}, "electronic": {"inner engineering|2026-08-20": 3, "volunteers meet": 0}, "chandapura": {"volunteers meet": 0}, "begur": {"volunteers meet": 0}, "hebbal": {"inner engineering|2026-10-29": 2}, "hubbali": {"volunteers meet": 0}, "indiranagar": {"bhuta shuddhi|2026-09-05": 2, "jala neti|2026-09-05": 0, "shanmukhi|2026-09-05": 0, "surya kriya|2026-09-02": 5, "yogasanas|2026-09-02": 6}, "jayanagar": {"angamardana|2026-09-02": 8, "inner engineering|2026-08-20": 5, "volunteers meet": 0, "surya kriya": 7, "yogasanas|2026-09-16": 12}, "hsr": {"angamardana|2026-08-23": 3, "volunteers meet": 0, "surya kriya|2026-08-19": 0}, "sarjapur": {"volunteers meet": 0}, "malleswaram": {"bhuta shuddhi|2026-09-20": 0, "inner engineering|2026-09-10": 3, "volunteers meet": 0, "surya kriya|2026-09-19": 0, "yogasanas|2026-08-26": 16, "yogasanas|2026-09-21": 0}, "marathahalli": {"angamardana|2026-08-17": 4, "angamardana|2026-08-31": 0, "bhuta shuddhi|2026-08-30": 10, "inner engineering|2026-11-12": 1, "volunteers meet": 0, "shanmukhi|2026-09-06": 0, "surya kriya|2026-09-02": 3, "surya kriya|2026-08-22": 12, "yogasanas|2026-08-24": 20}, "mysuru": {"inner engineering|2026-10-22": 2, "volunteers meet": 0}, "vijayanagar": {"angamardana|2026-08-22": 20, "bhuta shuddhi|2026-09-12": 0, "volunteers meet": 0, "shanmukhi|2026-09-12": 0, "surya kriya|2026-08-27": 10, "yogasanas|2026-09-16": 1}, "kengeri": {"volunteers meet": 0}, "kanakapura": {"angamardana|2026-09-12": 3, "surya kriya|2026-09-01": 3, "bhuta shuddhi|2026-09-12": 3, "volunteers meet": 0}, "budigere cross": {"inner engineering|2026-08-20": 2, "volunteers meet": 1}, "yelahanka": {"yogasanas|2026-08-20": 3}}}, {"date": "2026-08-23", "regs": {"sadhguru sannidhi": {"samyama": 202, "shoonya intensive|2026-10-15": 90, "shoonya intensive|2026-10-22": 90, "shoonya intensive|2026-10-29": 86, "upa yoga": 1890}, "girinagar": {"satsang": 0}, "banaswadi": {"volunteers meet": 0, "satsang": 0}, "bg road": {"volunteers meet": 0, "satsang": 0}, "electronic": {"inner engineering|2026-08-20": 3, "volunteers meet": 0, "satsang": 0}, "chandapura": {"volunteers meet": 0, "satsang": 0}, "begur": {"volunteers meet": 0}, "hebbal": {"inner engineering|2026-10-29": 3, "satsang": 0}, "hubbali": {"volunteers meet": 0, "satsang": 0}, "indiranagar": {"bhuta shuddhi|2026-09-05": 2, "jala neti|2026-09-05": 0, "satsang": 0, "shanmukhi|2026-09-05": 0, "surya kriya|2026-09-02": 6, "yogasanas|2026-09-02": 7}, "budigere cross": {"satsang": 0, "inner engineering|2026-08-20": 0, "volunteers meet": 1}, "jayanagar": {"angamardana|2026-09-02": 10, "inner engineering|2026-08-20": 2, "volunteers meet": 0, "satsang": 0, "surya kriya": 9, "yogasanas|2026-09-16": 13}, "hsr": {"angamardana|2026-08-23": 2, "volunteers meet": 0}, "sarjapur": {"volunteers meet": 0, "satsang": 0}, "koramangala": {"satsang": 0}, "malleswaram": {"bhuta shuddhi|2026-09-20": 0, "inner engineering|2026-10-08": 0, "inner engineering|2026-09-10": 4, "volunteers meet": 0, "satsang": 0, "surya kriya|2026-09-19": 0, "yogasanas|2026-08-26": 16, "yogasanas|2026-09-21": 2}, "mangalore": {"satsang": 0}, "marathahalli": {"angamardana|2026-08-31": 0, "bhuta shuddhi|2026-08-30": 12, "inner engineering|2026-11-12": 1, "volunteers meet": 0, "satsang": 0, "shanmukhi|2026-09-06": 0, "surya kriya|2026-09-02": 3, "surya kriya|2026-08-22": 3, "yogasanas|2026-08-24": 27}, "mysuru": {"inner engineering|2026-10-22": 2, "volunteers meet": 0, "satsang": 0}, "vijayanagar": {"angamardana|2026-08-22": 2, "bhuta shuddhi|2026-09-12": 1, "volunteers meet": 0, "satsang": 0, "shanmukhi|2026-09-12": 2, "surya kriya|2026-08-27": 10, "yogasanas|2026-09-16": 1}, "kengeri": {"volunteers meet": 0}, "tumkur": {"satsang": 0}, "kanakapura": {"angamardana|2026-09-12": 4, "inner engineering|2026-10-29": 0, "surya kriya|2026-09-01": 5, "bhuta shuddhi|2026-09-12": 4, "volunteers meet": 0, "satsang": 0}, "yelahanka": {"satsang": 0, "yogasanas|2026-08-20": 3}}}, {"date": "2026-08-24", "regs": {"sadhguru sannidhi": {"samyama": 202, "shoonya intensive|2026-10-15": 90, "shoonya intensive|2026-10-22": 90, "shoonya intensive|2026-10-29": 86, "upa yoga": 1908}, "girinagar": {"satsang": 0}, "banaswadi": {"volunteers meet": 0, "satsang": 2}, "bg road": {"volunteers meet": 0, "satsang": 0}, "chandapura": {"volunteers meet": 0, "satsang": 0}, "begur": {"volunteers meet": 0}, "electronic": {"volunteers meet": 0, "satsang": 0}, "hebbal": {"inner engineering|2026-10-29": 3, "satsang": 1}, "hubbali": {"inner engineering|2026-09-23": 0, "volunteers meet": 0, "satsang": 0}, "indiranagar": {"bhuta shuddhi|2026-09-05": 2, "jala neti|2026-09-05": 0, "satsang": 0, "shanmukhi|2026-09-05": 0, "surya kriya|2026-09-02": 6, "yogasanas|2026-09-02": 9}, "budigere cross": {"satsang": 0, "volunteers meet": 1}, "jayanagar": {"angamardana|2026-09-02": 10, "volunteers meet": 0, "satsang": 0, "surya kriya": 9, "yogasanas|2026-09-16": 13}, "hsr": {"angamardana|2026-08-23": 2, "volunteers meet": 0}, "sarjapur": {"volunteers meet": 0, "satsang": 1}, "koramangala": {"satsang": 2}, "malleswaram": {"bhuta shuddhi|2026-09-20": 0, "inner engineering|2026-10-08": 0, "inner engineering|2026-09-10": 4, "volunteers meet": 0, "satsang": 1, "surya kriya|2026-09-19": 1, "yogasanas|2026-08-26": 18, "yogasanas|2026-09-21": 2}, "mangalore": {"satsang": 0}, "marathahalli": {"angamardana|2026-08-31": 0, "bhuta shuddhi|2026-08-30": 14, "inner engineering|2026-11-12": 1, "volunteers meet": 0, "satsang": 1, "shanmukhi|2026-09-06": 0, "surya kriya|2026-09-02": 4, "yogasanas|2026-08-24": 4}, "mysuru": {"inner engineering|2026-10-22": 2, "volunteers meet": 0, "satsang": 0}, "vijayanagar": {"bhuta shuddhi|2026-09-12": 1, "volunteers meet": 0, "satsang": 1, "shanmukhi|2026-09-12": 2, "surya kriya|2026-08-27": 10, "yogasanas|2026-09-16": 1}, "kengeri": {"volunteers meet": 0}, "tumkur": {"satsang": 0}, "kanakapura": {"angamardana|2026-09-12": 4, "inner engineering|2026-10-29": 0, "surya kriya|2026-09-01": 5, "bhuta shuddhi|2026-09-12": 4, "volunteers meet": 0, "satsang": 0}, "yelahanka": {"satsang": 0, "yogasanas|2026-08-20": 3}}}, {"date": "2026-08-25", "regs": {"sadhguru sannidhi": {"samyama": 202, "shoonya intensive|2026-10-15": 90, "shoonya intensive|2026-10-22": 90, "shoonya intensive|2026-10-29": 86, "upa yoga": 1946}, "girinagar": {"satsang": 4}, "banaswadi": {"volunteers meet": 0, "satsang": 8}, "bg road": {"volunteers meet": 0, "satsang": 0}, "chandapura": {"volunteers meet": 0, "satsang": 1}, "begur": {"volunteers meet": 0, "satsang": 0}, "electronic": {"volunteers meet": 0, "satsang": 0}, "hebbal": {"inner engineering|2026-10-29": 3, "satsang": 1}, "hubbali": {"inner engineering|2026-09-23": 0, "volunteers meet": 0, "satsang": 0}, "indiranagar": {"bhuta shuddhi|2026-09-05": 2, "jala neti|2026-09-05": 0, "satsang": 1, "shanmukhi|2026-09-05": 0, "surya kriya|2026-09-02": 7, "yogasanas|2026-09-02": 11}, "budigere cross": {"satsang": 2, "volunteers meet": 1}, "jayanagar": {"angamardana|2026-09-02": 11, "volunteers meet": 0, "satsang": 0, "surya kriya": 9, "yogasanas|2026-09-16": 13}, "hsr": {"angamardana|2026-08-23": 2, "volunteers meet": 0}, "sarjapur": {"volunteers meet": 0, "satsang": 1}, "koramangala": {"satsang": 2}, "malleswaram": {"bhuta shuddhi|2026-09-20": 0, "inner engineering|2026-10-08": 0, "inner engineering|2026-09-10": 5, "volunteers meet": 0, "satsang": 1, "surya kriya|2026-09-19": 1, "yogasanas|2026-08-26": 18, "yogasanas|2026-09-21": 2}, "peenya": {"satsang": 0}, "mangalore": {"satsang": 1}, "marathahalli": {"angamardana|2026-08-31": 2, "bhuta shuddhi|2026-08-30": 15, "inner engineering|2026-11-12": 1, "volunteers meet": 0, "satsang": 1, "shanmukhi|2026-09-06": 0, "surya kriya|2026-09-02": 4, "yogasanas|2026-08-24": 4}, "mysuru": {"inner engineering|2026-10-22": 2, "volunteers meet": 0, "satsang": 0}, "vijayanagar": {"bhuta shuddhi|2026-09-12": 1, "volunteers meet": 0, "satsang": 1, "shanmukhi|2026-09-12": 2, "surya kriya|2026-08-27": 12, "yogasanas|2026-09-16": 1}, "kengeri": {"volunteers meet": 0, "satsang": 0}, "tumkur": {"satsang": 0}, "kanakapura": {"angamardana|2026-09-12": 4, "inner engineering|2026-10-29": 0, "surya kriya|2026-09-01": 5, "bhuta shuddhi|2026-09-12": 6, "volunteers meet": 0, "satsang": 3}, "yelahanka": {"satsang": 1}}}, {"date": "2026-08-26", "regs": {"sadhguru sannidhi": {"samyama": 204, "shoonya intensive|2026-10-15": 90, "shoonya intensive|2026-10-22": 90, "shoonya intensive|2026-10-29": 86, "upa yoga": 1954}, "girinagar": {"satsang": 4}, "banaswadi": {"volunteers meet": 0, "satsang": 8}, "bg road": {"volunteers meet": 0, "satsang": 0}, "chandapura": {"volunteers meet": 0, "satsang": 3}, "begur": {"volunteers meet": 0, "satsang": 0}, "electronic": {"volunteers meet": 0, "satsang": 1}, "hebbal": {"inner engineering|2026-10-29": 4, "satsang": 1}, "hubbali": {"inner engineering|2026-09-23": 0, "volunteers meet": 0, "satsang": 0}, "indiranagar": {"bhuta shuddhi|2026-09-05": 2, "jala neti|2026-09-05": 0, "satsang": 3, "shanmukhi|2026-09-05": 0, "surya kriya|2026-09-02": 7, "yogasanas|2026-09-02": 11}, "budigere cross": {"satsang": 2, "volunteers meet": 1}, "jayanagar": {"angamardana|2026-09-02": 11, "volunteers meet": 0, "satsang": 0, "surya kriya": 9, "yogasanas|2026-09-16": 13}, "hsr": {"angamardana|2026-08-23": 2, "volunteers meet": 0}, "sarjapur": {"volunteers meet": 0, "satsang": 2}, "koramangala": {"satsang": 3}, "malleswaram": {"bhuta shuddhi|2026-09-20": 0, "inner engineering|2026-10-08": 0, "inner engineering|2026-09-10": 9, "volunteers meet": 0, "satsang": 1, "surya kriya|2026-09-19": 1, "yogasanas|2026-08-26": 2, "yogasanas|2026-09-21": 2}, "peenya": {"satsang": 0}, "mangalore": {"satsang": 1}, "marathahalli": {"angamardana|2026-08-31": 2, "bhuta shuddhi|2026-08-30": 18, "inner engineering|2026-11-12": 2, "volunteers meet": 0, "satsang": 2, "shanmukhi|2026-09-06": 0, "surya kriya|2026-09-02": 4, "yogasanas|2026-08-24": 4}, "mysuru": {"inner engineering|2026-10-22": 2, "volunteers meet": 0, "satsang": 0}, "vijayanagar": {"bhuta shuddhi|2026-09-12": 2, "volunteers meet": 0, "satsang": 2, "shanmukhi|2026-09-12": 3, "surya kriya|2026-08-27": 18, "yogasanas|2026-09-16": 1}, "kengeri": {"volunteers meet": 0, "satsang": 0}, "tumkur": {"satsang": 0}, "kanakapura": {"angamardana|2026-09-12": 4, "inner engineering|2026-10-29": 1, "surya kriya|2026-09-01": 5, "bhuta shuddhi|2026-09-12": 6, "volunteers meet": 0, "satsang": 3}, "yelahanka": {"satsang": 1}}}, {"date": "2026-08-27", "regs": {"sadhguru sannidhi": {"samyama": 210, "shoonya intensive|2026-10-15": 90, "shoonya intensive|2026-10-22": 90, "shoonya intensive|2026-10-29": 86, "upa yoga": 1968}, "girinagar": {"satsang": 4}, "banaswadi": {"volunteers meet": 0, "satsang": 9}, "bg road": {"volunteers meet": 0, "satsang": 1}, "chandapura": {"volunteers meet": 0, "satsang": 3}, "begur": {"volunteers meet": 0, "satsang": 1}, "electronic": {"volunteers meet": 0, "satsang": 1}, "hebbal": {"inner engineering|2026-10-29": 4, "satsang": 1}, "hubbali": {"inner engineering|2026-09-23": 0, "volunteers meet": 0, "satsang": 1}, "indiranagar": {"bhuta shuddhi|2026-09-05": 2, "jala neti|2026-09-05": 0, "satsang": 4, "shanmukhi|2026-09-05": 0, "surya kriya|2026-09-02": 7, "yogasanas|2026-09-02": 11}, "budigere cross": {"satsang": 2, "volunteers meet": 1}, "jayanagar": {"angamardana|2026-09-02": 11, "volunteers meet": 0, "satsang": 1, "surya kriya": 9, "yogasanas|2026-09-16": 13}, "hsr": {"angamardana|2026-08-23": 2, "angamardana|2026-09-25": 0, "volunteers meet": 0, "surya kriya|2026-09-21": 0, "yogasanas|2026-09-16": 0}, "sarjapur": {"volunteers meet": 0, "satsang": 3}, "koramangala": {"satsang": 3}, "malleswaram": {"bhuta shuddhi|2026-09-20": 0, "inner engineering|2026-10-08": 0, "inner engineering|2026-09-10": 10, "volunteers meet": 0, "satsang": 1, "surya kriya|2026-09-19": 1, "yogasanas|2026-08-26": 2, "yogasanas|2026-09-21": 2}, "peenya": {"satsang": 1}, "mangalore": {"satsang": 1}, "marathahalli": {"angamardana|2026-08-31": 2, "bhuta shuddhi|2026-08-30": 18, "inner engineering|2026-11-12": 2, "volunteers meet": 0, "satsang": 2, "shanmukhi|2026-09-06": 1, "surya kriya|2026-09-02": 4, "yogasanas|2026-08-24": 4}, "mysuru": {"inner engineering|2026-10-22": 2, "volunteers meet": 0, "satsang": 1}, "vijayanagar": {"bhuta shuddhi|2026-09-12": 2, "volunteers meet": 0, "satsang": 2, "shanmukhi|2026-09-12": 3, "surya kriya|2026-08-27": 3, "yogasanas|2026-09-16": 2}, "kengeri": {"volunteers meet": 0, "satsang": 0}, "tumkur": {"satsang": 0}, "kanakapura": {"angamardana|2026-09-12": 4, "inner engineering|2026-10-29": 1, "surya kriya|2026-09-01": 5, "bhuta shuddhi|2026-09-12": 6, "volunteers meet": 0, "satsang": 3}, "yelahanka": {"satsang": 1}}}, {"date": "2026-08-28", "regs": {"sadhguru sannidhi": {"samyama": 211, "shoonya intensive|2026-10-15": 90, "shoonya intensive|2026-10-22": 90, "shoonya intensive|2026-10-29": 86, "upa yoga": 1981}, "girinagar": {"satsang": 4}, "banaswadi": {"volunteers meet": 0, "satsang": 9}, "bg road": {"volunteers meet": 0, "satsang": 1}, "chandapura": {"volunteers meet": 0, "satsang": 3}, "begur": {"volunteers meet": 0, "satsang": 1}, "electronic": {"volunteers meet": 0, "satsang": 2}, "hebbal": {"inner engineering|2026-10-29": 4, "satsang": 1}, "hubbali": {"inner engineering|2026-09-23": 1, "volunteers meet": 0, "satsang": 1}, "indiranagar": {"bhuta shuddhi|2026-09-05": 2, "jala neti|2026-09-05": 0, "satsang": 5, "shanmukhi|2026-09-05": 0, "surya kriya|2026-09-02": 7, "yogasanas|2026-09-02": 11}, "budigere cross": {"satsang": 2, "volunteers meet": 1}, "jayanagar": {"angamardana|2026-09-02": 11, "volunteers meet": 0, "satsang": 1, "surya kriya": 9, "yogasanas|2026-09-16": 13}, "hsr": {"angamardana|2026-09-25": 0, "volunteers meet": 0, "surya kriya|2026-09-21": 0, "yogasanas|2026-09-16": 0}, "sarjapur": {"volunteers meet": 0, "satsang": 3}, "koramangala": {"satsang": 3}, "malleswaram": {"bhuta shuddhi|2026-09-20": 0, "inner engineering|2026-10-08": 0, "inner engineering|2026-09-10": 10, "volunteers meet": 0, "satsang": 1, "surya kriya|2026-09-19": 1, "yogasanas|2026-08-26": 2, "yogasanas|2026-09-21": 2}, "peenya": {"satsang": 1}, "mangalore": {"satsang": 1}, "marathahalli": {"angamardana|2026-08-31": 2, "bhuta shuddhi|2026-08-30": 18, "inner engineering|2026-11-12": 2, "volunteers meet": 0, "satsang": 2, "shanmukhi|2026-09-06": 1, "surya kriya|2026-09-02": 6, "yogasanas|2026-08-24": 4}, "mysuru": {"inner engineering|2026-10-22": 2, "volunteers meet": 0, "satsang": 1}, "vijayanagar": {"bhuta shuddhi|2026-09-12": 2, "volunteers meet": 0, "satsang": 2, "shanmukhi|2026-09-12": 3, "surya kriya|2026-08-27": 4, "yogasanas|2026-09-16": 3}, "kengeri": {"volunteers meet": 0, "satsang": 0}, "tumkur": {"satsang": 1}, "kanakapura": {"angamardana|2026-09-12": 4, "inner engineering|2026-10-29": 1, "surya kriya|2026-09-01": 5, "bhuta shuddhi|2026-09-12": 6, "volunteers meet": 0, "satsang": 3}, "yelahanka": {"satsang": 2}}}, {"date": "2026-08-29", "regs": {"girinagar": {"satsang": 5}, "banaswadi": {"volunteers meet": 0, "satsang": 12}, "bg road": {"bhuta shuddhi|2026-09-20": 0, "jala neti|2026-09-20": 0, "volunteers meet": 0, "satsang": 1}, "chandapura": {"volunteers meet": 0, "satsang": 3}, "begur": {"volunteers meet": 0, "satsang": 1}, "electronic": {"volunteers meet": 0, "satsang": 2}, "hebbal": {"inner engineering|2026-10-29": 4, "satsang": 1}, "hubbali": {"inner engineering|2026-09-23": 1, "volunteers meet": 0, "satsang": 1}, "indiranagar": {"bhuta shuddhi|2026-09-05": 2, "jala neti|2026-09-05": 3, "satsang": 5, "shanmukhi|2026-09-05": 0, "surya kriya|2026-09-02": 9, "yogasanas|2026-09-02": 11}, "budigere cross": {"satsang": 2, "volunteers meet": 1}, "jayanagar": {"angamardana|2026-09-02": 11, "volunteers meet": 0, "satsang": 1, "surya kriya": 9, "yogasanas|2026-09-16": 13}, "hsr": {"angamardana|2026-09-25": 0, "volunteers meet": 0, "surya kriya|2026-09-21": 0, "yogasanas|2026-09-16": 0}, "sarjapur": {"volunteers meet": 0, "satsang": 3}, "koramangala": {"satsang": 3}, "malleswaram": {"bhuta shuddhi|2026-09-20": 0, "inner engineering|2026-10-08": 0, "inner engineering|2026-09-10": 10, "volunteers meet": 0, "satsang": 2, "surya kriya|2026-09-19": 1, "yogasanas|2026-08-26": 2, "yogasanas|2026-09-21": 2}, "peenya": {"satsang": 2}, "mangalore": {"satsang": 1}, "marathahalli": {"angamardana|2026-08-31": 5, "bhuta shuddhi|2026-08-30": 19, "inner engineering|2026-11-12": 2, "volunteers meet": 0, "satsang": 3, "shanmukhi|2026-09-06": 1, "surya kriya|2026-09-02": 6}, "mysuru": {"inner engineering|2026-10-22": 2, "volunteers meet": 0, "satsang": 2}, "vijayanagar": {"bhuta shuddhi|2026-09-12": 2, "volunteers meet": 0, "satsang": 4, "shanmukhi|2026-09-12": 3, "surya kriya|2026-08-27": 4, "yogasanas|2026-09-16": 3}, "kengeri": {"volunteers meet": 0, "satsang": 0}, "tumkur": {"satsang": 1}, "kanakapura": {"angamardana|2026-09-12": 4, "inner engineering|2026-10-29": 1, "surya kriya|2026-09-01": 5, "bhuta shuddhi|2026-09-12": 6, "volunteers meet": 0, "satsang": 4}, "yelahanka": {"satsang": 2}}}, {"date": "2026-08-30", "regs": {"girinagar": {"satsang": 8}, "banaswadi": {"volunteers meet": 0, "satsang": 14}, "bg road": {"bhuta shuddhi|2026-09-20": 0, "jala neti|2026-09-20": 0, "volunteers meet": 0, "satsang": 11}, "chandapura": {"volunteers meet": 0, "satsang": 3}, "begur": {"volunteers meet": 0, "satsang": 1}, "electronic": {"volunteers meet": 0, "satsang": 6}, "hebbal": {"inner engineering|2026-10-29": 4, "satsang": 6}, "hubbali": {"inner engineering|2026-09-23": 1, "volunteers meet": 0, "satsang": 1}, "indiranagar": {"bhuta shuddhi|2026-09-05": 2, "jala neti|2026-09-05": 3, "satsang": 9, "shanmukhi|2026-09-05": 1, "surya kriya|2026-09-02": 9, "yogasanas|2026-09-02": 15}, "budigere cross": {"satsang": 2, "volunteers meet": 1}, "jayanagar": {"angamardana|2026-09-02": 13, "volunteers meet": 0, "satsang": 2, "surya kriya": 9, "yogasanas|2026-09-16": 13}, "hsr": {"angamardana|2026-09-25": 0, "volunteers meet": 0, "surya kriya|2026-09-21": 0, "yogasanas|2026-09-16": 1}, "sarjapur": {"volunteers meet": 0, "satsang": 3}, "koramangala": {"satsang": 3}, "malleswaram": {"bhuta shuddhi|2026-09-20": 0, "inner engineering|2026-10-08": 0, "inner engineering|2026-09-10": 11, "volunteers meet": 0, "satsang": 7, "surya kriya|2026-09-19": 2, "yogasanas|2026-08-26": 2, "yogasanas|2026-09-21": 2}, "peenya": {"satsang": 2}, "mangalore": {"satsang": 3}, "marathahalli": {"angamardana|2026-08-31": 10, "bhuta shuddhi|2026-08-30": 1, "inner engineering|2026-11-12": 2, "volunteers meet": 0, "satsang": 12, "shanmukhi|2026-09-06": 1, "surya kriya|2026-09-02": 7}, "mysuru": {"inner engineering|2026-10-22": 2, "volunteers meet": 0, "satsang": 5}, "vijayanagar": {"bhuta shuddhi|2026-09-12": 2, "volunteers meet": 0, "satsang": 7, "shanmukhi|2026-09-12": 4, "surya kriya|2026-08-27": 4, "yogasanas|2026-09-16": 3}, "kengeri": {"volunteers meet": 0, "satsang": 0}, "tumkur": {"satsang": 1}, "kanakapura": {"angamardana|2026-09-12": 4, "inner engineering|2026-10-29": 1, "surya kriya|2026-09-01": 5, "bhuta shuddhi|2026-09-12": 6, "volunteers meet": 0, "satsang": 6}, "yelahanka": {"satsang": 3}}}, {"date": "2026-08-31", "regs": {"girinagar": {"satsang": 12}, "banaswadi": {"satsang": 15}, "bg road": {"bhuta shuddhi|2026-09-20": 0, "jala neti|2026-09-20": 0, "satsang": 16}, "begur": {"satsang": 1}, "chandapura": {"satsang": 5}, "electronic": {"satsang": 7}, "hebbal": {"inner engineering|2026-10-29": 4, "satsang": 9}, "hubbali": {"inner engineering|2026-09-23": 1, "satsang": 1}, "indiranagar": {"bhuta shuddhi|2026-09-05": 2, "jala neti|2026-09-05": 3, "satsang": 13, "shanmukhi|2026-09-05": 1, "surya kriya|2026-09-02": 9, "yogasanas|2026-09-02": 16}, "budigere cross": {"satsang": 2}, "jayanagar": {"angamardana|2026-09-02": 13, "satsang": 19, "surya kriya": 9, "yogasanas|2026-09-16": 13}, "hsr": {"angamardana|2026-09-25": 0, "surya kriya|2026-09-21": 0, "yogasanas|2026-09-16": 2}, "koramangala": {"satsang": 3}, "sarjapur": {"satsang": 3}, "malleswaram": {"bhuta shuddhi|2026-09-20": 0, "inner engineering|2026-10-08": 0, "inner engineering|2026-09-10": 11, "satsang": 7, "surya kriya|2026-09-19": 2, "yogasanas|2026-09-21": 2}, "peenya": {"satsang": 2}, "mangalore": {"satsang": 5}, "marathahalli": {"angamardana|2026-08-31": 2, "inner engineering|2026-11-12": 2, "satsang": 13, "shanmukhi|2026-09-06": 2, "surya kriya|2026-09-02": 9}, "mysuru": {"inner engineering|2026-10-22": 2, "satsang": 5}, "vijayanagar": {"bhuta shuddhi|2026-09-12": 2, "satsang": 8, "shanmukhi|2026-09-12": 5, "yogasanas|2026-09-16": 3}, "kengeri": {"satsang": 0}, "tumkur": {"satsang": 1}, "kanakapura": {"angamardana|2026-09-12": 4, "inner engineering|2026-10-29": 2, "surya kriya|2026-09-01": 7, "bhuta shuddhi|2026-09-12": 6, "satsang": 8}, "yelahanka": {"satsang": 10}}}, {"date": "2026-09-01", "regs": {"sadhguru sannidhi": {"samyama": 227, "shoonya intensive|2026-10-15": 91, "shoonya intensive|2026-10-22": 90, "shoonya intensive|2026-10-29": 87, "upa yoga": 2216}, "girinagar": {"satsang": 18}, "banaswadi": {"satsang": 17}, "bg road": {"bhuta shuddhi|2026-09-20": 0, "jala neti|2026-09-20": 0, "satsang": 17}, "begur": {"satsang": 1}, "chandapura": {"satsang": 6}, "electronic": {"satsang": 11}, "hebbal": {"inner engineering|2026-10-29": 4, "satsang": 9}, "hubbali": {"inner engineering|2026-09-23": 3, "satsang": 1}, "indiranagar": {"bhuta shuddhi|2026-09-05": 2, "jala neti|2026-09-05": 3, "satsang": 17, "shanmukhi|2026-09-05": 1, "surya kriya|2026-09-02": 10, "yogasanas|2026-09-02": 17}, "budigere cross": {"satsang": 8}, "jayanagar": {"angamardana|2026-09-02": 13, "satsang": 29, "surya kriya": 9, "yogasanas|2026-09-16": 13}, "hsr": {"angamardana|2026-09-25": 0, "surya kriya|2026-09-21": 1, "yogasanas|2026-09-16": 2}, "koramangala": {"satsang": 3}, "sarjapur": {"satsang": 3}, "malleswaram": {"bhuta shuddhi|2026-09-20": 1, "inner engineering|2026-10-08": 0, "inner engineering|2026-09-10": 12, "satsang": 8, "surya kriya|2026-09-19": 2, "yogasanas|2026-09-21": 2}, "peenya": {"satsang": 6}, "mangalore": {"satsang": 5}, "marathahalli": {"angamardana|2026-08-31": 2, "inner engineering|2026-11-12": 2, "satsang": 13, "shanmukhi|2026-09-06": 3, "surya kriya|2026-09-02": 11}, "mysuru": {"inner engineering|2026-10-22": 2, "satsang": 5}, "vijayanagar": {"bhuta shuddhi|2026-09-12": 2, "satsang": 9, "shanmukhi|2026-09-12": 5, "yogasanas|2026-09-16": 3}, "kengeri": {"satsang": 0}, "tumkur": {"satsang": 1}, "kanakapura": {"angamardana|2026-09-12": 6, "inner engineering|2026-10-29": 2, "surya kriya|2026-09-01": 0, "bhuta shuddhi|2026-09-12": 6, "satsang": 11}, "yelahanka": {"satsang": 10}}}, {"date": "2026-09-02", "regs": {"sadhguru sannidhi": {"samyama": 233, "shoonya intensive|2026-10-15": 91, "shoonya intensive|2026-10-22": 90, "shoonya intensive|2026-10-29": 87, "upa yoga": 2277}, "girinagar": {"satsang": 18}, "banaswadi": {"satsang": 18}, "bg road": {"bhuta shuddhi|2026-09-20": 0, "jala neti|2026-09-20": 0, "satsang": 22}, "electronic": {"inner engineering|2026-10-29": 0, "satsang": 20}, "begur": {"satsang": 3}, "chandapura": {"satsang": 10}, "hebbal": {"inner engineering|2026-10-29": 4, "satsang": 10}, "hubbali": {"inner engineering|2026-09-23": 4, "satsang": 1}, "indiranagar": {"bhuta shuddhi|2026-09-05": 3, "jala neti|2026-09-05": 3, "satsang": 17, "shanmukhi|2026-09-05": 3, "surya kriya|2026-09-02": 0, "yogasanas|2026-09-02": 4}, "budigere cross": {"satsang": 9}, "jayanagar": {"angamardana|2026-09-02": 0, "satsang": 35, "surya kriya": 12, "yogasanas|2026-09-16": 17}, "hsr": {"angamardana|2026-09-25": 0, "surya kriya|2026-09-21": 1, "yogasanas|2026-09-16": 2}, "koramangala": {"satsang": 12}, "sarjapur": {"satsang": 9}, "malleswaram": {"bhuta shuddhi|2026-09-20": 1, "inner engineering|2026-10-08": 0, "inner engineering|2026-09-10": 14, "satsang": 12, "surya kriya|2026-09-19": 2, "yogasanas|2026-09-21": 2}, "peenya": {"satsang": 12}, "mangalore": {"satsang": 6}, "marathahalli": {"angamardana|2026-08-31": 2, "inner engineering|2026-11-12": 3, "satsang": 19, "shanmukhi|2026-09-06": 4, "surya kriya|2026-09-02": 2}, "mysuru": {"inner engineering|2026-10-22": 2, "satsang": 5}, "vijayanagar": {"bhuta shuddhi|2026-09-12": 5, "guru pooja|2026-10-23": 1, "satsang": 17, "shanmukhi|2026-09-12": 5, "yogasanas|2026-09-16": 4}, "kengeri": {"satsang": 0}, "tumkur": {"satsang": 1}, "kanakapura": {"angamardana|2026-09-12": 7, "inner engineering|2026-10-29": 2, "surya kriya|2026-09-01": 0, "bhuta shuddhi|2026-09-12": 5, "satsang": 28}, "yelahanka": {"satsang": 10}}}, {"date": "2026-09-03", "regs": {"sadhguru sannidhi": {"angamardana|2026-07-11": 24, "angamardana|2026-07-25": 21, "bhastrika|2026-07-12": 2, "bhuta shuddhi|2026-07-19": 15, "eye care|2026-07-05": 4, "guru purnima|2026-07-29": 0, "jala neti|2026-07-19": 0, "shanmukhi|2026-07-05": 4, "shoonya intensive|2026-07-16": 62, "shoonya intensive|2026-07-23": 88, "shoonya intensive|2026-07-02": 45, "volunteers meet|2026-06-11": 0, "surya kriya|2026-07-10": 0, "surya kriya surya shakti|2026-07-04": 19, "thoppukarnam|2026-07-12": 0, "volunteers meet|2026-07-11": 138, "yogasanas|2026-07-26": 2, "yogasanas|2026-07-18": 35, "yogasanas|2026-07-17": 1, "shoonya intensive|2026-08-06": 89, "volunteers meet|2026-08-01": 38, "samyama": 235, "shoonya intensive|2026-10-15": 91, "shoonya intensive|2026-10-22": 90, "shoonya intensive|2026-10-29": 87, "upa yoga": 2278}, "hsr": {"angamardana|2026-07-25": 10, "bhastrika|2026-07-25": 1, "guru purnima|2026-07-29": 32, "surya kriya|2026-07-20": 4, "yogasanas|2026-07-15": 6, "angamardana|2026-08-23": 1, "volunteers meet": 0, "surya kriya|2026-08-19": 6, "yogasanas|2026-08-10": 12, "angamardana|2026-09-25": 0, "surya kriya|2026-09-21": 1, "yogasanas|2026-09-16": 2}, "jayanagar": {"angamardana|2026-07-08": 12, "eye care shanmukhi|2026-07-04": 6, "guru purnima|2026-07-29": 47, "isha janani|2026-07-17": 0, "satsang": 83, "surya kriya": 22, "bhuta shuddhi": 20, "inner engineering|2026-08-20": 53, "volunteers meet": 0, "yogasanas|2026-08-12": 21, "angamardana|2026-09-02": 0, "yogasanas|2026-09-16": 17}, "malleswaram": {"angamardana": 12, "bhuta shuddhi|2026-07-19": 12, "guru purnima|2026-07-29": 85, "inner engineering|2026-07-23": 31, "satsang": 47, "surya kriya|2026-07-18": 11, "bhuta shuddhi|2026-08-16": 9, "guru pooja|2026-08-07": 32, "volunteers meet": 0, "shanmukhi|2026-08-15": 11, "yogasanas|2026-08-26": 16, "bhuta shuddhi|2026-09-20": 1, "inner engineering|2026-10-08": 0, "inner engineering|2026-09-10": 14, "surya kriya|2026-09-19": 2, "yogasanas|2026-09-21": 2}, "marathahalli": {"angamardana|2026-07-06": 7, "bhuta shuddhi|2026-07-19": 14, "guru purnima|2026-07-29": 19, "satsang": 76, "shanmukhi|2026-07-05": 15, "surya kriya|2026-07-11": 17, "yogasanas|2026-07-13": 11, "angamardana|2026-08-17": 13, "angamardana|2026-08-31": 2, "bhuta shuddhi|2026-08-30": 18, "inner engineering|2026-08-06": 42, "volunteers meet": 0, "surya kriya|2026-08-22": 11, "yogasanas|2026-08-24": 23, "inner engineering|2026-11-12": 3, "shanmukhi|2026-09-06": 4, "surya kriya|2026-09-02": 2}, "mysuru": {"angamardana|2026-07-15": 7, "guru purnima|2026-07-29": 26, "satsang": 20, "volunteers meet": 0, "inner engineering|2026-10-22": 2}, "kanakapura": {"bhuta shuddhi|2026-07-19": 10, "guru purnima|2026-07-29": 57, "inner engineering|2026-07-23": 16, "satsang": 74, "surya kriya|2026-07-12": 13, "volunteers meet": 0, "yogasanas|2026-08-05": 15, "angamardana|2026-09-12": 7, "inner engineering|2026-10-29": 2, "surya kriya|2026-09-01": 0, "bhuta shuddhi|2026-09-12": 5}, "electronic": {"guru pooja|2026-07-17": 35, "guru purnima|2026-07-29": 23, "satsang": 43, "inner engineering|2026-08-20": 29, "volunteers meet": 0, "inner engineering|2026-10-29": 0}, "ballari": {"guru purnima|2026-07-29": 8}, "banaswadi": {"guru purnima|2026-07-29": 14, "satsang": 64, "volunteers meet": 0}, "belagavi": {"guru purnima|2026-07-29": 33}, "bg road": {"guru purnima|2026-07-29": 8, "satsang": 32, "inner engineering|2026-08-06": 26, "volunteers meet": 0, "bhuta shuddhi|2026-09-20": 0, "jala neti|2026-09-20": 0}, "budigere cross": {"guru purnima|2026-07-29": 56, "satsang": 59, "inner engineering|2026-08-20": 20, "volunteers meet": 0}, "hubbali": {"guru purnima|2026-07-29": 26, "satsang": 1, "volunteers meet": 0, "inner engineering|2026-09-23": 4}, "indiranagar": {"guru purnima|2026-07-29": 17, "satsang": 61, "bhuta shuddhi|2026-09-05": 6, "jala neti|2026-09-05": 3, "shanmukhi|2026-09-05": 6, "surya kriya|2026-09-02": 0, "yogasanas|2026-09-02": 1}, "sarjapur": {"guru purnima|2026-07-29": 15, "inner engineering|2026-07-16": 31, "satsang": 15, "volunteers meet": 0}, "mangalore": {"guru purnima|2026-07-29": 39, "satsang": 19}, "tumkur": {"guru purnima|2026-07-29": 0, "satsang": 1}, "vijayanagar": {"guru purnima|2026-07-29": 99, "hatha children|2026-07-18": 4, "satsang": 94, "angamardana|2026-08-22": 18, "inner engineering|2026-08-05": 87, "volunteers meet": 0, "surya kriya|2026-08-27": 15, "bhuta shuddhi|2026-09-12": 5, "guru pooja|2026-10-23": 3, "shanmukhi|2026-09-12": 5, "yogasanas|2026-09-16": 4}, "yelahanka": {"guru purnima|2026-07-29": 50, "satsang": 50, "yogasanas|2026-08-20": 17}, "begur": {"satsang": 15, "volunteers meet": 0}, "chandapura": {"satsang": 28, "volunteers meet": 0}, "chikkaballapur": {"satsang": 5}, "girinagar": {"satsang": 51}, "hebbal": {"satsang": 40, "inner engineering|2026-10-29": 5}, "kengeri": {"satsang": 13, "volunteers meet": 0}, "koramangala": {"satsang": 20}, "peenya": {"satsang": 24}, "singasandra": {"satsang": 3}, "whitefield": {"satsang": 0}}}];
 /* __REGS_HISTORY_END__ */
 
 
@@ -9691,21 +9869,25 @@ function _buildCentreSatsangCard(centre){
 
 
 function showOvPage(page){
-  const isInsights  = page==='insights';
-  const isRegCounts = page==='regcounts';
-  const isIeOnline  = page==='ieonline';
-  const isOverview  = !isInsights && !isRegCounts && !isIeOnline;
-  document.getElementById('ovOverviewPage').style.display   = isOverview  ? '' : 'none';
-  document.getElementById('ovInsightsPage').style.display   = isInsights  ? '' : 'none';
-  document.getElementById('ovRegCountsPage').style.display  = isRegCounts ? '' : 'none';
-  document.getElementById('ovIeOnlinePage').style.display   = isIeOnline  ? '' : 'none';
-  document.getElementById('ovNavOverview').classList.toggle('active',   isOverview);
-  document.getElementById('ovNavInsights').classList.toggle('active',   isInsights);
-  document.getElementById('ovNavRegCounts').classList.toggle('active',  isRegCounts);
-  document.getElementById('ovNavIeOnline').classList.toggle('active',   isIeOnline);
-  if(isInsights)  buildInsights();
-  if(isRegCounts){ switchRegSubTab('table'); buildAdminRegCounts(); }
-  if(isIeOnline)  buildIeOnlinePage();
+  const isInsights     = page==='insights';
+  const isRegCounts    = page==='regcounts';
+  const isIeOnline     = page==='ieonline';
+  const isProgUpdates  = page==='programupdates';
+  const isOverview     = !isInsights && !isRegCounts && !isIeOnline && !isProgUpdates;
+  document.getElementById('ovOverviewPage').style.display     = isOverview     ? '' : 'none';
+  document.getElementById('ovInsightsPage').style.display     = isInsights     ? '' : 'none';
+  document.getElementById('ovRegCountsPage').style.display    = isRegCounts    ? '' : 'none';
+  document.getElementById('ovIeOnlinePage').style.display     = isIeOnline     ? '' : 'none';
+  document.getElementById('ovProgUpdatesPage').style.display  = isProgUpdates  ? '' : 'none';
+  document.getElementById('ovNavOverview').classList.toggle('active',    isOverview);
+  document.getElementById('ovNavInsights').classList.toggle('active',    isInsights);
+  document.getElementById('ovNavRegCounts').classList.toggle('active',   isRegCounts);
+  document.getElementById('ovNavIeOnline').classList.toggle('active',    isIeOnline);
+  document.getElementById('ovNavProgUpdates').classList.toggle('active', isProgUpdates);
+  if(isInsights)     buildInsights();
+  if(isRegCounts)    { switchRegSubTab('table'); buildAdminRegCounts(); }
+  if(isIeOnline)     buildIeOnlinePage();
+  if(isProgUpdates)  buildProgramUpdates();
 }
 
 // ════════════════════════════════════════════════════════════
@@ -10604,6 +10786,191 @@ function _navToIeoOnlineCentre(centre){
     if(btn && btn.offsetParent !== null){ clearInterval(poll); switchIeSubTab('online'); }
     if(++attempts > 30) clearInterval(poll);
   }, 100);
+}
+
+// ════════════════════════════════════════════════════════════
+//  PROGRAM UPDATES PAGE
+// ════════════════════════════════════════════════════════════
+let _puActiveKey = null;
+let _puGroupBy = 'programme'; // 'programme' | 'centre'
+
+function buildProgramUpdates(){
+  const el = document.getElementById('ovProgUpdatesContent');
+  if(!el) return;
+  if(typeof PROGRAM_UPDATES === 'undefined' || !Object.keys(PROGRAM_UPDATES).length){
+    el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--muted);font-size:.8rem">No Program Updates data available. Add xlsx files to Santhosha Data/Program Updates/</div>';
+    return;
+  }
+
+  // Sort keys chronologically
+  const keys = Object.keys(PROGRAM_UPDATES).sort();
+  if(!_puActiveKey || !PROGRAM_UPDATES[_puActiveKey]) _puActiveKey = keys[keys.length-1];
+
+  // Build grouped list of programme labels in order
+  const PROG_ORDER = ['Inner Engineering','Bhava Spandana','Shoonya Intensive','Shoonya Volunteering','Samyama',
+    'Angamardana','Surya Kriya','Surya Shakti','Yogasanas','Bhuta Shuddhi','Shanmukhi Mudra','Jala Neti',
+    'Hatha Yoga','Bhastrika Kriya','Guru Pooja','Monthly Satsang','Guru Purnima','Naga Panchami',
+    'Volunteers Meet','Mahakshetra','Upa Yoga','Eye Care','Isha Janani','Gen A Program','Other'];
+
+  function renderMonth(key){
+    const data = PROGRAM_UPDATES[key];
+    const rows = data.rows;
+
+    // KPI strip
+    const progTotals = {};
+    rows.forEach(r => { progTotals[r.progLabel] = (progTotals[r.progLabel]||0) + r.count; });
+    const uniqueCentres = new Set(rows.map(r=>r.centre)).size;
+    const uniqueProgs   = Object.keys(progTotals).length;
+
+    // Group rows by progLabel (always needed for KPI strip)
+    const grouped = {};
+    rows.forEach(r => {
+      if(!grouped[r.progLabel]) grouped[r.progLabel] = [];
+      grouped[r.progLabel].push(r);
+    });
+
+    // Sort programmes by PROG_ORDER
+    const orderedProgs = [...new Set([...PROG_ORDER, ...Object.keys(grouped)])].filter(p=>grouped[p]);
+
+    let html = `
+    <div style="margin-bottom:14px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
+      <div>
+        <div style="font-size:1.1rem;font-weight:800;color:var(--navy);margin-bottom:3px">Program Updates — ${data.month} ${data.year}</div>
+        <div style="font-size:.68rem;color:var(--muted)">${data.total.toLocaleString()} total participants · ${uniqueProgs} programme types · ${uniqueCentres} centres</div>
+      </div>
+    </div>
+
+    <!-- KPI strip -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-bottom:18px">
+      <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:12px 14px">
+        <div style="font-size:.52rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">Total Participants</div>
+        <div style="font-size:1.6rem;font-weight:900;color:var(--navy);line-height:1">${data.total.toLocaleString()}</div>
+      </div>
+      ${orderedProgs.filter(p=>p!=='Monthly Satsang').slice(0,5).map(p=>`
+      <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:12px 14px">
+        <div style="font-size:.52rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">${p}</div>
+        <div style="font-size:1.6rem;font-weight:900;color:var(--navy);line-height:1">${progTotals[p]||0}</div>
+      </div>`).join('')}
+    </div>`;
+
+    if(_puGroupBy === 'centre'){
+      // ── By Centre ──────────────────────────────────────────
+      const byCentre = {};
+      rows.forEach(r => {
+        if(!byCentre[r.centre]) byCentre[r.centre] = [];
+        byCentre[r.centre].push(r);
+      });
+      const orderedCentres = Object.keys(byCentre).sort();
+      html += `<div style="display:flex;flex-direction:column;gap:14px">`;
+      orderedCentres.forEach(centre => {
+        const centreRows = byCentre[centre].sort((a,b)=>b.count-a.count);
+        const centreTotal = centreRows.reduce((s,r)=>s+r.count,0);
+        html += `
+      <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:12px;overflow:hidden">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--surface-3)">
+          <span style="font-size:.8rem;font-weight:800;color:var(--navy)">${centre}</span>
+          <span style="font-size:.72rem;font-weight:700;color:var(--muted)">${centreRows.length} event${centreRows.length>1?'s':''} · <span style="color:var(--navy)">${centreTotal} participants</span></span>
+        </div>
+        <table style="width:100%;border-collapse:collapse;font-size:.7rem">
+          <thead>
+            <tr style="background:var(--surface-3)">
+              <th style="padding:7px 12px;text-align:left;font-weight:700;color:var(--muted);font-size:.6rem;text-transform:uppercase;letter-spacing:.05em">Programme</th>
+              <th style="padding:7px 12px;text-align:left;font-weight:700;color:var(--muted);font-size:.6rem;text-transform:uppercase;letter-spacing:.05em">Event Name</th>
+              <th style="padding:7px 12px;text-align:right;font-weight:700;color:var(--muted);font-size:.6rem;text-transform:uppercase;letter-spacing:.05em">Participants</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${centreRows.map((r,idx)=>`
+            <tr style="border-top:1px solid var(--border);background:${idx%2===0?'transparent':'var(--surface-3)'}">
+              <td style="padding:8px 12px;font-weight:600;color:var(--navy);white-space:nowrap">${r.progLabel}</td>
+              <td style="padding:8px 12px;color:var(--muted);font-size:.65rem">${r.name}</td>
+              <td style="padding:8px 12px;text-align:right;font-weight:800;color:${r.count===0?'#bbb':'var(--navy)'}">${r.count}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>`;
+      });
+      html += `</div>`;
+    } else {
+      // ── By Programme (default) ─────────────────────────────
+      html += `<div style="display:flex;flex-direction:column;gap:14px">`;
+      orderedProgs.forEach(prog => {
+        const progRows = grouped[prog].sort((a,b) => b.count - a.count);
+        const progTotal = progRows.reduce((s,r)=>s+r.count,0);
+        html += `
+      <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:12px;overflow:hidden">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--surface-3)">
+          <span style="font-size:.8rem;font-weight:800;color:var(--navy)">${prog}</span>
+          <span style="font-size:.72rem;font-weight:700;color:var(--muted)">${progRows.length} programme${progRows.length>1?'s':''} · <span style="color:var(--navy)">${progTotal} participants</span></span>
+        </div>
+        <table style="width:100%;border-collapse:collapse;font-size:.7rem">
+          <thead>
+            <tr style="background:var(--surface-3)">
+              <th style="padding:7px 12px;text-align:left;font-weight:700;color:var(--muted);font-size:.6rem;text-transform:uppercase;letter-spacing:.05em">Centre</th>
+              <th style="padding:7px 12px;text-align:left;font-weight:700;color:var(--muted);font-size:.6rem;text-transform:uppercase;letter-spacing:.05em">Programme</th>
+              <th style="padding:7px 12px;text-align:right;font-weight:700;color:var(--muted);font-size:.6rem;text-transform:uppercase;letter-spacing:.05em">Participants</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${progRows.map((r,idx)=>`
+            <tr style="border-top:1px solid var(--border);background:${idx%2===0?'transparent':'var(--surface-3)'}">
+              <td style="padding:8px 12px;font-weight:600;color:var(--navy);white-space:nowrap">${r.centre}</td>
+              <td style="padding:8px 12px;color:var(--muted);font-size:.65rem">${r.name}</td>
+              <td style="padding:8px 12px;text-align:right;font-weight:800;color:${r.count===0?'#bbb':'var(--navy)'}">${r.count}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>`;
+      });
+      html += `</div>`;
+    }
+    return html;
+  }
+
+  // Month toggle pills
+  const MONTH_NAMES = {
+    '01':'Jan','02':'Feb','03':'Mar','04':'Apr','05':'May','06':'Jun',
+    '07':'Jul','08':'Aug','09':'Sep','10':'Oct','11':'Nov','12':'Dec'
+  };
+
+  // Group keys by year
+  const byYear = {};
+  keys.forEach(k => {
+    const [yr, mo] = k.split('-');
+    if(!byYear[yr]) byYear[yr] = [];
+    byYear[yr].push({key:k, mo});
+  });
+
+  let toggleHtml = '<div style="margin-bottom:16px">';
+  Object.entries(byYear).sort().forEach(([yr, months]) => {
+    toggleHtml += `<div style="margin-bottom:8px">
+      <span style="font-size:.62rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-right:8px">${yr}</span>`;
+    months.forEach(({key, mo}) => {
+      const active = key === _puActiveKey;
+      toggleHtml += `<button onclick="_puSetMonth('${key}')" style="margin-right:6px;padding:5px 13px;border-radius:20px;border:1px solid ${active?'var(--navy)':'var(--border)'};background:${active?'var(--navy)':'transparent'};color:${active?'#fff':'var(--muted)'};font-size:.7rem;font-weight:700;cursor:pointer">${MONTH_NAMES[mo]}</button>`;
+    });
+    toggleHtml += `</div>`;
+  });
+  toggleHtml += '</div>';
+
+  // Group-by toggle
+  const groupByHtml = `<div style="margin-bottom:16px;display:flex;align-items:center;gap:8px">
+    <span style="font-size:.62rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Group by</span>
+    <button onclick="_puSetGroupBy('programme')" style="padding:5px 13px;border-radius:20px;border:1px solid ${_puGroupBy==='programme'?'var(--navy)':'var(--border)'};background:${_puGroupBy==='programme'?'var(--navy)':'transparent'};color:${_puGroupBy==='programme'?'#fff':'var(--muted)'};font-size:.7rem;font-weight:700;cursor:pointer">Programme</button>
+    <button onclick="_puSetGroupBy('centre')" style="padding:5px 13px;border-radius:20px;border:1px solid ${_puGroupBy==='centre'?'var(--navy)':'var(--border)'};background:${_puGroupBy==='centre'?'var(--navy)':'transparent'};color:${_puGroupBy==='centre'?'#fff':'var(--muted)'};font-size:.7rem;font-weight:700;cursor:pointer">Centre</button>
+  </div>`;
+
+  el.innerHTML = toggleHtml + groupByHtml + renderMonth(_puActiveKey);
+}
+
+function _puSetMonth(key){
+  _puActiveKey = key;
+  buildProgramUpdates();
+}
+
+function _puSetGroupBy(val){
+  _puGroupBy = val;
+  buildProgramUpdates();
 }
 
 // ════════════════════════════════════════════════════════════
