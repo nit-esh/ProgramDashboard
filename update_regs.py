@@ -150,6 +150,10 @@ _LANG_RE = re.compile(r'\b(English|Kannada|Tamil|Hindi|Telugu|Malayalam|Marathi)
 
 def extract_start_date(text):
     t = text.lower()
+    # Pattern 0a: "06-Sep-2026" — DD-Mon-YYYY with hyphens (Pivot Event file format)
+    m = re.search(r'\b(\d{1,2})-(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\w*-(20\d{2})\b', t)
+    if m:
+        return f"{m.group(3)}-{_MONTH_MAP[m.group(2)]}-{m.group(1).zfill(2)}"
     # Pattern 0: cross-month range "29 Oct - 01 Nov 2026" or "29 Oct – 01 Nov 2026"
     # The year sits at the end with the end-month; we extract the start day+month.
     m = re.search(
@@ -420,10 +424,8 @@ def parse_csv(csv_path, regs, cd_updates, source_label, lang_map=None):
                 _lm = _LANG_RE.search(name)
                 if _lm and date:
                     lang_map.setdefault(centre, {})[f"{prog}|{date}"] = _lm.group(1).title()
-            if date:
-                regs[centre][prog_key] = count
-            else:
-                regs[centre][prog_key] = regs[centre].get(prog_key, 0) + count
+            # Always overwrite — no accumulation across rows or re-runs for the same key
+            regs[centre][prog_key] = count
 
             # ── CENTRE_DATA update (IE / BSP / Shoonya / Samyama only) ─────
             cd_key      = PROG_TO_CD_KEY.get(prog)
