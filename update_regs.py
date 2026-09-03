@@ -1301,3 +1301,10 @@ if __name__ == '__main__':
         except: pass
 
     print(f"\n✓ Done — {len(files)} file(s) processed.\n")
+
+    # Also update Program Updates
+    import subprocess
+    pu_script = os.path.join(BASE, 'update_program_updates.py')
+    if os.path.exists(pu_script):
+        print("── Program Updates ──────────────────────────")
+        subprocess.run([sys.executable, pu_script], cwd=BASE)
