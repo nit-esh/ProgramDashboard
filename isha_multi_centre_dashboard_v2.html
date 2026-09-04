@@ -7749,10 +7749,10 @@ async function _exportRegCountsPNG(filename, elId){
   const filterBars = [...el.querySelectorAll(':scope > div')].filter(d => d.querySelector('button[onclick*="Filter"]')||d.querySelector('button[onclick*="filter"]'));
   const prevDisplays = filterBars.map(b => { const d = b.style.display; b.style.display = 'none'; return d; });
   // Wrap content in a padded container for left/right whitespace
-  // Use a minimum of 1200px so mobile exports aren't cramped
+  // Use scrollWidth so the export fits the content exactly, with a sensible floor/ceiling
   const wrapper = document.createElement('div');
-  const fullW = Math.max(el.offsetWidth, el.scrollWidth, 1200);
-  wrapper.style.cssText = 'position:fixed;top:-9999px;left:-9999px;background:#ffffff;padding:20px 32px;width:'+(fullW+64)+'px;box-sizing:border-box;font-family:inherit;overflow:visible;min-width:1264px;';
+  const fullW = Math.min(Math.max(el.scrollWidth, 860), 1100);
+  wrapper.style.cssText = 'position:fixed;top:-9999px;left:-9999px;background:#ffffff;padding:16px 24px;width:'+(fullW+48)+'px;box-sizing:border-box;font-family:inherit;overflow:visible;';
   wrapper.innerHTML = el.innerHTML;
   document.body.appendChild(wrapper);
   // Let content expand to natural height before capture
@@ -7781,8 +7781,8 @@ async function _exportRegCountsPDF(filename, elId){
   const filterBars2 = [...el.querySelectorAll(':scope > div')].filter(d => d.querySelector('button[onclick*="Filter"]')||d.querySelector('button[onclick*="filter"]'));
   const prevDisplays2 = filterBars2.map(b => { const d = b.style.display; b.style.display = 'none'; return d; });
   const wrapper = document.createElement('div');
-  const _pdfW = Math.max(el.offsetWidth, el.scrollWidth, 1200);
-  wrapper.style.cssText = 'position:fixed;top:-9999px;left:-9999px;background:#ffffff;padding:20px 32px;width:'+(_pdfW+64)+'px;box-sizing:border-box;font-family:inherit;min-width:1264px;';
+  const _pdfW = Math.min(Math.max(el.scrollWidth, 860), 1100);
+  wrapper.style.cssText = 'position:fixed;top:-9999px;left:-9999px;background:#ffffff;padding:16px 24px;width:'+(_pdfW+48)+'px;box-sizing:border-box;font-family:inherit;';
   wrapper.innerHTML = el.innerHTML;
   document.body.appendChild(wrapper);
   let canvas;
