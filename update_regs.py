@@ -161,10 +161,10 @@ def extract_start_date(text):
         t)
     if m:
         return f"{m.group(3)}-{_MONTH_MAP[m.group(2)]}-{m.group(1).zfill(2)}"
-    # Pattern 1: "12-15 Nov 2026" or "12 Nov 2026" — day-first, same-month range.
-    # Requires a digit before the month name so "marathahalli" can never match.
+    # Pattern 1: "12-15 Nov 2026", "12 Nov 2026", "17-20 Sep, 2026" — day-first, same-month range.
+    # Allows optional comma before year. Requires a digit before month so "marathahalli" never matches.
     m = re.search(
-        r'\b(\d{1,2})(?:-\d{1,2})?\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\w*\s+(20\d{2})\b',
+        r'\b(\d{1,2})(?:-\d{1,2})?\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\w*[,\s]+(20\d{2})\b',
         t)
     if m:
         return f"{m.group(3)}-{_MONTH_MAP[m.group(2)]}-{m.group(1).zfill(2)}"
@@ -981,6 +981,89 @@ def fetch_upcoming_programs():
           f"{sum(len(v) for v in hatha_up.values())} Hatha, {sat_count} Satsang")
     return ie_up, bsp_up, shoonya_up, samyama_up, hatha_up, all_up
 
+HC_START = "/* __HALL_CAPACITY_START__ */"
+HC_END   = "/* __HALL_CAPACITY_END__ */"
+
+def read_hall_capacity(html):
+    """Read existing HALL_CAPACITY from HTML. Returns dict."""
+    m = re.search(re.escape(HC_START) + r'(.*?)' + re.escape(HC_END), html, re.DOTALL)
+    if not m: return {}
+    obj_m = re.search(r'const HALL_CAPACITY\s*=\s*(\{.*?\});', m.group(1), re.DOTALL)
+    if not obj_m: return {}
+    try: return json.loads(obj_m.group(1))
+    except: return {}
+
+def parse_pivot_capacities(xlsx_path):
+    """Extract Maximum Attendees Number from Pivot Event file.
+    Returns dict: 'progLabel|html_centre|YYYY-MM' → capacity
+    """
+    if not HAS_OPENPYXL: return {}
+    try:
+        wb = openpyxl.load_workbook(xlsx_path, data_only=True)
+        ws = wb.active
+    except Exception as e:
+        print(f"  ⚠ Could not open pivot file for capacity: {e}")
+        return {}
+
+    # Find which column is "Maximum Attendees Number"
+    headers = list(ws.iter_rows(min_row=2, max_row=2, values_only=True))[0]
+    max_att_col = None
+    for i, h in enumerate(headers):
+        if h and 'maximum' in str(h).lower():
+            max_att_col = i
+            break
+    if max_att_col is None: return {}
+
+    caps = {}
+    for row in ws.iter_rows(min_row=4, values_only=True):
+        v0 = row[0]
+        if not v0: continue
+        s = str(v0).strip()
+        if not s or s.lower() in ('total',): continue
+        indent = len(str(v0)) - len(s)
+        if indent < 8: continue   # skip group headers, only detail rows
+
+        try: cap = int(row[max_att_col] or 0)
+        except: cap = 0
+        if cap <= 0: continue
+
+        prog = norm_prog(s)
+        centre = norm_centre(s)
+        date  = extract_start_date(s)
+        if not prog or not centre or not date: continue
+
+        # Extend CENTRE_KEY_MAP with any keys not needed for CENTRE_DATA but needed for HALL_CAPACITY
+        _CAP_EXTRA = {'hsr': 'HSR Layout', 'sarjapur': 'Sarjapur Road'}
+        html_centre = CENTRE_KEY_MAP.get(centre) or _CAP_EXTRA.get(centre)
+        if not html_centre: continue
+
+        # Use prog label matching dashboard convention
+        PROG_LABEL_MAP = {
+            'inner engineering': 'Inner Engineering',
+            'bhava spandana': 'Bhava Spandana',
+            'shoonya': 'Shoonya Intensive',
+            'samyama': 'Samyama',
+            'angamardana': 'Angamardana',
+            'surya kriya': 'Surya Kriya',
+            'surya shakti': 'Surya Shakti',
+            'yogasanas': 'Yogasanas',
+            'bhuta shuddhi': 'Bhuta Shuddhi',
+            'shanmukhi': 'Shanmukhi Mudra',
+            'jala neti': 'Jala Neti',
+            'hatha yoga': 'Hatha Yoga',
+            'bhastrika': 'Bhastrika Kriya',
+        }
+        prog_label = PROG_LABEL_MAP.get(prog)
+        if not prog_label: continue
+
+        ym = date[:7]  # YYYY-MM
+        key = f"{prog_label}|{html_centre}|{ym}"
+        # Keep the larger capacity if multiple batches in same month
+        if key not in caps or cap > caps[key]:
+            caps[key] = cap
+
+    return caps
+
 # ── Inject LIVE_REGS, CENTRE_DATA, MONTHLY_DATA, and CENTRE_TIMESTAMPS into HTML ─
 LIVE_START = "/* __LIVE_REGS_START__ */"
 LIVE_END   = "/* __LIVE_REGS_END__ */"
@@ -1003,7 +1086,7 @@ def read_regs_history(html):
     except json.JSONDecodeError:
         return []
 
-def inject_html(html, regs, centre_data=None, monthly_data=None, latest_mtime=None, file_timestamps=None, upcoming=None, ieo_data=None, ieo_cm_data=None, regs_history=None, lang_map=None):
+def inject_html(html, regs, centre_data=None, monthly_data=None, latest_mtime=None, file_timestamps=None, upcoming=None, ieo_data=None, ieo_cm_data=None, regs_history=None, lang_map=None, hall_caps=None):
     # 1. LIVE_REGS block
     dt          = datetime.datetime.fromtimestamp(latest_mtime)
     updated_str = dt.strftime('%d %b %Y, %I:%M %p')
@@ -1124,6 +1207,16 @@ def inject_html(html, regs, centre_data=None, monthly_data=None, latest_mtime=No
     elif IEO_CM_START not in html:
         print(f"  ⚠ IEO_CURRENT_MONTH markers not found — skipping")
 
+    # 8. HALL_CAPACITY — fully replace from pivot file (never hardcode)
+    if hall_caps and HC_START in html:
+        hc_block = (f"{HC_START}\nconst HALL_CAPACITY = "
+                    f"{json.dumps(hall_caps, indent=2, ensure_ascii=False)};\n{HC_END}")
+        html = re.sub(re.escape(HC_START) + r'.*?' + re.escape(HC_END),
+                      hc_block, html, flags=re.DOTALL)
+        print(f"  ✓ Updated HALL_CAPACITY: {len(hall_caps)} entries (from Pivot Event file)")
+    elif HC_START not in html:
+        print(f"  ⚠ HALL_CAPACITY markers not found — skipping")
+
     with open(HTML, 'w', encoding='utf-8') as f:
         f.write(html)
 
@@ -1222,6 +1315,29 @@ if __name__ == '__main__':
         else:
             print(f"\nMONTHLY_DATA: no changes")
 
+    # Filter LIVE_REGS: only keep entries with a future date (>= today).
+    # Removes past satsangs, past guru purnima, etc. that are no longer in the Pivot file.
+    today_str = datetime.date.today().isoformat()  # "YYYY-MM-DD"
+    filtered_regs: dict = {}
+    removed_count = 0
+    for centre, progs in regs.items():
+        kept = {}
+        for pk, cnt in progs.items():
+            if '|' in pk:
+                _, date_part = pk.split('|', 1)
+                if date_part >= today_str:
+                    kept[pk] = cnt
+                else:
+                    removed_count += 1
+            else:
+                # Undated entry — skip (no way to tell if it's current)
+                removed_count += 1
+        if kept:
+            filtered_regs[centre] = kept
+    regs = filtered_regs
+    if removed_count:
+        print(f"\n  ✓ Filtered out {removed_count} past/undated LIVE_REGS entries (keeping only date >= {today_str})")
+
     # Print LIVE_REGS summary
     total = sum(sum(p.values()) for p in regs.values())
     print(f"\n{'─'*62}")
@@ -1266,8 +1382,15 @@ if __name__ == '__main__':
     else:
         print(f"\n  ⚠ IE Online current month file not found in {SANTHOSHA_DIR}")
 
-    # Build 3-day registration history — use Pivot Event file's mtime as the date
+    # Extract hall capacities from Pivot Event file
     pivot_files = [f for f in files if 'pivot event' in os.path.basename(f).lower()]
+    hall_caps = {}
+    if pivot_files:
+        print(f"\nExtracting hall capacities from {os.path.basename(pivot_files[-1])} …")
+        hall_caps = parse_pivot_capacities(pivot_files[-1])
+        print(f"  ✓ {len(hall_caps)} capacity entries parsed")
+
+    # Build 3-day registration history — use Pivot Event file's mtime as the date
     if pivot_files:
         pivot_mtime = max(os.path.getmtime(f) for f in pivot_files)
         today_str = datetime.datetime.fromtimestamp(pivot_mtime).strftime('%Y-%m-%d')
@@ -1295,6 +1418,7 @@ if __name__ == '__main__':
         ieo_cm_data,
         regs_history,
         lang_map=lang_map,
+        hall_caps=hall_caps if hall_caps else None,
     )
 
     # Cleanup
