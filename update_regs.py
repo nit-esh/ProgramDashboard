@@ -47,6 +47,7 @@ CENTRE_PATTERNS = [
     (r'hubballi|hubbali|hubli',                               'hubbali'),
     (r'ballari|bellary',                                      'ballari'),
     (r'belagavi|belgaum',                                     'belagavi'),
+    (r'kalaburagi|gulbarga',                                  'kalaburagi'),
     (r'koramangala',                                          'koramangala'),
     (r'chikkaballapur',                                       'chikkaballapur'),
     # Sub-centres (primarily Monthly Satsang, parsed from Pivot Event xlsx)
@@ -154,6 +155,16 @@ def extract_start_date(text):
     m = re.search(r'\b(\d{1,2})-(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\w*-(20\d{2})\b', t)
     if m:
         return f"{m.group(3)}-{_MONTH_MAP[m.group(2)]}-{m.group(1).zfill(2)}"
+    # Pattern 0b: "28-Oct to 03-Nov 2026" — DD-Mon to DD-Mon YYYY cross-month with hyphens
+    m = re.search(r'\b(\d{1,2})-(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\w{0,6}\b\s+to\s+\d{1,2}-\w+\s+(20\d{2})\b', t)
+    if m:
+        return f"{m.group(3)}-{_MONTH_MAP[m.group(2)]}-{m.group(1).zfill(2)}"
+    # Pattern 0c: "2-7 Oct" or "2-7 Oct (online)..." — DD-DD Mon day range, year anywhere in string or current year
+    m = re.search(r'\b(\d{1,2})-\d{1,2}\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\w{0,6}\b', t)
+    if m:
+        ym = re.search(r'\b(20\d{2})\b', t)
+        yr = ym.group(1) if ym else str(datetime.date.today().year)
+        return f"{yr}-{_MONTH_MAP[m.group(2)]}-{m.group(1).zfill(2)}"
     # Pattern 0: cross-month range "29 Oct - 01 Nov 2026" or "29 Oct – 01 Nov 2026"
     # The year sits at the end with the end-month; we extract the start day+month.
     m = re.search(
@@ -169,7 +180,8 @@ def extract_start_date(text):
     if m:
         return f"{m.group(3)}-{_MONTH_MAP[m.group(2)]}-{m.group(1).zfill(2)}"
     # Pattern 2 (fallback): "Nov 12 2026" or "Nov 12, 2026" — month-first format.
-    m  = re.search(r'\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\w*\s+(\d{1,2})\b', t)
+    # Use \w{0,6} (not \w*) to avoid matching centre names like "marathahalli" (9 extra chars after "mar").
+    m  = re.search(r'\b(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\w{0,6}\b\s+(\d{1,2})\b', t)
     ym = re.search(r'\b(20\d{2})\b', text)
     if m and ym:
         return f"{ym.group(1)}-{_MONTH_MAP[m.group(1)]}-{m.group(2).zfill(2)}"
@@ -1033,7 +1045,12 @@ def parse_pivot_capacities(xlsx_path):
         if not prog or not centre or not date: continue
 
         # Extend CENTRE_KEY_MAP with any keys not needed for CENTRE_DATA but needed for HALL_CAPACITY
-        _CAP_EXTRA = {'hsr': 'HSR Layout', 'sarjapur': 'Sarjapur Road'}
+        _CAP_EXTRA = {
+            'hsr':              'HSR Layout',
+            'sarjapur':         'Sarjapur Road',
+            'sadhguru sannidhi':'Sadhguru Sannidhi',
+            'kalaburagi':       'Kalaburagi',
+        }
         html_centre = CENTRE_KEY_MAP.get(centre) or _CAP_EXTRA.get(centre)
         if not html_centre: continue
 
@@ -1052,6 +1069,8 @@ def parse_pivot_capacities(xlsx_path):
             'jala neti': 'Jala Neti',
             'hatha yoga': 'Hatha Yoga',
             'bhastrika': 'Bhastrika Kriya',
+            'guru pooja': 'Guru Pooja',
+            'isha janani': 'Isha Janani',
         }
         prog_label = PROG_LABEL_MAP.get(prog)
         if not prog_label: continue
@@ -1389,6 +1408,17 @@ if __name__ == '__main__':
         print(f"\nExtracting hall capacities from {os.path.basename(pivot_files[-1])} …")
         hall_caps = parse_pivot_capacities(pivot_files[-1])
         print(f"  ✓ {len(hall_caps)} capacity entries parsed")
+    # Sadhguru Sannidhi: Pivot file has 0 in Maximum Attendees column — hardcode 90 as exception
+    _SS_PROGS = ['Shoonya Intensive', 'Bhava Spandana', 'Samyama']
+    for centre_regs in regs.get('sadhguru sannidhi', {}).keys():
+        if '|' in centre_regs:
+            prog_raw, date_part = centre_regs.split('|', 1)
+            ym = date_part[:7]
+            for prog_label in _SS_PROGS:
+                k = f"{prog_label}|Sadhguru Sannidhi|{ym}"
+                if k not in hall_caps:
+                    hall_caps[k] = 90
+    print(f"  ✓ Sadhguru Sannidhi capacity set to 90 (hardcoded exception)")
 
     # Build 3-day registration history — use Pivot Event file's mtime as the date
     if pivot_files:
