@@ -1461,6 +1461,8 @@ tbody tr:hover { background: #f0ebe0 !important; }
             style="padding:5px 14px;border:none;border-radius:6px;cursor:pointer;font-size:.7rem;font-weight:800;background:#fff;color:var(--navy);box-shadow:0 1px 4px rgba(0,0,0,.18)">Overall Status</button>
           <button id="ieoTabCurrent" onclick="switchIeoOvTab('current')"
             style="padding:5px 14px;border:none;border-radius:6px;cursor:pointer;font-size:.7rem;font-weight:600;background:transparent;color:#888">Current Month</button>
+          <button id="ieoTabAnalytics" onclick="switchIeoOvTab('analytics')"
+            style="padding:5px 14px;border:none;border-radius:6px;cursor:pointer;font-size:.7rem;font-weight:600;background:transparent;color:#888">Analytics</button>
         </div>
       </div>
 
@@ -1484,6 +1486,30 @@ tbody tr:hover { background: #f0ebe0 !important; }
       <!-- Current Month panel -->
       <div id="ieoOvCurrentPanel" style="display:none">
         <div id="ieoCurrentMonthContent"></div>
+      </div>
+
+      <!-- Analytics panel -->
+      <div id="ieoOvAnalyticsPanel" style="display:none">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+          <div class="card">
+            <div class="card-t">Year-over-Year Trend</div>
+            <div style="position:relative;height:200px"><canvas id="ieoYoyChart"></canvas></div>
+          </div>
+          <div class="card">
+            <div class="card-t" id="ieoMonthChartTitle">Monthly Enrollment</div>
+            <div style="position:relative;height:200px"><canvas id="ieoMonthChart"></canvas></div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div class="card">
+            <div class="card-t">Completion Rate — Year over Year</div>
+            <div style="position:relative;height:200px"><canvas id="ieoCompletionTrendChart"></canvas></div>
+          </div>
+          <div class="card">
+            <div class="card-t" id="ieoMoversTitle">Top Centre Movers</div>
+            <div id="ieoMovers" style="margin-top:6px"></div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -4151,7 +4177,13 @@ const HALL_CAPACITY = {
   "Shanmukhi Mudra|Kanakapura Road|2026-10": 20,
   "Yogasanas|Kanakapura Road|2026-10": 20,
   "Shanmukhi Mudra|IP - Marathahalli|2026-09": 25,
-  "Eye Care Yoga & Shanmukhi Mudra|IP - Marathahalli|2026-09": 25
+  "Eye Care Yoga & Shanmukhi Mudra|IP - Marathahalli|2026-09": 25,
+  "Shoonya Intensive|Sadhguru Sannidhi|2026-09": 90,
+  "Bhava Spandana|Sadhguru Sannidhi|2026-09": 90,
+  "Samyama|Sadhguru Sannidhi|2026-09": 90,
+  "Shoonya Intensive|Sadhguru Sannidhi|2026-10": 90,
+  "Bhava Spandana|Sadhguru Sannidhi|2026-10": 90,
+  "Samyama|Sadhguru Sannidhi|2026-10": 90
 };
 /* __HALL_CAPACITY_END__ */
 /* __RESERVED_SEATS_START__ */
@@ -10367,20 +10399,20 @@ let _ieoYear = 'All';
 let _ieoSort = {col:'total', dir:-1};
 
 function switchIeoOvTab(tab){
-  const isOverall = tab === 'overall';
-  document.getElementById('ieoOvOverallPanel').style.display  = isOverall ? '' : 'none';
-  document.getElementById('ieoOvCurrentPanel').style.display  = isOverall ? 'none' : '';
-  const btnO = document.getElementById('ieoTabOverall');
-  const btnC = document.getElementById('ieoTabCurrent');
-  btnO.style.background    = isOverall ? '#fff' : 'transparent';
-  btnO.style.color         = isOverall ? 'var(--navy)' : '#888';
-  btnO.style.fontWeight    = isOverall ? '800' : '600';
-  btnO.style.boxShadow     = isOverall ? '0 1px 4px rgba(0,0,0,.18)' : 'none';
-  btnC.style.background    = isOverall ? 'transparent' : '#fff';
-  btnC.style.color         = isOverall ? '#888' : 'var(--navy)';
-  btnC.style.fontWeight    = isOverall ? '600' : '800';
-  btnC.style.boxShadow     = isOverall ? 'none' : '0 1px 4px rgba(0,0,0,.18)';
-  if(!isOverall) buildIeoCurrentMonth();
+  var panels = {overall:'ieoOvOverallPanel', current:'ieoOvCurrentPanel', analytics:'ieoOvAnalyticsPanel'};
+  var btns   = {overall:'ieoTabOverall',     current:'ieoTabCurrent',     analytics:'ieoTabAnalytics'};
+  Object.keys(panels).forEach(function(t){
+    var el = document.getElementById(panels[t]); if(el) el.style.display = (t===tab ? '' : 'none');
+  });
+  Object.keys(btns).forEach(function(t){
+    var b = document.getElementById(btns[t]); if(!b) return;
+    b.style.background = t===tab ? '#fff' : 'transparent';
+    b.style.color      = t===tab ? 'var(--navy)' : '#888';
+    b.style.fontWeight = t===tab ? '800' : '600';
+    b.style.boxShadow  = t===tab ? '0 1px 4px rgba(0,0,0,.18)' : 'none';
+  });
+  if(tab==='current')   buildIeoCurrentMonth();
+  if(tab==='analytics') _renderIeoAnalytics(_ieoLastRows||[], _ieoLastTotal||0);
 }
 
 function buildIeoCurrentMonth(){
@@ -10613,6 +10645,147 @@ function _renderIeoPage(){
         </tr>
       </tfoot>
     </table>`;
+
+  /* Cache for Analytics tab (rendered on demand) */
+  _ieoLastRows = rows; _ieoLastTotal = totalAll;
+}
+
+function _renderIeoAnalytics(rows, totalAll){
+  if(typeof Chart === 'undefined') return;
+
+  /* ── 1. Year-over-Year Trend ── */
+  const allYears = [...new Set(
+    Object.values(IE_ONLINE_DATA).flatMap(d=>Object.keys(d.years||{}).filter(y=>y!=='None'))
+  )].sort();
+  const yoyEnrolled = [], yoyCompleted = [];
+  allYears.forEach(yr=>{
+    let enr=0, cmp=0;
+    Object.values(IE_ONLINE_DATA).forEach(d=>{
+      const yd=(d.years||{})[yr]; if(!yd) return;
+      enr += (yd.cc||0)+(yd.st||0)+(yd.ns||0)+(yd.s||[]).reduce((a,b)=>a+b,0);
+      cmp += (yd.cc||0);
+    });
+    yoyEnrolled.push(enr); yoyCompleted.push(cmp);
+  });
+  const yoyCtx = document.getElementById('ieoYoyChart');
+  if(yoyCtx){
+    if(yoyCtx._chart) yoyCtx._chart.destroy();
+    yoyCtx._chart = new Chart(yoyCtx, {
+      type:'bar',
+      data:{
+        labels: allYears,
+        datasets:[
+          {label:'Enrolled', data:yoyEnrolled, backgroundColor:'rgba(30,42,69,.75)', borderRadius:4},
+          {label:'Completed', data:yoyCompleted, backgroundColor:'rgba(26,107,58,.75)', borderRadius:4}
+        ]
+      },
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:10},boxWidth:10}}},
+        scales:{x:{ticks:{font:{size:10}}},y:{ticks:{font:{size:10},callback:v=>v>=1000?Math.round(v/1000)+'k':v}}}}
+    });
+  }
+
+  /* ── 2. Monthly Enrollment Trend (for selected year, or latest with data) ── */
+  const mYear = (_ieoYear !== 'All') ? _ieoYear : allYears[allYears.length-1];
+  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const SHORT  = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const monthMap = {};
+  Object.values(IE_ONLINE_DATA).forEach(d=>{
+    const yd=(d.years||{})[mYear]; if(!yd||!yd.months) return;
+    Object.entries(yd.months).forEach(([mLabel,md])=>{
+      const mi = MONTHS.findIndex(m=>mLabel.toLowerCase().startsWith(m.toLowerCase()));
+      if(mi<0) return;
+      if(!monthMap[mi]) monthMap[mi]={enr:0,cmp:0};
+      monthMap[mi].enr += (md.cc||0)+(md.st||0)+(md.ns||0)+(md.s||[]).reduce((a,b)=>a+b,0);
+      monthMap[mi].cmp += (md.cc||0);
+    });
+  });
+  const mIdxs  = Object.keys(monthMap).map(Number).sort((a,b)=>a-b);
+  const mLabels = mIdxs.map(i=>SHORT[i]);
+  const mEnr   = mIdxs.map(i=>monthMap[i].enr);
+  const mCmp   = mIdxs.map(i=>monthMap[i].cmp);
+  const monthTitle = document.getElementById('ieoMonthChartTitle');
+  if(monthTitle) monthTitle.textContent = 'Monthly Enrollment — '+mYear;
+  const mCtx = document.getElementById('ieoMonthChart');
+  if(mCtx){
+    if(mCtx._chart) mCtx._chart.destroy();
+    mCtx._chart = new Chart(mCtx, {
+      type:'bar',
+      data:{
+        labels: mLabels,
+        datasets:[
+          {label:'Enrolled', data:mEnr, backgroundColor:'rgba(30,42,69,.75)', borderRadius:3},
+          {label:'Completed', data:mCmp, backgroundColor:'rgba(26,107,58,.75)', borderRadius:3}
+        ]
+      },
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:10},boxWidth:10}}},
+        scales:{x:{ticks:{font:{size:10}}},y:{ticks:{font:{size:10},callback:v=>v>=1000?Math.round(v/1000)+'k':v}}}}
+    });
+  }
+
+  /* ── 3. Completion Rate Trend (line chart over years) ── */
+  const compPcts = allYears.map((yr,i) => yoyEnrolled[i] ? Math.round(100*yoyCompleted[i]/yoyEnrolled[i]) : 0);
+  const ctCtx = document.getElementById('ieoCompletionTrendChart');
+  if(ctCtx){
+    if(ctCtx._chart) ctCtx._chart.destroy();
+    ctCtx._chart = new Chart(ctCtx, {
+      type:'line',
+      data:{
+        labels: allYears,
+        datasets:[{
+          label:'Completion %',
+          data: compPcts,
+          borderColor:'#1a6b3a', backgroundColor:'rgba(26,107,58,.1)',
+          borderWidth:2.5, pointRadius:5, pointBackgroundColor:'#1a6b3a', fill:true, tension:.3
+        }]
+      },
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:v=>v.raw+'% completion rate'}}},
+        scales:{
+          x:{ticks:{font:{size:10}}},
+          y:{min:0,max:100,ticks:{font:{size:10},callback:v=>v+'%'}}
+        }
+      }
+    });
+  }
+
+  /* ── 4. Top Centre Movers (this year vs prev year enrollment) ── */
+  const moversEl = document.getElementById('ieoMovers');
+  const movTitle = document.getElementById('ieoMoversTitle');
+  const allYrsSorted = [...allYears].sort();
+  const curYr  = allYrsSorted[allYrsSorted.length-1];
+  const prevYr = allYrsSorted[allYrsSorted.length-2];
+  if(moversEl && prevYr){
+    if(movTitle) movTitle.textContent = 'Centre Movers — '+prevYr+' → '+curYr;
+    const centreGrowth = [];
+    Object.entries(IE_ONLINE_DATA).forEach(([centre, d])=>{
+      const yCur  = (d.years||{})[curYr];
+      const yPrev = (d.years||{})[prevYr];
+      if(!yCur||!yPrev) return;
+      const enrCur  = (yCur.cc||0)+(yCur.st||0)+(yCur.ns||0)+(yCur.s||[]).reduce((a,b)=>a+b,0);
+      const enrPrev = (yPrev.cc||0)+(yPrev.st||0)+(yPrev.ns||0)+(yPrev.s||[]).reduce((a,b)=>a+b,0);
+      if(!enrPrev) return;
+      const growth = Math.round((enrCur-enrPrev)/enrPrev*100);
+      centreGrowth.push({centre, enrCur, enrPrev, growth});
+    });
+    centreGrowth.sort((a,b)=>b.growth-a.growth);
+    const top5 = centreGrowth.slice(0,5);
+    const bot5 = centreGrowth.slice(-3).reverse();
+    const mkRow = (r,isTop)=>{
+      const col = isTop?'#1a6b3a':'#b83232';
+      const sign = r.growth>=0?'+':'';
+      return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:7px">
+        <div style="flex:1;font-size:.7rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.centre}</div>
+        <div style="font-size:.65rem;color:var(--muted)">${r.enrPrev}→${r.enrCur}</div>
+        <div style="font-size:.72rem;font-weight:800;color:${col};min-width:44px;text-align:right">${sign}${r.growth}%</div>
+      </div>`;
+    };
+    moversEl.innerHTML =
+      `<div style="font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:6px">▲ Fastest Growing</div>`
+      + top5.map(r=>mkRow(r,true)).join('')
+      + `<div style="margin:10px 0 6px;border-top:1px solid var(--border)"></div>`
+      + `<div style="font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:6px">▼ Needs Attention</div>`
+      + bot5.map(r=>mkRow(r,false)).join('');
+  }
 }
 
 function ieoSortBy(col){
@@ -11264,6 +11437,8 @@ function _navToIeoOnlineCentre(centre){
 let _puActiveKey = null;
 let _puGroupBy    = 'programme'; // 'programme' | 'centre'
 let _puTypeFilter = 'all';      // 'all' | 'ie' | 'hatha' | 'advanced'
+let _puTab        = 'monthly';  // 'monthly' | 'analytics'
+let _ieoLastRows = [], _ieoLastTotal = 0;
 
 function buildProgramUpdates(){
   const el = document.getElementById('ovProgUpdatesContent');
@@ -11352,10 +11527,15 @@ function buildProgramUpdates(){
   const header = `
   <div style="margin-bottom:14px;display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:8px">
     <div>
-      <div style="font-size:1.1rem;font-weight:800;color:var(--navy);margin-bottom:3px">Program Updates — ${data.month} ${data.year}</div>
-      <div style="font-size:.68rem;color:var(--muted)">Participant counts across all Karnataka centres</div>
+      <div style="font-size:1.1rem;font-weight:800;color:var(--navy);margin-bottom:3px">Program Updates${_puTab==='monthly'?' — '+data.month+' '+data.year:' — Analytics'}</div>
+      <div style="font-size:.68rem;color:var(--muted)">${_puTab==='analytics'?'Cross-month trends across all Karnataka centres':'Participant counts across all Karnataka centres'}</div>
     </div>
     <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <div style="display:inline-flex;background:#e8e4db;border-radius:8px;padding:3px;gap:2px">
+        <button onclick="_puSetTab('monthly')"   style="${_tabBtn(_puTab==='monthly')}">Monthly View</button>
+        <button onclick="_puSetTab('analytics')" style="${_tabBtn(_puTab==='analytics')}">Analytics</button>
+      </div>
+      ${_puTab==='monthly'?`
       <div style="display:inline-flex;background:#e8e4db;border-radius:8px;padding:3px;gap:2px">
         <button onclick="_puSetGroupBy('programme')" style="${_tabBtn(_puGroupBy==='programme')}">By Programme</button>
         <button onclick="_puSetGroupBy('centre')" style="${_tabBtn(_puGroupBy==='centre')}">By Centre</button>
@@ -11364,7 +11544,7 @@ function buildProgramUpdates(){
         <button onclick="_puExport('csv')" style="${_expBtn}">↓ CSV</button>
         <button onclick="_puExport('png')" style="${_expBtn}">↓ PNG</button>
         <button onclick="_puExport('pdf')" style="${_expBtn}">↓ PDF</button>
-      </div>
+      </div>`:''}
     </div>
   </div>`;
 
@@ -11509,12 +11689,255 @@ function buildProgramUpdates(){
     </div>
   </div>`;
 
-  el.innerHTML = header + monthPills + typeFilterBar + kpiStrip + breakdown;
+  if(_puTab === 'analytics'){
+    el.innerHTML = header + `<div id="puAnalyticsPanel"></div>`;
+    _renderPuAnalytics(keys, _puCoordNorm);
+  } else {
+    el.innerHTML = header + monthPills + typeFilterBar + kpiStrip + breakdown;
+  }
 }
 
 function _puSetMonth(key){ _puActiveKey = key; buildProgramUpdates(); }
 function _puSetGroupBy(val){ _puGroupBy = val; buildProgramUpdates(); }
 function _puSetTypeFilter(val){ _puTypeFilter = val; buildProgramUpdates(); }
+function _puSetTab(tab){ _puTab = tab; buildProgramUpdates(); }
+
+function _renderPuAnalytics(keys, coordNorm){
+  const el = document.getElementById('puAnalyticsPanel');
+  if(!el || typeof Chart === 'undefined') return;
+
+  /* helpers */
+  function _puCmatch(r){ return !coordNorm || (r.centre && typeof _normCentreKey==='function' && _normCentreKey(r.centre)===coordNorm); }
+  const MONTH_NAMES = {'01':'Jan','02':'Feb','03':'Mar','04':'Apr','05':'May','06':'Jun','07':'Jul','08':'Aug','09':'Sep','10':'Oct','11':'Nov','12':'Dec'};
+  const shortLabel = k => { const [yr,mo]=k.split('-'); return MONTH_NAMES[mo]+' '+(yr.slice(2)); };
+
+  /* aggregate cross-month */
+  const mLabels = keys.map(shortLabel);
+  const mAttended = [], mNoshow = [], mTotal = [];
+  const progAccum = {}, centreAccum = {};
+
+  keys.forEach(k => {
+    const rows = ((PROGRAM_UPDATES[k]||{}).rows||[]).filter(_puCmatch);
+    const att  = rows.reduce((s,r)=>s+r.count,0);
+    const ns   = rows.reduce((s,r)=>s+(r.noshow||0),0);
+    mAttended.push(att);
+    mNoshow.push(ns);
+    mTotal.push(att+ns);
+    rows.forEach(r => {
+      progAccum[r.progLabel]   = (progAccum[r.progLabel]||0)  + r.count;
+      centreAccum[r.centre]    = (centreAccum[r.centre]||0)   + r.count;
+    });
+  });
+  const nsRates = mTotal.map((t,i) => t>0 ? Math.round(mNoshow[i]/t*100) : 0);
+
+  /* top 8 programmes */
+  const topProgs = Object.entries(progAccum).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  /* top 8 centres */
+  const topCentres = Object.entries(centreAccum).sort((a,b)=>b[1]-a[1]).slice(0,8);
+
+  const PROG_COLORS = {'Inner Engineering':'#7c3aed','Bhava Spandana':'#db2777','Shoonya Intensive':'#0369a1',
+    'Shoonya Volunteering':'#0284c7','Samyama':'#065f46','Angamardana':'#d97706',
+    'Surya Kriya':'#c2410c','Surya Shakti':'#ea580c','Yogasanas':'#0891b2',
+    'Hatha Yoga':'#16a34a','Other':'#64748b'};
+  const _pc = p => PROG_COLORS[p] || '#64748b';
+  const CENTRE_PAL = ['#0369a1','#7c3aed','#db2777','#065f46','#d97706','#dc2626','#0891b2','#4338ca','#16a34a','#92400e'];
+  const _cc = c => { let h=0; for(let i=0;i<c.length;i++) h=(h*31+c.charCodeAt(i))&0x7fffffff; return CENTRE_PAL[h%CENTRE_PAL.length]; };
+
+  el.innerHTML = `
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+    <div class="card">
+      <div class="card-t">Monthly Attendance Trend</div>
+      <div style="position:relative;height:200px"><canvas id="puTrendChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-t">No-show Rate by Month</div>
+      <div style="position:relative;height:200px"><canvas id="puNoshowChart"></canvas></div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+    <div class="card">
+      <div class="card-t">Top Programmes (All Months)</div>
+      <div style="position:relative;height:230px"><canvas id="puProgsChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-t">Top Centres (All Months)</div>
+      <div style="position:relative;height:230px"><canvas id="puCentresChart"></canvas></div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+    <div class="card">
+      <div class="card-t">No-show Rate by Programme</div>
+      <div style="position:relative;height:230px"><canvas id="puNoshowProgChart"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-t" id="puMomTitle">Month-over-Month Growth</div>
+      <div id="puMomTable" style="margin-top:6px;max-height:220px;overflow-y:auto"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-t" id="puHeatmapTitle">Centre Activity Heatmap</div>
+    <div id="puHeatmap" style="margin-top:8px;overflow-x:auto"></div>
+  </div>`;
+
+  /* 1. Monthly Attendance Trend — stacked bar (attended + noshow) */
+  const tCtx = document.getElementById('puTrendChart');
+  if(tCtx){ if(tCtx._chart) tCtx._chart.destroy();
+    tCtx._chart = new Chart(tCtx, {type:'bar', data:{labels:mLabels, datasets:[
+      {label:'Attended', data:mAttended, backgroundColor:'rgba(26,107,58,.8)', borderRadius:3},
+      {label:'No-show',  data:mNoshow,  backgroundColor:'rgba(185,64,64,.6)', borderRadius:3}
+    ]}, options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{font:{size:10},boxWidth:10}}},
+      scales:{x:{stacked:true,ticks:{font:{size:9}}},y:{stacked:true,ticks:{font:{size:9},callback:v=>v>=1000?Math.round(v/1000)+'k':v}}}}
+    });
+  }
+
+  /* 2. No-show rate line chart */
+  const nsCtx = document.getElementById('puNoshowChart');
+  if(nsCtx){ if(nsCtx._chart) nsCtx._chart.destroy();
+    nsCtx._chart = new Chart(nsCtx, {type:'line', data:{labels:mLabels, datasets:[{
+      label:'No-show %', data:nsRates,
+      borderColor:'#b94040', backgroundColor:'rgba(185,64,64,.1)',
+      borderWidth:2.5, pointRadius:4, fill:true, tension:.3
+    }]}, options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:v=>v.raw+'% no-show'}}},
+      scales:{x:{ticks:{font:{size:9}}},y:{min:0,max:100,ticks:{font:{size:9},callback:v=>v+'%'}}}}
+    });
+  }
+
+  /* 3. Top Programmes horizontal bar */
+  const ppCtx = document.getElementById('puProgsChart');
+  if(ppCtx){ if(ppCtx._chart) ppCtx._chart.destroy();
+    ppCtx._chart = new Chart(ppCtx, {type:'bar', data:{
+      labels: topProgs.map(([p])=>p.length>22?p.slice(0,20)+'…':p),
+      datasets:[{data:topProgs.map(([,v])=>v), backgroundColor:topProgs.map(([p])=>_pc(p)+'cc'), borderRadius:4}]
+    }, options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:v=>v.raw.toLocaleString()+' attended'}}},
+      scales:{x:{ticks:{font:{size:9},callback:v=>v>=1000?Math.round(v/1000)+'k':v}},y:{ticks:{font:{size:9}}}}}
+    });
+  }
+
+  /* 4. Top Centres horizontal bar */
+  const pcCtx = document.getElementById('puCentresChart');
+  if(pcCtx){ if(pcCtx._chart) pcCtx._chart.destroy();
+    pcCtx._chart = new Chart(pcCtx, {type:'bar', data:{
+      labels: topCentres.map(([c])=>c.length>22?c.slice(0,20)+'…':c),
+      datasets:[{data:topCentres.map(([,v])=>v), backgroundColor:topCentres.map(([c])=>_cc(c)+'cc'), borderRadius:4}]
+    }, options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:v=>v.raw.toLocaleString()+' attended'}}},
+      scales:{x:{ticks:{font:{size:9},callback:v=>v>=1000?Math.round(v/1000)+'k':v}},y:{ticks:{font:{size:9}}}}}
+    });
+  }
+
+  /* 5. No-show Rate by Programme (horizontal bar, only progs with any no-shows) */
+  const progNs = {}, progAll = {};
+  keys.forEach(k => {
+    ((PROGRAM_UPDATES[k]||{}).rows||[]).filter(_puCmatch).forEach(r => {
+      progNs[r.progLabel]  = (progNs[r.progLabel]||0)  + (r.noshow||0);
+      progAll[r.progLabel] = (progAll[r.progLabel]||0)  + r.count + (r.noshow||0);
+    });
+  });
+  const nsProgData = Object.entries(progNs)
+    .filter(([p,ns]) => ns > 0 && progAll[p] > 0)
+    .map(([p,ns]) => ({prog:p, pct:Math.round(ns/progAll[p]*100), ns, total:progAll[p]}))
+    .sort((a,b) => b.pct - a.pct).slice(0,8);
+  const npCtx = document.getElementById('puNoshowProgChart');
+  if(npCtx && nsProgData.length){ if(npCtx._chart) npCtx._chart.destroy();
+    npCtx._chart = new Chart(npCtx, {type:'bar', data:{
+      labels: nsProgData.map(d=>d.prog.length>22?d.prog.slice(0,20)+'…':d.prog),
+      datasets:[{data:nsProgData.map(d=>d.pct), backgroundColor:'rgba(185,64,64,.75)', borderRadius:4}]
+    }, options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:v=>`${v.raw}% no-show (${nsProgData[v.dataIndex].ns} of ${nsProgData[v.dataIndex].total})`}}},
+      scales:{x:{min:0,max:100,ticks:{font:{size:9},callback:v=>v+'%'}},y:{ticks:{font:{size:9}}}}}
+    });
+  } else if(npCtx){
+    npCtx.parentElement.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:.72rem;color:var(--muted)">No no-show data available</div>';
+  }
+
+  /* 6. Month-over-Month Growth Table */
+  const momEl = document.getElementById('puMomTable');
+  const momTitle = document.getElementById('puMomTitle');
+  if(momEl && keys.length >= 2){
+    const kCur  = keys[keys.length-1];
+    const kPrev = keys[keys.length-2];
+    if(momTitle) momTitle.textContent = 'MoM Growth — '+shortLabel(kPrev)+' → '+shortLabel(kCur);
+    const rowsCur  = ((PROGRAM_UPDATES[kCur]||{}).rows||[]).filter(_puCmatch);
+    const rowsPrev = ((PROGRAM_UPDATES[kPrev]||{}).rows||[]).filter(_puCmatch);
+    const curByProg = {}, prevByProg = {};
+    rowsCur.forEach(r  => { curByProg[r.progLabel]  = (curByProg[r.progLabel]||0)  + r.count; });
+    rowsPrev.forEach(r => { prevByProg[r.progLabel] = (prevByProg[r.progLabel]||0) + r.count; });
+    const allP = [...new Set([...Object.keys(curByProg), ...Object.keys(prevByProg)])];
+    const momRows = allP.map(p => {
+      const c = curByProg[p]||0, pr = prevByProg[p]||0;
+      const delta = c - pr;
+      const pct = pr > 0 ? Math.round(delta/pr*100) : (c>0?100:0);
+      return {prog:p, cur:c, prev:pr, delta, pct};
+    }).sort((a,b)=>b.cur - a.cur);
+    momEl.innerHTML = `<table style="width:100%;border-collapse:collapse;font-size:.7rem">
+      <thead><tr style="border-bottom:2px solid var(--border)">
+        <th style="text-align:left;padding:5px 8px;font-size:.6rem;font-weight:700;color:var(--muted);text-transform:uppercase">Programme</th>
+        <th style="text-align:right;padding:5px 6px;font-size:.6rem;font-weight:700;color:var(--muted);text-transform:uppercase">${shortLabel(kPrev)}</th>
+        <th style="text-align:right;padding:5px 6px;font-size:.6rem;font-weight:700;color:var(--muted);text-transform:uppercase">${shortLabel(kCur)}</th>
+        <th style="text-align:right;padding:5px 8px;font-size:.6rem;font-weight:700;color:var(--muted);text-transform:uppercase">Change</th>
+      </tr></thead>
+      <tbody>${momRows.map((r,i)=>{
+        const col = r.delta>0?'#1a6b3a':r.delta<0?'#b83232':'#888';
+        const sign = r.delta>0?'▲':r.delta<0?'▼':'–';
+        const bg = i%2 ? 'background:var(--surface-2)' : '';
+        return `<tr style="${bg};border-bottom:1px solid var(--border)">
+          <td style="padding:5px 8px;font-weight:600;color:var(--navy)">${r.prog}</td>
+          <td style="padding:5px 6px;text-align:right;color:var(--muted)">${r.prev||'—'}</td>
+          <td style="padding:5px 6px;text-align:right;font-weight:700">${r.cur||'—'}</td>
+          <td style="padding:5px 8px;text-align:right;font-weight:800;color:${col}">${r.delta===0?'–':sign+' '+Math.abs(r.pct)+'%'}</td>
+        </tr>`;
+      }).join('')}</tbody>
+    </table>`;
+  } else if(momEl){
+    momEl.innerHTML = '<div style="font-size:.72rem;color:var(--muted);padding:10px">Need at least 2 months of data</div>';
+  }
+
+  /* 7. Centre Activity Heatmap */
+  const hmEl = document.getElementById('puHeatmap');
+  const hmTitle = document.getElementById('puHeatmapTitle');
+  if(hmEl){
+    const allCentres = [...new Set(
+      keys.flatMap(k => ((PROGRAM_UPDATES[k]||{}).rows||[]).filter(_puCmatch).map(r=>r.centre))
+    )].sort();
+    const hmLabels = keys.map(shortLabel);
+    /* build max for colour scale */
+    let hmMax = 0;
+    const hmData = {}; /* centre → [count per key] */
+    allCentres.forEach(c => { hmData[c] = keys.map(k => {
+      const v = ((PROGRAM_UPDATES[k]||{}).rows||[]).filter(_puCmatch).filter(r=>r.centre===c).reduce((s,r)=>s+r.count,0);
+      if(v>hmMax) hmMax=v; return v;
+    }); });
+    const _heatCol = v => {
+      if(!v) return 'background:#f5f1ea;color:#ccc';
+      const pct = Math.min(v/hmMax,1);
+      if(pct<.25) return 'background:#d1e8ff;color:#1e6fa8';
+      if(pct<.5)  return 'background:#6db8ff;color:#fff';
+      if(pct<.75) return 'background:#2176c4;color:#fff';
+      return 'background:#0d3d7c;color:#fff';
+    };
+    const cellW = Math.max(52, Math.floor(560/keys.length));
+    let html = `<table style="border-collapse:collapse;font-size:.65rem;min-width:100%"><thead><tr>
+      <th style="text-align:left;padding:4px 8px;white-space:nowrap;font-size:.58rem;font-weight:700;color:var(--muted);border-bottom:2px solid var(--border)">Centre</th>
+      ${hmLabels.map(l=>`<th style="text-align:center;padding:4px 4px;min-width:${cellW}px;font-size:.58rem;font-weight:700;color:var(--muted);border-bottom:2px solid var(--border)">${l}</th>`).join('')}
+      <th style="text-align:right;padding:4px 8px;font-size:.58rem;font-weight:700;color:var(--muted);border-bottom:2px solid var(--border)">Total</th>
+    </tr></thead><tbody>`;
+    allCentres.forEach((c,ci) => {
+      const vals = hmData[c];
+      const tot  = vals.reduce((s,v)=>s+v,0);
+      html += `<tr style="${ci%2?'background:var(--surface-2)':''}">
+        <td style="padding:5px 8px;font-weight:600;color:var(--navy);white-space:nowrap">${c}</td>
+        ${vals.map(v=>`<td style="text-align:center;padding:4px 3px"><span style="display:inline-block;min-width:${cellW-10}px;padding:3px 0;border-radius:4px;font-weight:700;font-size:.62rem;${_heatCol(v)}">${v||'–'}</span></td>`).join('')}
+        <td style="text-align:right;padding:5px 8px;font-weight:800;color:var(--navy)">${tot.toLocaleString()}</td>
+      </tr>`;
+    });
+    html += '</tbody></table>';
+    hmEl.innerHTML = html;
+    if(hmTitle) hmTitle.textContent = 'Centre Activity Heatmap ('+allCentres.length+' centres × '+keys.length+' months)';
+  }
+}
 
 function _puExport(fmt){
   const data = PROGRAM_UPDATES[_puActiveKey];
