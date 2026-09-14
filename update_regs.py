@@ -25,6 +25,7 @@ except ImportError:
 # ── Paths ─────────────────────────────────────────────────────────────────────
 BASE          = os.path.dirname(os.path.abspath(__file__))
 HTML          = os.path.join(BASE, "isha_multi_centre_dashboard_v2.html")
+HTML_V3       = os.path.join(BASE, "isha_multi_centre_dashboard_v3.html")
 SANTHOSHA_DIR = os.path.join(BASE, "Santhosha Data")
 CURRENT_YEAR  = str(datetime.date.today().year)
 
@@ -1105,7 +1106,7 @@ def read_regs_history(html):
     except json.JSONDecodeError:
         return []
 
-def inject_html(html, regs, centre_data=None, monthly_data=None, latest_mtime=None, file_timestamps=None, upcoming=None, ieo_data=None, ieo_cm_data=None, regs_history=None, lang_map=None, hall_caps=None):
+def inject_html(html, regs, centre_data=None, monthly_data=None, latest_mtime=None, file_timestamps=None, upcoming=None, ieo_data=None, ieo_cm_data=None, regs_history=None, lang_map=None, hall_caps=None, out_path=None):
     # 1. LIVE_REGS block
     dt          = datetime.datetime.fromtimestamp(latest_mtime)
     updated_str = dt.strftime('%d %b %Y, %I:%M %p')
@@ -1236,7 +1237,7 @@ def inject_html(html, regs, centre_data=None, monthly_data=None, latest_mtime=No
     elif HC_START not in html:
         print(f"  ⚠ HALL_CAPACITY markers not found — skipping")
 
-    with open(HTML, 'w', encoding='utf-8') as f:
+    with open(out_path or HTML, 'w', encoding='utf-8') as f:
         f.write(html)
 
 # ── Main ──────────────────────────────────────────────────────────────────────
@@ -1408,6 +1409,16 @@ if __name__ == '__main__':
         print(f"\nExtracting hall capacities from {os.path.basename(pivot_files[-1])} …")
         hall_caps = parse_pivot_capacities(pivot_files[-1])
         print(f"  ✓ {len(hall_caps)} capacity entries parsed")
+
+    # Fallback overrides — entries missing or zero in the pivot file
+    # Pivot takes precedence; these only fill gaps (not overwrite)
+    CAPACITY_OVERRIDES = {
+        "Shanmukhi Mudra|IP - Marathahalli|2026-09":           25,
+        "Eye Care Yoga & Shanmukhi Mudra|IP - Marathahalli|2026-09": 25,
+    }
+    for k, v in CAPACITY_OVERRIDES.items():
+        if k not in hall_caps or hall_caps[k] <= 0:
+            hall_caps[k] = v
     # Sadhguru Sannidhi: Pivot file has 0 in Maximum Attendees column — hardcode 90 as exception
     _SS_PROGS = ['Shoonya Intensive', 'Bhava Spandana', 'Samyama']
     for centre_regs in regs.get('sadhguru sannidhi', {}).keys():
@@ -1450,6 +1461,27 @@ if __name__ == '__main__':
         lang_map=lang_map,
         hall_caps=hall_caps if hall_caps else None,
     )
+
+    # Also update v3 if it exists
+    if os.path.exists(HTML_V3):
+        print(f"\nInjecting into v3 dashboard …")
+        with open(HTML_V3, 'r', encoding='utf-8') as f:
+            html_v3 = f.read()
+        inject_html(
+            html_v3,
+            regs,
+            centre_data if cd_updates else None,
+            monthly_data if monthly_updates else None,
+            latest_mtime,
+            file_timestamps if file_timestamps else None,
+            upcoming,
+            ieo_data,
+            ieo_cm_data,
+            regs_history,
+            lang_map=lang_map,
+            hall_caps=hall_caps if hall_caps else None,
+            out_path=HTML_V3,
+        )
 
     # Cleanup
     for t in tmp_files:
