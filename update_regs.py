@@ -93,6 +93,7 @@ PROG_PATTERNS = [
     (r'nauli',                                                       'nauli'),
     (r'kapalbhati',                                                  'kapalbhati'),
     (r'trataka',                                                     'trataka'),
+    (r'devi divya pooja|devi divya puja',                            'devi divya pooja'),
     (r'guru purnima',                                                'guru purnima'),
     (r'volunteers meet|volunteer meet',                              'volunteers meet'),
     (r'guru pooja|guru puja',                                        'guru pooja'),
@@ -717,7 +718,7 @@ PLACE_CENTRE = {
     'tumakuru':        'Tumkur',
     'udupi':           'Udupi',
     'whitefield':      'Whitefield',
-    'singasandra':     'Singasandra',
+    'singasandra':     'Singasandra (Electronic City)',
 }
 
 KA_CITIES = [
