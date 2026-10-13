@@ -48,7 +48,12 @@ CENTRE_PATTERNS = [
     (r'hubballi|hubbali|hubli',                               'hubbali'),
     (r'ballari|bellary',                                      'ballari'),
     (r'belagavi|belgaum',                                     'belagavi'),
-    (r'kalaburagi|gulbarga',                                  'kalaburagi'),
+    (r'kalaburagi|gulbarga',                                   'kalaburagi'),
+    (r'vijayapura|bijapur',                                    'vijayapura'),
+    (r'mandya',                                                'mandya'),
+    (r'hassan',                                                'hassan'),
+    (r'shivamogga|shimoga',                                    'shivamogga'),
+    (r'udupi',                                                 'udupi'),
     (r'koramangala',                                          'koramangala'),
     (r'chikkaballapur',                                       'chikkaballapur'),
     # Sub-centres (primarily Monthly Satsang, parsed from Pivot Event xlsx)
@@ -135,6 +140,15 @@ CENTRE_KEY_MAP = {
     'tumkur':          'Tumkur',
     'udupi':           'Udupi',
     'kodagu':          'Kodagu',
+    'vijayapura':      'Vijayapura',
+    'bijapur':         'Vijayapura',
+    'kalaburagi':      'Kalaburagi',
+    'gulbarga':        'Kalaburagi',
+    'mandya':          'Mandya',
+    'hassan':          'Hassan',
+    'shivamogga':      'Shivamogga',
+    'shimoga':         'Shivamogga',
+    'udupi':           'Udupi',
 }
 
 # Maps normalised prog key → CENTRE_DATA / MONTHLY_DATA sub-key
@@ -1051,7 +1065,6 @@ def parse_pivot_capacities(xlsx_path):
             'hsr':              'HSR Layout',
             'sarjapur':         'Sarjapur Road',
             'sadhguru sannidhi':'Sadhguru Sannidhi',
-            'kalaburagi':       'Kalaburagi',
         }
         html_centre = CENTRE_KEY_MAP.get(centre) or _CAP_EXTRA.get(centre)
         if not html_centre: continue
