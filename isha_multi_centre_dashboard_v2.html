@@ -430,6 +430,7 @@ footer{text-align:center;padding:13px;font-size:.54rem;letter-spacing:1px;text-t
 .udrop-role{display:inline-block;margin-top:6px;font-size:.58rem;font-weight:700;padding:3px 9px;border-radius:20px;letter-spacing:.4px;text-transform:uppercase}
 .udrop-role.badge-admin{background:#e8ecf5;color:#1e2a45}
 .udrop-role.badge-coord{background:#fdeee6;color:#b84e10}
+.udrop-role.badge-sector{background:#e8f4e8;color:#1d6a3c}
 .udrop-centre{font-size:.65rem;color:#555;margin-top:5px}
 .udrop-email{font-size:.62rem;color:#999;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .udrop-footer{padding:10px 12px}
@@ -437,6 +438,7 @@ footer{text-align:center;padding:13px;font-size:.54rem;letter-spacing:1px;text-t
 .udrop-signout:hover{background:#f87171;color:#fff}
 .role-admin{background:#1e2a45}
 .role-coord{background:#d4641a}
+.role-sector{background:#1d6a3c}
 .mgmt-btn{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.2);color:#fff;padding:6px 14px;font-size:.65rem;font-weight:700;cursor:pointer;border-radius:20px;transition:background .15s,border-color .15s;letter-spacing:.3px}
 .mgmt-btn:hover{background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.4)}
 .mgmt-btn svg{width:13px;height:13px;fill:#fff;flex-shrink:0}
@@ -466,6 +468,7 @@ footer{text-align:center;padding:13px;font-size:.54rem;letter-spacing:1px;text-t
 .um-badge{font-size:.52rem;font-weight:700;padding:2px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.4px}
 .um-badge.badge-admin{background:#e8ecf5;color:#1e2a45}
 .um-badge.badge-coord{background:#fdeee6;color:#b84e10}
+.um-badge.badge-sector{background:#e8f4e8;color:#1d6a3c}
 .um-badge.badge-dynamic{background:#e8f5e9;color:#2e7d32}
 .um-badge.badge-static{background:#f5f5f5;color:#757575}
 .um-del{background:none;border:1.5px solid #fecaca;color:#f87171;font-size:.6rem;padding:4px 10px;border-radius:8px;cursor:pointer;font-weight:600;transition:all .15s;white-space:nowrap}
@@ -956,10 +959,22 @@ tbody tr:hover { background: #f0ebe0 !important; }
         <label for="reqEmail">Email Address</label>
         <input type="email" id="reqEmail" placeholder="yourname@example.com" style="margin-bottom:14px"/>
         <label for="reqRole">Requested Role</label>
-        <select id="reqRole" style="margin-bottom:14px;width:100%;padding:10px 12px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:8px;color:#fff;font-size:.78rem;cursor:pointer" onchange="document.getElementById('reqCentreRow').style.display=this.value==='admin'?'none':'block'">
+        <select id="reqRole" style="margin-bottom:14px;width:100%;padding:10px 12px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:8px;color:#fff;font-size:.78rem;cursor:pointer" onchange="(function(){const v=this.value;document.getElementById('reqCentreRow').style.display=(v==='admin'||v==='sector')?'none':'block';document.getElementById('reqSectorRow').style.display=v==='sector'?'block':'none';}).call(this)">
           <option value="coordinator">Coordinator</option>
+          <option value="sector">Sector POC</option>
           <option value="admin">Admin</option>
         </select>
+        <div id="reqSectorRow" style="display:none">
+        <label for="reqSector">Your Sector</label>
+        <select id="reqSector" style="margin-bottom:14px;width:100%;padding:10px 12px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:8px;color:#fff;font-size:.78rem;cursor:pointer">
+          <option value="Bangalore">Bangalore</option>
+          <option value="Mangalore Sector">Mangalore Sector</option>
+          <option value="Tumkur Sector">Tumkur Sector</option>
+          <option value="Mysuru Sector">Mysuru Sector</option>
+          <option value="Chikkaballapura Sector">Chikkaballapura Sector</option>
+          <option value="North Karnataka Sector">North Karnataka Sector</option>
+        </select>
+        </div>
         <div id="reqCentreRow">
         <label for="reqCentre">Your Centre</label>
         <select id="reqCentre" style="margin-bottom:4px;width:100%;padding:10px 12px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:8px;color:#fff;font-size:.78rem;cursor:pointer">
@@ -1098,7 +1113,7 @@ tbody tr:hover { background: #f0ebe0 !important; }
 
     <div class="hdr-r" style="flex-shrink:0">
 <!-- V3 Print Button -->
-<button id="v3PrintBtn" onclick="window.print()" title="Print / Save as PDF" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:20px;padding:5px 9px;color:rgba(255,255,255,.8);font-size:.85rem;cursor:pointer;display:flex;align-items:center;transition:background .15s;margin-right:4px">🖨️</button>
+<button id="v3PrintBtn" onclick="_v3Print()" title="Print / Save as PDF" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:20px;padding:5px 9px;color:rgba(255,255,255,.8);font-size:.85rem;cursor:pointer;display:flex;align-items:center;transition:background .15s;margin-right:4px">🖨️</button>
 <!-- V3 Refresh Button -->
 <button id="v3RefreshBtn" onclick="_v3RefreshData()" title="Refresh live programme data" style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:20px;padding:5px 11px;color:rgba(255,255,255,.8);font-size:.72rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;transition:background .15s;margin-right:4px">
   <span id="v3RefreshIcon" style="display:inline-block;font-size:.8rem;transition:transform .4s">↻</span>
@@ -1353,6 +1368,11 @@ tbody tr:hover { background: #f0ebe0 !important; }
         <div id="ovHeading" style="font-size:1.1rem;font-weight:800;color:var(--navy);margin-bottom:4px">All Karnataka Centres — Overview</div>
         <div id="ovSubtitle" style="font-size:.68rem;color:var(--muted)"></div>
       </div>
+      <!-- Sector / Centre view toggle (admin only) -->
+      <div id="ovViewToggle" style="display:none;background:#f0ebe0;border:1px solid #e0d8c8;border-radius:8px;padding:2px;gap:2px;flex-shrink:0">
+        <button id="ovViewCentre" onclick="_setOvView('centre')" style="border:none;border-radius:6px;padding:5px 10px;font-size:.68rem;font-weight:700;cursor:pointer;background:var(--navy);color:#fff">By Centre</button>
+        <button id="ovViewSector" onclick="_setOvView('sector')" style="border:none;border-radius:6px;padding:5px 10px;font-size:.68rem;font-weight:700;cursor:pointer;background:transparent;color:var(--muted)">By Sector</button>
+      </div>
       <div id="blastBtn" style="display:none;gap:6px;flex-shrink:0">
         <button onclick="_openBlastSelect('wa')" style="display:flex;align-items:center;gap:5px;background:#25D366;color:#fff;border:none;border-radius:8px;padding:7px 13px;font-size:.72rem;font-weight:700;cursor:pointer;white-space:nowrap">
           <svg viewBox="0 0 24 24" width="12" height="12" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
@@ -1392,11 +1412,11 @@ tbody tr:hover { background: #f0ebe0 !important; }
     <div id="blastModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.55);overflow-y:auto;padding:20px 12px" onclick="if(event.target===this)_closeBlastModal()">
       <div style="max-width:560px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.3)">
         <div style="background:linear-gradient(135deg,#152a52,#1e3d7a);padding:16px 20px;display:flex;align-items:center;justify-content:space-between">
-          <div style="color:#fff;font-weight:800;font-size:.95rem">WhatsApp Blast — All Centres</div>
+          <div style="color:#fff;font-weight:800;font-size:.95rem">WA Blast — Bangalore &amp; Sector Messages</div>
           <button onclick="_closeBlastModal()" style="background:rgba(255,255,255,.15);border:none;border-radius:50%;width:28px;height:28px;color:#fff;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
         </div>
         <div style="padding:6px 16px 4px;background:#f8f6f2;border-bottom:1px solid #e8dfc8;font-size:.68rem;color:#7a7060">
-          Copy each centre's message and paste into their WhatsApp group
+          Bangalore: one message per centre POC · Outside Bangalore: one message per sector POC
         </div>
         <div id="blastModalBody" style="padding:16px;display:block;max-height:70vh;overflow-y:auto"></div>
         <div style="padding:12px 16px;border-top:1px solid #e8dfc8;text-align:right">
@@ -1620,12 +1640,24 @@ tbody tr:hover { background: #f0ebe0 !important; }
           <div class="um-field"><label>Password <span style="font-weight:400;color:#888;font-size:.75em">(leave blank → Google Sign-In only)</span></label><input type="text" id="umPassword" placeholder="Leave blank for Google Sign-In only"/></div>
           <div class="um-field">
             <label>Role</label>
-            <select id="umRole" onchange="(function(){const isAdmin=this.value==='admin';const c=document.getElementById('umCentre');c.disabled=isAdmin;if(isAdmin){c.value='all';}else if(c.value==='all'){const first=Array.from(c.options).find(o=>o.value!=='all');if(first)c.value=first.value;}}).call(this)">
+            <select id="umRole" onchange="(function(){const r=this.value;const c=document.getElementById('umCentre');const sw=document.getElementById('umSectorWrap');const cw=document.getElementById('umCentreWrap');if(r==='admin'){c.disabled=true;c.value='all';if(sw)sw.style.display='none';if(cw)cw.style.display='';}else if(r==='sector'){c.disabled=true;c.value='all';if(sw)sw.style.display='';if(cw)cw.style.display='none';}else{c.disabled=false;if(c.value==='all'){const first=Array.from(c.options).find(o=>o.value!=='all');if(first)c.value=first.value;}if(sw)sw.style.display='none';if(cw)cw.style.display='';}}).call(this)">
               <option value="coordinator">Coordinator</option>
+              <option value="sector">Sector POC</option>
               <option value="admin">Admin</option>
             </select>
           </div>
-          <div class="um-field">
+          <div class="um-field" id="umSectorWrap" style="display:none">
+            <label>Sector</label>
+            <select id="umSector">
+              <option value="Bangalore">Bangalore</option>
+              <option value="Mangalore Sector">Mangalore Sector</option>
+              <option value="Tumkur Sector">Tumkur Sector</option>
+              <option value="Mysuru Sector">Mysuru Sector</option>
+              <option value="Chikkaballapura Sector">Chikkaballapura Sector</option>
+              <option value="North Karnataka Sector">North Karnataka Sector</option>
+            </select>
+          </div>
+          <div class="um-field" id="umCentreWrap">
             <label>Centre</label>
             <select id="umCentre">
               <option value="all">All Centres (Admin)</option>
@@ -4864,6 +4896,40 @@ const PROG_META = {
 const CENTRES = Object.keys(CENTRE_DATA);
 const CY = '2026';
 
+// ── Sector definitions ──────────────────────────────────────────────────────
+// Outside-Bangalore centres are grouped into 5 sectors (one POC per sector).
+// Bangalore centres each have their own POC and are handled individually.
+const SECTOR_DEFS = {
+  'Mangalore Sector':       ['Mangalore', 'Udupi', 'Shivamogga'],
+  'Tumkur Sector':          ['Tumkur', 'Hassan'],
+  'Mysuru Sector':          ['Mysuru', 'Mandya', 'Kodagu'],
+  'Chikkaballapura Sector': ['Chikkaballapura', 'Bangalore Rural'],
+  'North Karnataka Sector': ['Ballari', 'Belagavi', 'Hubbali', 'Kalaburagi',
+                             'Vijayapura', 'Koppal', 'Chitradurga'],
+};
+const BANGALORE_CENTRES = [
+  'Banaswadi','Bannerghatta Road','Electronic City','Girinagar','Hebbal',
+  'IP - Jayanagar','Indiranagar','Koramangala','IP - Malleswaram',
+  'IP - Marathahalli','IP - Vijayanagar','Kanakapura Road','Whitefield','Budigere Cross'
+];
+// Helper: which sector does a centre belong to? (null = Bangalore individual)
+function _centreSector(c){
+  for(const [s,cs] of Object.entries(SECTOR_DEFS)){ if(cs.includes(c)) return s; }
+  return null;
+}
+// Aggregate CENTRE_DATA numbers for a list of centres
+function _sectorAggregate(centres){
+  const ie={}, bsp={}, sho={}, sam={};
+  for(const c of centres){
+    const cd=CENTRE_DATA[c]||{};
+    for(const [yr,v] of Object.entries(cd.ie||{}))     ie[yr]=(ie[yr]||0)+v;
+    for(const [yr,v] of Object.entries(cd.bsp||{}))    bsp[yr]=(bsp[yr]||0)+v;
+    for(const [yr,v] of Object.entries(cd.shoonya||{})) sho[yr]=(sho[yr]||0)+v;
+    for(const [yr,v] of Object.entries(cd.samyama||{})) sam[yr]=(sam[yr]||0)+v;
+  }
+  return {ie,bsp,sho,sam};
+}
+
 /* __MONTHLY_DATA_START__ */
 // Monthly data — centres with month-level CRM data (others have annual totals only)
 const MONTHLY_DATA = {
@@ -6620,6 +6686,7 @@ let currentCentre  = CENTRES[0];
 let currentProg    = 'ie';
 let currentRole    = null;
 let overviewCentre = null;   // null = admin (all centres); set to centre name for coordinator
+let overviewSector = null;   // null = admin/coordinator; set to sector name for sector POC
 let _pendingTab    = null;   // set before switchCentre() to land on a specific tab
 let currentUserName  = '';
 let currentUserEmail = '';
@@ -6710,7 +6777,7 @@ function populateUMCentreFilter(){
     [...centres].sort().map(c=>`<option value="${c}">${c}</option>`).join('');
 }
 function umInitials(email){ return email.split('@')[0].slice(0,2).toUpperCase(); }
-function umAvatarBg(role){ return role==='admin'?'#1e2a45':'#d4641a'; }
+function umAvatarBg(role){ return role==='admin'?'#1e2a45':role==='sector'?'#1d6a3c':'#d4641a'; }
 
 function renderUMTable(){
   // Pending
@@ -6720,8 +6787,11 @@ function renderUMTable(){
   if(_fsPending.length){
     document.getElementById('umPendingCount').textContent=_fsPending.length;
     document.getElementById('umPendingList').innerHTML=_fsPending.map(r=>{
-      const roleLabel = r.requestedRole==='admin' ? 'Admin' : 'Coordinator';
-      const centreLabel = r.requestedRole==='admin' ? 'All Centres' : (r.centre||'—');
+      const isAdminReq = r.requestedRole==='admin';
+      const isSectorReq = r.requestedRole==='sector';
+      const roleLabel = isAdminReq ? 'Admin' : isSectorReq ? 'Sector POC' : 'Coordinator';
+      const centreLabel = isAdminReq ? 'All Centres' : isSectorReq ? (r.sector||'—') : (r.centre||'—');
+      const badgeClass = isAdminReq ? 'badge-admin' : isSectorReq ? 'badge-sector' : 'badge-coord';
       return `<div class="um-pending-card">
         <div style="display:flex;align-items:center;gap:10px">
           <div class="um-user-avatar" style="background:${umAvatarBg(r.requestedRole||'coordinator')}">${umInitials(r.email)}</div>
@@ -6730,7 +6800,7 @@ function renderUMTable(){
             <div class="um-pending-email">${r.email}</div>
           </div>
           <div style="margin-left:auto;text-align:right">
-            <span class="um-badge ${r.requestedRole==='admin'?'badge-admin':'badge-coord'}">${roleLabel}</span>
+            <span class="um-badge ${badgeClass}">${roleLabel}</span>
             <div style="font-size:.6rem;color:#94a3b8;margin-top:3px">${centreLabel}</div>
           </div>
         </div>
@@ -6751,14 +6821,18 @@ function renderUMTable(){
   document.getElementById('umUserList').innerHTML=allEntries.map(([email,entry])=>{
     const isDynamic=entry.source==='firestore';
     const isAdmin=entry.role==='admin';
+    const isSector=entry.role==='sector';
     const centre=entry.centre&&entry.centre!=='all'?entry.centre:'All Centres';
+    const metaLabel = isAdmin ? 'All Centres' : isSector ? (entry.sector||'Sector POC') : centre;
+    const badgeClass = isAdmin ? 'badge-admin' : isSector ? 'badge-sector' : 'badge-coord';
+    const badgeLabel = isAdmin ? 'Admin' : isSector ? 'Sector POC' : 'Coordinator';
     return `<div class="um-user-card" data-role="${entry.role}" data-centre="${(entry.centre||'all').toLowerCase()}">
       <div class="um-user-avatar" style="background:${umAvatarBg(entry.role)}">${umInitials(email)}</div>
       <div class="um-user-info">
         <div class="um-user-email">${email}</div>
-        <div class="um-user-meta">${isAdmin?'All Centres':centre}</div>
+        <div class="um-user-meta">${metaLabel}</div>
       </div>
-      <span class="um-badge ${isAdmin?'badge-admin':'badge-coord'}">${isAdmin?'Admin':'Coordinator'}</span>
+      <span class="um-badge ${badgeClass}">${badgeLabel}</span>
       <span class="um-badge ${isDynamic?'badge-dynamic':'badge-static'}" style="margin-left:4px">${isDynamic?'Added':'Built-in'}</span>
       <button class="um-del" ${isDynamic?'':'disabled'} onclick="umDeleteUser('${email}')">Remove</button>
     </div>`;
@@ -6768,10 +6842,13 @@ function renderUMTable(){
 async function approveRequest(email, name, docId){
   const req=_fsPending.find(r=>r.id===docId)||{};
   const role=req.requestedRole||'coordinator';
-  const centre=role==='admin'?'all':(req.centre||CENTRES[0]);
+  const centre=(role==='admin'||role==='sector')?'all':(req.centre||CENTRES[0]);
+  const sector=role==='sector'?(req.sector||null):null;
   const pw='Isha@'+Math.random().toString(36).slice(2,7).toUpperCase();
   const passwordHash=await sha256(pw);
-  await db.collection('users').doc(email).set({ email, role, passwordHash, centre, name, addedAt: new Date().toISOString() });
+  const approveData = { email, role, passwordHash, centre, name, addedAt: new Date().toISOString() };
+  if(sector) approveData.sector = sector;
+  await db.collection('users').doc(email).set(approveData);
   await db.collection('pendingRequests').doc(docId).delete();
   _fsUsersLoaded=false; _fsPendingLoaded=false;
   await loadFSUsers(); await loadFSPending();
@@ -6796,10 +6873,12 @@ function _umValidate(){
   const pw    = document.getElementById('umPassword').value.trim();
   const role  = document.getElementById('umRole').value;
   const centre= document.getElementById('umCentre').value;
+  const sector= document.getElementById('umSector')?.value||'';
   const emailOk  = email.includes('@') && email.length > 3;
   const pwOk     = pw === '' || pw.length >= 4;
-  const centreOk = role === 'admin' || centre !== 'all';
-  document.getElementById('umAddBtn').disabled = !(emailOk && pwOk && centreOk);
+  const centreOk = role === 'admin' || role === 'sector' || centre !== 'all';
+  const sectorOk = role !== 'sector' || sector !== '';
+  document.getElementById('umAddBtn').disabled = !(emailOk && pwOk && centreOk && sectorOk);
 }
 (function _umBindValidation(){
   // Fields may not exist yet if UM panel hasn't rendered — defer until DOM ready
@@ -6810,6 +6889,8 @@ function _umValidate(){
     // selects fire 'change', not 'input'
     document.getElementById('umRole').addEventListener('change', _umValidate);
     document.getElementById('umCentre').addEventListener('change', _umValidate);
+    const umSec = document.getElementById('umSector');
+    if(umSec) umSec.addEventListener('change', _umValidate);
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',_bind);
   else _bind();
@@ -6819,20 +6900,26 @@ async function umAddUser(){
   const email=document.getElementById('umEmail').value.trim().toLowerCase();
   const pw=document.getElementById('umPassword').value.trim();
   const role=document.getElementById('umRole').value;
-  const centre=role==='admin' ? 'all' : document.getElementById('umCentre').value;
+  const isSectorRole = role==='sector';
+  const centre = (role==='admin'||isSectorRole) ? 'all' : document.getElementById('umCentre').value;
+  const sector = isSectorRole ? (document.getElementById('umSector')?.value||null) : null;
   const msg=document.getElementById('umMsg');
   if(!email||!email.includes('@')){msg.className='um-msg err';msg.textContent='Enter a valid email.';return;}
   if(pw && pw.length<4){msg.className='um-msg err';msg.textContent='Password must be at least 4 chars (or leave blank for Google Sign-In only).';return;}
   if(role==='coordinator' && centre==='all'){msg.className='um-msg err';msg.textContent='Please select a specific centre for coordinators.';return;}
+  if(isSectorRole && !sector){msg.className='um-msg err';msg.textContent='Please select a sector.';return;}
   const passwordHash = pw ? await sha256(pw) : null;
-  await db.collection('users').doc(email).set({ email, role, passwordHash, centre, addedAt: new Date().toISOString() });
+  const docData = { email, role, passwordHash, centre, addedAt: new Date().toISOString() };
+  if(sector) docData.sector = sector;
+  await db.collection('users').doc(email).set(docData);
   _fsUsersLoaded=false;
   await loadFSUsers();
   document.getElementById('umEmail').value='';
   document.getElementById('umPassword').value='';
   document.getElementById('umAddBtn').disabled=true;
   const authNote = pw ? '' : ' (Google Sign-In only)';
-  msg.className='um-msg ok'; msg.textContent=`✓ ${email} added as ${role} (${centre})${authNote}.`;
+  const label = isSectorRole ? sector : centre;
+  msg.className='um-msg ok'; msg.textContent=`✓ ${email} added as ${role} (${label})${authNote}.`;
   renderUMTable();
 }
 
@@ -6874,17 +6961,21 @@ function stopPendingListener(){
 // ════════════════════════════════════════════════════════════
 const GOOGLE_CLIENT_ID='350269138141-6ml3haltgcrv2saes9jtep7v6cfo3ub7.apps.googleusercontent.com';
 function getSession(){ try{return JSON.parse(sessionStorage.getItem('mcDash'));}catch(e){return null;} }
-function setSession(email,role,centre,name,picture){ sessionStorage.setItem('mcDash',JSON.stringify({email,role,centre,name,picture})); }
+function setSession(email,role,centre,name,picture,sector){ sessionStorage.setItem('mcDash',JSON.stringify({email,role,centre,name,picture,sector:sector||null})); }
 function clearSession(){ sessionStorage.removeItem('mcDash'); }
 
-function applySession(email,role,centre,name,picture){
+function applySession(email,role,centre,name,picture,sector){
   currentRole=role;
   currentUserEmail = email||'';
-  currentUserName  = name || (role==='admin' ? 'Admin' : (email||'').split('@')[0]);
+  const isSector = role==='sector';
+  const isAdmin  = role==='admin';
+  overviewSector = isSector ? (sector||null) : null;
+  currentUserName = name || (isAdmin ? 'Admin' : (email||'').split('@')[0]);
   document.getElementById('userPill').style.display='';
   const displayName = currentUserName;
   const initials = displayName.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
-  const isAdmin = role==='admin';
+  const avatarClass = isAdmin ? 'role-admin' : isSector ? 'role-sector' : 'role-coord';
+  const avatarColor = isAdmin ? '#1e2a45' : isSector ? '#1d6a3c' : '#d4641a';
 
   // Avatar (small, in header)
   const av = document.getElementById('userAvatar');
@@ -6892,11 +6983,11 @@ function applySession(email,role,centre,name,picture){
     av.innerHTML = `<img src="${picture}" alt="${displayName}" onerror="this.parentNode.innerHTML='${initials}'">`;
   } else {
     av.innerHTML = `<span>${initials}</span>`;
-    av.style.background = isAdmin ? '#1e2a45' : '#d4641a';
+    av.style.background = avatarColor;
   }
   // Dropdown large avatar
   const avLg = document.getElementById('udropAvatarLg');
-  avLg.className = 'udrop-avatar-lg ' + (isAdmin ? 'role-admin' : 'role-coord');
+  avLg.className = 'udrop-avatar-lg ' + avatarClass;
   if(picture){
     avLg.innerHTML = `<img src="${picture}" alt="${displayName}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
   } else {
@@ -6904,15 +6995,15 @@ function applySession(email,role,centre,name,picture){
   }
   document.getElementById('udropName').textContent = displayName;
   const roleEl = document.getElementById('udropRole');
-  roleEl.textContent = isAdmin ? 'Admin' : 'Centre Coordinator';
-  roleEl.className = 'udrop-role ' + (isAdmin ? 'badge-admin' : 'badge-coord');
+  roleEl.textContent = isAdmin ? 'Admin' : isSector ? 'Sector POC' : 'Centre Coordinator';
+  roleEl.className   = 'udrop-role ' + (isAdmin ? 'badge-admin' : isSector ? 'badge-sector' : 'badge-coord');
   const centreEl = document.getElementById('udropCentre');
-  centreEl.textContent = (!isAdmin && centre && centre!=='all') ? centre : '';
+  centreEl.textContent = isSector ? (sector||'') : (!isAdmin && centre && centre!=='all') ? centre : '';
   document.getElementById('udropEmail').textContent = email;
-  // Show export buttons for all roles; admin gets both, coordinator gets centre-only
+  // Show export buttons for all roles; admin gets both, others get centre-only
   document.getElementById('exportBtns').style.display='flex';
-  document.getElementById('expAllBtn').style.display= role==='admin' ? '' : 'none';
-  if(role==='admin'){
+  document.getElementById('expAllBtn').style.display= isAdmin ? '' : 'none';
+  if(isAdmin){
     const btn=document.getElementById('manageUsersBtn');
     btn.style.display='';
     updatePendingBadge();
@@ -7269,8 +7360,8 @@ async function onGoogleCredential(response){
   }
   const name=entry.name||payload.name||'';
   const picture=payload.picture||'';
-  setSession(email,entry.role,entry.centre||'all',name,picture);
-  applySession(email,entry.role,entry.centre||'all',name,picture);
+  setSession(email,entry.role,entry.centre||'all',name,picture,entry.sector||null);
+  applySession(email,entry.role,entry.centre||'all',name,picture,entry.sector||null);
 }
 
 let _googleReady = false;
@@ -7330,8 +7421,8 @@ async function doLogin(){
   await loadFSPending();
   const centre=entry.centre||'all';
   const name=entry.name||'';
-  setSession(email,entry.role,centre,name,'');
-  applySession(email,entry.role,centre,name,'');
+  setSession(email,entry.role,centre,name,'',entry.sector||null);
+  applySession(email,entry.role,centre,name,'',entry.sector||null);
 }
 
 document.getElementById('loginBtn').onclick=doLogin;
@@ -7377,16 +7468,21 @@ document.getElementById('reqSubmitBtn').onclick=async()=>{
   const name=document.getElementById('reqName').value.trim();
   const email=document.getElementById('reqEmail').value.trim().toLowerCase();
   const requestedRole=document.getElementById('reqRole').value;
-  const centre=requestedRole==='admin'?'all':document.getElementById('reqCentre').value;
+  const isSectorReq = requestedRole==='sector';
+  const centre=(requestedRole==='admin'||isSectorReq)?'all':document.getElementById('reqCentre').value;
+  const sector=isSectorReq?(document.getElementById('reqSector')?.value||null):null;
   const err=document.getElementById('reqErr');
   if(!name){err.textContent='Please enter your name.';return;}
   if(!email||!email.includes('@')){err.textContent='Please enter a valid email.';return;}
   if(requestedRole==='coordinator'&&!centre){err.textContent='Please select your centre.';return;}
+  if(isSectorReq&&!sector){err.textContent='Please select your sector.';return;}
   err.textContent='Submitting...';
   await loadFSUsers();
   if(getAllUsers()[email]){err.textContent='This email already has access.';return;}
   if(_fsPending.find(r=>r.email===email)){err.textContent='Request already pending.';return;}
-  await db.collection('pendingRequests').add({ name, email, centre, requestedRole, requestedAt: new Date().toLocaleString() });
+  const reqData = { name, email, centre, requestedRole, requestedAt: new Date().toLocaleString() };
+  if(sector) reqData.sector = sector;
+  await db.collection('pendingRequests').add(reqData);
   await loadFSPending();
   err.textContent='';
   document.getElementById('reqForm').style.display='none';
@@ -7417,7 +7513,7 @@ async function initAuth(){
   await loadFSPending();
   const sess=getSession();
   if(sess&&getAllUsers()[sess.email]){
-    applySession(sess.email,sess.role,sess.centre||'all',sess.name||'',sess.picture||'');
+    applySession(sess.email,sess.role,sess.centre||'all',sess.name||'',sess.picture||'',sess.sector||null);
     return;
   }
   document.getElementById('loginScreen').classList.remove('hidden');
@@ -7460,6 +7556,15 @@ function buildCentreSwitcher(role, userCentre){
 
     // Admin always lands on overview
     switchCentre('__all__', null);
+  } else if(role==='sector'){
+    // Sector POC: show sector name, land on sector-filtered overview
+    overviewCentre = null;
+    // overviewSector is already set by applySession
+    const sLabel = document.createElement('span');
+    sLabel.className = 'centre-coord-label';
+    sLabel.textContent = overviewSector || 'Sector POC';
+    inner.appendChild(sLabel);
+    switchCentre('__all__', null);
   } else {
     // Coordinator: show their centre name, land on filtered overview
     // Normalize centre name — fuzzy match handles spelling variants (e.g. "Malleshwaram" vs "Malleswaram")
@@ -7493,6 +7598,20 @@ function goHome(){
   showOvPage('overview');
 }
 
+function _v3Print(){
+  // Ensure overview is visible before printing
+  const ov = document.getElementById('overviewView');
+  if(ov && ov.style.display === 'none'){
+    // User is on a centre detail view — print as-is
+    window.print();
+    return;
+  }
+  // Make sure we're on the overview sub-page (not Insights/RegCounts etc.)
+  showOvPage('overview');
+  // Small delay so DOM settles before print dialog opens
+  setTimeout(function(){ window.print(); }, 80);
+}
+
 function switchCentre(centre, btn){
   // Sync dropdown if admin
   const sel=document.getElementById('centreSelect');
@@ -7506,6 +7625,10 @@ function switchCentre(centre, btn){
     if(overviewCentre){
       document.getElementById('dashTitle').textContent=overviewCentre+' — Centre Overview';
       document.getElementById('dashSubtitle').textContent='Isha Foundation · Karnataka Region';
+    } else if(overviewSector){
+      const sCentres = overviewSector === 'Bangalore' ? BANGALORE_CENTRES : (SECTOR_DEFS[overviewSector] || []);
+      document.getElementById('dashTitle').textContent=overviewSector+' — Overview';
+      document.getElementById('dashSubtitle').textContent='Isha Foundation · '+sCentres.length+' Centres';
     } else {
       document.getElementById('dashTitle').textContent='Isha Karnataka — All Centres Overview';
       document.getElementById('dashSubtitle').textContent='Isha Foundation · '+CENTRES.length+' Karnataka Centres';
@@ -11458,13 +11581,43 @@ function _openBlastModal(){
   const body  = document.getElementById('blastModalBody');
   if(!modal||!body) return;
 
-  const centres = [...CENTRES].filter(c=>CENTRE_DATA[c]).sort();
-
-  // Build cards — store messages in a lookup so onclick can retrieve them safely
-  window._blastMsgs = {};
   body.innerHTML = '';
 
-  centres.forEach(c => {
+  // ── Tab bar ─────────────────────────────────────────────────────────────
+  const tabBar = document.createElement('div');
+  tabBar.style.cssText = 'display:flex;gap:0;border-bottom:2px solid #e0d8c8;margin-bottom:14px;background:#f8f5f0;border-radius:8px 8px 0 0;overflow:hidden';
+
+  const mkTab = (label, id, active) => {
+    const btn = document.createElement('button');
+    btn.id = id;
+    btn.textContent = label;
+    btn.style.cssText = `flex:1;border:none;padding:10px 4px;font-size:.75rem;font-weight:700;cursor:pointer;transition:background .15s,color .15s;background:${active?'var(--navy)':'transparent'};color:${active?'#fff':'var(--muted)'}`;
+    return btn;
+  };
+  const tabBlr = mkTab('🏙️ Bangalore Centres', 'blastTabBlr', true);
+  const tabSec = mkTab('🗺️ Outside Bangalore (Sectors)', 'blastTabSec', false);
+  tabBar.append(tabBlr, tabSec);
+  body.appendChild(tabBar);
+
+  // Panels
+  const panelBlr = document.createElement('div'); panelBlr.id = 'blastPanelBlr';
+  const panelSec = document.createElement('div'); panelSec.id = 'blastPanelSec'; panelSec.style.display='none';
+  body.append(panelBlr, panelSec);
+
+  tabBlr.addEventListener('click', ()=>{
+    panelBlr.style.display=''; panelSec.style.display='none';
+    tabBlr.style.background='var(--navy)'; tabBlr.style.color='#fff';
+    tabSec.style.background='transparent'; tabSec.style.color='var(--muted)';
+  });
+  tabSec.addEventListener('click', ()=>{
+    panelSec.style.display=''; panelBlr.style.display='none';
+    tabSec.style.background='var(--navy)'; tabSec.style.color='#fff';
+    tabBlr.style.background='transparent'; tabBlr.style.color='var(--muted)';
+  });
+
+  // ── Bangalore Centre cards ───────────────────────────────────────────────
+  const blrCentres = BANGALORE_CENTRES.filter(c=>CENTRE_DATA[c]).sort();
+  blrCentres.forEach(c => {
     let plainMsg = 'Loading...';
     try {
       const cd = CENTRE_DATA[c]||{};
@@ -11548,7 +11701,17 @@ function _openBlastModal(){
     ta.readOnly = true;
 
     card.append(hdr, ta);
-    body.appendChild(card);
+    panelBlr.appendChild(card);
+  });
+
+  // ── Sector cards ─────────────────────────────────────────────────────────
+  Object.entries(SECTOR_DEFS).forEach(([sName, sCentres]) => {
+    try {
+      const msg = _buildSectorMsg(sName, sCentres);
+      panelSec.appendChild(_blastCardEl(sName, msg));
+    } catch(e){
+      panelSec.appendChild(_blastCardEl(sName, sName + ' — error: ' + e.message));
+    }
   });
 
   modal.style.display='block';
@@ -11558,6 +11721,87 @@ function _openBlastModal(){
 function _closeBlastModal(){
   document.getElementById('blastModal').style.display='none';
   document.body.style.overflow='';
+}
+
+// ── Build sector-level WA blast message ──────────────────────────────────
+function _buildSectorMsg(sName, sCentres){
+  const known = sCentres.filter(c=>CENTRE_DATA[c]);
+  const agg   = _sectorAggregate(known);
+  const ieT   = Object.values(agg.ie).reduce((s,v)=>s+v,0);
+  const ieY   = agg.ie[CY]||0, bspY=agg.bsp[CY]||0, shoY=agg.sho[CY]||0, samY=agg.sam[CY]||0;
+  const today = new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+  const fmtD  = d=>{ const dt=new Date(d); return isNaN(dt)?d:dt.toLocaleDateString('en-IN',{day:'2-digit',month:'short'}); };
+  const ln    = [];
+  ln.push('Namaskaram');
+  ln.push('');
+  ln.push(`${sName} - Programme Update`);
+  ln.push(`(${known.join(', ')})`);
+  ln.push('');
+  ln.push(`${CY} YTD — Combined`);
+  ln.push(`Inner Engineering: ${ieY} (All-time: ${ieT})`);
+  if(bspY) ln.push(`BSP: ${bspY}`);
+  if(shoY) ln.push(`Shoonya: ${shoY}`);
+  if(samY) ln.push(`Samyama: ${samY}`);
+  ln.push('');
+  ln.push('Centre-wise Breakup');
+  for(const c of known){
+    const cd=CENTRE_DATA[c]||{};
+    const cIeY=(cd.ie||{})[CY]||0, cIeT=Object.values(cd.ie||{}).reduce((s,v)=>s+v,0);
+    const cBsp=(cd.bsp||{})[CY]||0, cSho=(cd.shoonya||{})[CY]||0, cSam=(cd.samyama||{})[CY]||0;
+    let row = `${c}: IE ${cIeY} (All-time ${cIeT})`;
+    if(cBsp) row += ` | BSP ${cBsp}`;
+    if(cSho) row += ` | Shoonya ${cSho}`;
+    if(cSam) row += ` | Samyama ${cSam}`;
+    // Upcoming for this centre
+    const ups=(ALL_UPCOMING[c]||[]);
+    if(ups.length){
+      const upStr = ups.map(p=>{
+        const r=_getRegInfo(p.name,c,p.fr);
+        const ds=p.fr?fmtD(p.fr)+(p.to&&p.to!==p.fr?' - '+fmtD(p.to):''):'';
+        const conf=r&&r.confirmed!==null?' ('+r.confirmed+')':'';
+        return `  - ${p.name}${ds?' '+ds:''}${conf}`;
+      }).join('\n');
+      row += '\n  Upcoming:\n' + upStr;
+    }
+    ln.push(row);
+  }
+  ln.push('');
+  ln.push('Pranam');
+  ln.push('_Isha Karnataka Programme Dashboard_');
+  return ln.join('\n');
+}
+
+// ── Build a blast card DOM element (shared for centre + sector) ───────────
+function _blastCardEl(label, msg){
+  const card = document.createElement('div');
+  card.style.cssText = 'border:1px solid #e0d8c8;border-radius:10px;overflow:hidden;background:#fff;margin-bottom:12px;flex-shrink:0';
+  const hdr = document.createElement('div');
+  hdr.style.cssText = 'background:#f0ebe0;padding:9px 14px;display:flex;align-items:center;justify-content:space-between;gap:8px';
+  const nameEl = document.createElement('b');
+  nameEl.style.cssText = 'font-size:13px;color:#1e2a45';
+  nameEl.textContent = label;
+  const btnWrap = document.createElement('div');
+  btnWrap.style.cssText = 'display:flex;gap:6px;flex-shrink:0';
+  const copyBtn = document.createElement('button');
+  copyBtn.style.cssText = 'background:#e8e0d0;border:1px solid #ccc;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;color:#1e2a45';
+  copyBtn.textContent = 'Copy';
+  const _m = msg;
+  copyBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    navigator.clipboard.writeText(_m).then(()=>{ copyBtn.textContent='✓ Copied'; copyBtn.style.background='#2a7a2a'; copyBtn.style.color='#fff'; setTimeout(()=>{ copyBtn.textContent='Copy'; copyBtn.style.background=''; copyBtn.style.color=''; },2000); }).catch(()=>alert('Copy failed'));
+  });
+  const waBtn = document.createElement('button');
+  waBtn.style.cssText = 'background:#25D366;border:none;border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;color:#fff';
+  waBtn.textContent = 'WhatsApp';
+  waBtn.addEventListener('click', e => { e.stopPropagation(); window.open('https://wa.me/?text='+encodeURIComponent(_m),'_blank'); });
+  btnWrap.append(copyBtn, waBtn);
+  hdr.append(nameEl, btnWrap);
+  const ta = document.createElement('textarea');
+  ta.style.cssText = 'display:block;width:100%;box-sizing:border-box;border:none;border-top:1px solid #e8dfc8;padding:10px 14px;font-size:12px;color:#333;font-family:monospace;background:#fff;line-height:1.5;height:140px;resize:vertical;outline:none';
+  ta.value = msg;
+  ta.readOnly = true;
+  card.append(hdr, ta);
+  return card;
 }
 
 function _blastCopy(btn, c, mode){
@@ -13526,12 +13770,48 @@ function _buildCompareChart(showYears){
   compareChart.update();
 }
 
+// ── Overview view toggle (centre vs sector) ──────────────────────────────
+function _setOvView(mode){
+  window._ovSectorView = (mode === 'sector');
+  const btnC = document.getElementById('ovViewCentre');
+  const btnS = document.getElementById('ovViewSector');
+  if(btnC && btnS){
+    btnC.style.background = mode==='centre' ? 'var(--navy)' : 'transparent';
+    btnC.style.color      = mode==='centre' ? '#fff' : 'var(--muted)';
+    btnS.style.background = mode==='sector' ? 'var(--navy)' : 'transparent';
+    btnS.style.color      = mode==='sector' ? '#fff' : 'var(--muted)';
+  }
+  buildOverview();
+}
+
+function _toggleOvSector(sName){
+  if(!window._ovSectorOpen) window._ovSectorOpen = new Set();
+  if(window._ovSectorOpen.has(sName)) window._ovSectorOpen.delete(sName);
+  else window._ovSectorOpen.add(sName);
+
+  // Toggle without full rebuild — just show/hide body + rotate arrow
+  const sid  = 'sector-' + sName.replace(/\s+/g,'-').toLowerCase();
+  const body = document.getElementById(sid + '-body');
+  const arr  = document.getElementById(sid + '-arrow');
+  const hdr  = body ? body.previousElementSibling : null;
+  const isOpen = window._ovSectorOpen.has(sName);
+
+  if(body) body.style.display = isOpen ? 'block' : 'none';
+  if(arr)  arr.style.transform = isOpen ? 'rotate(90deg)' : 'rotate(0deg)';
+  if(hdr)  hdr.style.borderRadius = isOpen ? '10px 10px 0 0' : '10px';
+}
+
 // ════════════════════════════════════════════════════════════
 //  ALL-CENTRES OVERVIEW (admin)
 // ════════════════════════════════════════════════════════════
 function buildOverview(){
   // When coordinator is logged in, filter to just their centre
-  const centreList = overviewCentre ? [overviewCentre] : CENTRES;
+  // When sector POC is logged in, filter to just their sector's centres
+  const centreList = overviewCentre
+    ? [overviewCentre]
+    : overviewSector
+      ? (overviewSector === 'Bangalore' ? BANGALORE_CENTRES : (SECTOR_DEFS[overviewSector] || [])).filter(c => CENTRE_DATA[c])
+      : CENTRES;
   // Update section heading
   const blastBtn = document.getElementById('blastBtn');
   if(overviewCentre){
@@ -13547,6 +13827,21 @@ function buildOverview(){
     document.getElementById('ovNav').style.display='flex';
     setTimeout(function(){ if(typeof _applyMobile==='function') _applyMobile(); },50);
     if(blastBtn) blastBtn.style.display='none';
+    const vt = document.getElementById('ovViewToggle'); if(vt) vt.style.display='none';
+  } else if(overviewSector){
+    /* Sector POC: show sector centres, limited nav, sector WA blast button */
+    ['ovNavInsights','ovNavRegCounts','ovNavIeOnline'].forEach(function(id){
+      var b=document.getElementById(id); if(b) b.style.display='none';
+    });
+    document.getElementById('ovNav').style.display='flex';
+    setTimeout(function(){ if(typeof _applyMobile==='function') _applyMobile(); }, 50);
+    document.getElementById('ovHeading').textContent = overviewSector + ' — Centre Overview';
+    document.getElementById('ovSubtitle').textContent = 'IE, BSP, Shoonya and Samyama totals for '+centreList.length+' centres · Click card to open full dashboard';
+    document.getElementById('ovKpiStrip').style.display='none';
+    document.getElementById('ovExtraCards').style.display='none';
+    document.getElementById('coordOvChartWrap').style.display='none';
+    if(blastBtn) blastBtn.style.display='flex';
+    const vt = document.getElementById('ovViewToggle'); if(vt) vt.style.display='none';
   } else {
     /* Admin: restore all nav tabs */
     ['ovNavInsights','ovNavRegCounts','ovNavIeOnline'].forEach(function(id){
@@ -13557,6 +13852,9 @@ function buildOverview(){
     document.getElementById('ovHeading').textContent = 'All Karnataka Centres — Overview';
     if(blastBtn){ blastBtn.style.display='flex'; }
     document.getElementById('ovSubtitle').textContent = `Showing IE, BSP, Shoonya and Samyama totals across all ${CENTRES.length} centres · Green badge = % of IE participants · ${CY} YTD in brackets`;
+    // Show sector/centre toggle for admin
+    const vt = document.getElementById('ovViewToggle');
+    if(vt) vt.style.display='flex';
     // Insights (extra cards + comparison chart) now live on the Karnataka Insights tab
     document.getElementById('ovKpiStrip').style.display='none';
     document.getElementById('coordOvChartWrap').style.display='none';
@@ -13585,10 +13883,13 @@ function buildOverview(){
       </div>`;
   };
 
-  // Cards per centre — sorted by all-time IE rank
+  // Cards per centre — card builder closure (used by both normal + sector views)
   const sortedCentreList = [...centreList].filter(c=>CENTRE_DATA[c])
     .sort((a,b)=>(_ieRankTotal[a]||999)-(_ieRankTotal[b]||999));
-  document.getElementById('overviewGrid').innerHTML=sortedCentreList.map(c=>{
+
+  // Card builder — defined before sector-view early-return so it can be used there
+  const _cardFn = c => {
+
     const ie=CENTRE_DATA[c].ie||{}, bsp=CENTRE_DATA[c].bsp||{}, sho=CENTRE_DATA[c].shoonya||{}, sam=CENTRE_DATA[c].samyama||{};
     const ieT=Object.values(ie).reduce((s,v)=>s+v,0);
     const rankTotal=_ieRankTotal[c]||'—';
@@ -13721,7 +14022,82 @@ function buildOverview(){
         </div>
       </div>
     </div>`;
-  }).join('');
+  
+  };
+
+  // ── Normal (By Centre) view
+
+  // ── Sector View ──────────────────────────────────────────────────────────
+  if(!overviewCentre && window._ovSectorView){
+    if(!window._ovSectorOpen) window._ovSectorOpen = new Set();
+    const SECTOR_COLORS = {
+      'Mangalore Sector':'#1a5276','Tumkur Sector':'#1d6a3c','Mysuru Sector':'#6c3483',
+      'Chikkaballapura Sector':'#7d6608','North Karnataka Sector':'#922b21'
+    };
+
+    const blrCards = BANGALORE_CENTRES.filter(c=>CENTRE_DATA[c])
+      .sort((a,b)=>(_ieRankTotal[a]||999)-(_ieRankTotal[b]||999));
+
+    // Build sector accordion sections (span full grid width)
+    const sectorAccordions = Object.entries(SECTOR_DEFS).map(([sName, sCentres])=>{
+      const known   = sCentres.filter(c=>CENTRE_DATA[c]);
+      const agg     = _sectorAggregate(known);
+      const ieT     = Object.values(agg.ie).reduce((s,v)=>s+v,0);
+      const ieY     = agg.ie[CY]||0, bspY=agg.bsp[CY]||0, shoY=agg.sho[CY]||0, samY=agg.sam[CY]||0;
+      const col     = SECTOR_COLORS[sName]||'#1e2a45';
+      const sid     = 'sector-' + sName.replace(/\s+/g,'-').toLowerCase();
+      const isOpen  = window._ovSectorOpen.has(sName);
+
+      // Individual centre cards for this sector (same _cardFn tiles)
+      const centreCardsHtml = known.map(_cardFn).join('');
+
+      return `
+      <div style="grid-column:1/-1;margin-bottom:4px">
+        <!-- Sector accordion header -->
+        <div onclick="_toggleOvSector('${sName.replace(/'/g,"\\'")}')"
+          style="display:flex;align-items:center;justify-content:space-between;gap:12px;
+                 background:${col};color:#fff;border-radius:${isOpen?'10px 10px 0 0':'10px'};
+                 padding:12px 16px;cursor:pointer;user-select:none;transition:border-radius .2s">
+          <div style="display:flex;align-items:center;gap:10px;min-width:0">
+            <span style="font-size:.85rem;font-weight:800">${sName}</span>
+            <span style="font-size:.6rem;opacity:.75">${known.join(' · ')}</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:16px;flex-shrink:0">
+            <div style="text-align:right">
+              <div style="font-size:1rem;font-weight:800">${ieY.toLocaleString()}</div>
+              <div style="font-size:.55rem;opacity:.75">IE ${CY} YTD</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-size:.8rem;font-weight:700">${ieT.toLocaleString()}</div>
+              <div style="font-size:.55rem;opacity:.75">IE All-time</div>
+            </div>
+            ${bspY?`<div style="text-align:right"><div style="font-size:.8rem;font-weight:700">${bspY}</div><div style="font-size:.55rem;opacity:.75">BSP</div></div>`:''}
+            ${shoY?`<div style="text-align:right"><div style="font-size:.8rem;font-weight:700">${shoY}</div><div style="font-size:.55rem;opacity:.75">Shoonya</div></div>`:''}
+            <span style="font-size:1rem;transition:transform .25s;display:inline-block;transform:rotate(${isOpen?'90':'0'}deg)"
+              id="${sid}-arrow">▶</span>
+          </div>
+        </div>
+        <!-- Sector body: individual centre cards -->
+        <div id="${sid}-body" style="display:${isOpen?'block':'none'};
+             background:#f8f5f0;border:2px solid ${col};border-top:none;
+             border-radius:0 0 10px 10px;padding:12px">
+          <div class="overview-grid" style="margin:0">
+            ${centreCardsHtml}
+          </div>
+        </div>
+      </div>`;
+    });
+
+    document.getElementById('overviewGrid').innerHTML =
+      `<div style="grid-column:1/-1;font-size:.65rem;font-weight:700;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px">— Bangalore Centres —</div>`
+      + blrCards.map(_cardFn).join('')
+      + `<div style="grid-column:1/-1;font-size:.65rem;font-weight:700;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;margin:16px 0 8px">— Outside Bangalore — By Sector —</div>`
+      + sectorAccordions.join('');
+    return;
+  }
+
+  // ── Normal (By Centre) view ──────────────────────────────────────────────
+  document.getElementById('overviewGrid').innerHTML=sortedCentreList.map(_cardFn).join('');
 
   // Coordinator: single-centre IE year-over-year chart in overview
   if(overviewCentre){
@@ -14105,12 +14481,14 @@ initAuth();    // load Firebase users + check session in parallel
   #loginScreen, #publicUpcomingScreen, #v3Brief, #v3BottomBar,
   #v3InlineSearch, #v3PrintBtn, #v3RefreshBtn, #v3RefreshToast,
   .hdr-r, #centreInner, #tabBar, #v3Slideshow, #v3StaleWarning,
-  .ov-ie-ie-chart, .chartWrap, [id^="kpiChart"], button.tab { display: none !important; }
+  .ov-ie-ie-chart, .chartWrap, [id^="kpiChart"], button.tab,
+  #ovViewToggle, #ovNav, #blastBtn { display: none !important; }
   body, html { background: #fff !important; }
   .header { background: #1e2f5a !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 10px 20px !important; }
   .brand { color: #fff !important; }
   #mainApp { padding: 0 !important; }
   .card, .ov-card { break-inside: avoid; box-shadow: none !important; border: 1px solid #ddd !important; }
+  #overviewView { display: block !important; }
   #ovOverviewPage { display: block !important; }
   #regCountsView { display: block !important; }
   .no-print { display: none !important; }
