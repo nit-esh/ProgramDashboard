@@ -417,18 +417,64 @@ def parse_csv(csv_path, regs, cd_updates, source_label, lang_map=None):
     skipped = 0
     matched = 0
 
+    today_str = datetime.date.today().isoformat()  # YYYY-MM-DD
+
     with open(csv_path, newline='', encoding='utf-8-sig', errors='replace') as f:
         reader = csv.reader(f)
-        for row in reader:
+
+        # ── Detect column positions by header name (order-independent) ──────
+        # Scan the first few rows for "Reserved Seats" and "Number of Participants"
+        reserved_col    = None   # col index for Reserved Seats
+        participants_col = None  # col index for Number of Participants
+        all_rows = list(reader)
+        for hrow in all_rows[:5]:
+            for i, cell in enumerate(hrow):
+                cl = str(cell).strip().lower()
+                if 'reserved' in cl and 'seat' in cl:
+                    reserved_col = i
+                if 'participant' in cl and 'number' in cl or cl == 'number of participants':
+                    participants_col = i
+            if reserved_col is not None or participants_col is not None:
+                break
+
+        for row in all_rows:
             if not row: continue
             name = row[0].strip()
+            if not name: continue
+
+            # Skip volunteering registrations — only count participant events
+            if 'volunteer' in name.lower():
+                skipped += 1
+                continue
+
+            # Column layout from Isha pivot xlsx (detected by header name above):
+            #   reserved_col     = Reserved Seats   → use for future/upcoming programmes
+            #   participants_col  = Number of Participants → use for programmes starting today
+            prog_date = extract_start_date(name)
+            is_today  = (prog_date == today_str) if prog_date else False
+
+            def _cell(idx):
+                if idx is None or idx >= len(row): return ''
+                return str(row[idx]).strip() if row[idx] is not None else ''
+
             count_str = ''
-            for col in row[1:]:
-                col = col.strip()
-                if col and re.match(r'^-?\d+(\.\d+)?$', col):
-                    count_str = col
-                    break
-            if not name or not count_str:
+            if is_today and participants_col is not None:
+                v = _cell(participants_col)
+                if v and re.match(r'^\d+(\.\d+)?$', v):
+                    count_str = v
+            if not count_str and reserved_col is not None:
+                v = _cell(reserved_col)
+                if v and re.match(r'^-?\d+(\.\d+)?$', v):
+                    count_str = v
+            if not count_str:
+                # Fallback: first numeric column (covers simple 2-column CSVs)
+                for col in row[1:]:
+                    col = str(col).strip() if col is not None else ''
+                    if col and re.match(r'^-?\d+(\.\d+)?$', col):
+                        count_str = col
+                        break
+
+            if not count_str:
                 continue
             try:
                 count = int(float(count_str))
