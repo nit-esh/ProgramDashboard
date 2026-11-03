@@ -12852,7 +12852,7 @@ function buildAdminRegCounts(){
   // Flatten all upcoming programmes into rows with centre label
   const rows = [];
   for(const [centre, progs] of Object.entries(ALL_UPCOMING)){
-    if(/coimbatore|isha\s+yoga\s+cent/i.test(centre)) continue;
+    if(/coimbatore|isha\s+yoga\s+cent|kalaburagi|gulbarga/i.test(centre)) continue;
     if(!(progs||[]).length) continue;
     for(const p of progs){
       let reg = _getRegInfo(p.name, centre, p.fr);
