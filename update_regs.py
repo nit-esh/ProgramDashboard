@@ -387,6 +387,116 @@ def try_parse_crm_xlsx(xlsx_path, regs, cd_updates, monthly_updates, source_labe
           f"{html_centre} / {cd_key}")
     return True
 
+# ── Parse single-column CRM xlsx format ─────────────────────────────────────
+# Format: Row1=(None,'Total'), Row2=(None,'Count'), Row3=('Total',ALL_MEMBERS)
+# Row4+: year rows ('     2026', N) and monthly sub-rows ('          Oct 2026', N)
+# The Total row is the whole-centre aggregate (same across all programme files).
+# Programme-specific counts come from year-level and monthly sub-rows.
+def try_parse_single_col_crm_xlsx(xlsx_path, regs, cd_updates, monthly_updates, source_label, file_timestamps=None):
+    """Returns True if file matches single-col CRM format and was parsed; False to fall back."""
+    if not HAS_OPENPYXL:
+        return False
+    try:
+        wb   = openpyxl.load_workbook(xlsx_path, data_only=True)
+        rows = list(wb.active.iter_rows(values_only=True))
+    except Exception as e:
+        print(f"  ✗ openpyxl error: {e}")
+        return False
+
+    # Detect: rows[2][0]='Total', rows[1][1]='Count' (single count column)
+    if len(rows) < 4:
+        return False
+    if str(rows[2][0] or '').strip().lower() != 'total':
+        return False
+    if str(rows[1][1] if len(rows[1]) > 1 else '').strip().lower() != 'count':
+        return False
+
+    # Infer centre from parent folder name
+    parent_folder = os.path.basename(os.path.dirname(xlsx_path))
+    centre_key    = norm_centre(parent_folder)
+    html_centre   = CENTRE_KEY_MAP.get(centre_key) if centre_key else None
+
+    # Infer programme from filename
+    fname    = os.path.basename(xlsx_path).lower().replace('_', ' ')
+    prog_key = norm_prog(fname)
+    cd_key   = PROG_TO_CD_KEY.get(prog_key) if prog_key else None
+
+    if not html_centre or not cd_key:
+        print(f"  ⚠ Single-col CRM format detected but couldn't infer centre ({parent_folder!r}) "
+              f"or programme ({fname!r}) — skipping")
+        return True  # still this format, just not updatable
+
+    # Record file timestamp
+    if file_timestamps is not None:
+        mtime = os.path.getmtime(xlsx_path)
+        if html_centre not in file_timestamps or mtime > file_timestamps[html_centre]:
+            file_timestamps[html_centre] = mtime
+
+    month_name_re = re.compile(
+        r'\b(january|february|march|april|may|june|july|august|september|october|november|december)\b',
+        re.IGNORECASE
+    )
+    month_num = {
+        'january':'01','february':'02','march':'03','april':'04',
+        'may':'05','june':'06','july':'07','august':'08',
+        'september':'09','october':'10','november':'11','december':'12'
+    }
+    year_re = re.compile(r'\b(20\d{2})\b')
+
+    matched_annual = 0
+    matched_monthly = 0
+
+    for row in rows[3:]:
+        if not row or row[0] is None:
+            continue
+        label = str(row[0])
+        label_stripped = label.strip()
+        if not label_stripped:
+            continue
+
+        val = row[1] if len(row) > 1 else None
+        if val is None:
+            continue
+        try:
+            count = int(float(str(val)))
+        except:
+            continue
+        if count <= 0:
+            continue
+
+        mn   = month_name_re.search(label_stripped)
+        yr_m = year_re.search(label_stripped)
+
+        if mn and yr_m:
+            # Monthly sub-row: has both month name and year
+            month_str = month_num[mn.group(1).lower()]
+            year = yr_m.group(1)
+            (monthly_updates
+                .setdefault(html_centre, {})
+                .setdefault(cd_key, {})
+                .setdefault(year, {})[month_str]) = count
+            matched_monthly += 1
+        elif yr_m and not mn:
+            # Year-level row: use directly as annual count
+            year = yr_m.group(1)
+            cd_updates.setdefault(html_centre, {}).setdefault(cd_key, {})[year] = count
+            matched_annual += 1
+
+    # For non-IE programmes: derive annual totals from monthly rows where available
+    # (monthly sum is more accurate since year rows may differ from actual programme counts)
+    if cd_key != 'ie' and matched_monthly > 0:
+        centre_monthly = monthly_updates.get(html_centre, {}).get(cd_key, {})
+        for yr, months in centre_monthly.items():
+            yr_total = sum(v for v in months.values() if v)
+            if yr_total > 0:
+                cd_updates.setdefault(html_centre, {}).setdefault(cd_key, {})[yr] = yr_total
+                matched_annual += 1
+
+    monthly_note = f", {matched_monthly} monthly entries" if matched_monthly else ""
+    print(f"  ✓ {source_label} [single-col CRM]: {matched_annual} annual{monthly_note} → "
+          f"{html_centre} / {cd_key}")
+    return True
+
 # ── Read .xlsx via openpyxl → temp CSV (fallback for non-CRM xlsx) ───────────
 def export_xlsx_to_csv(xlsx_path, tmp_csv):
     if not HAS_OPENPYXL:
@@ -1343,6 +1453,9 @@ if __name__ == '__main__':
         # Try CRM "Total row" format first (xlsx only — no CSV export needed)
         if ext in ('.xlsx', '.xls') and HAS_OPENPYXL:
             if try_parse_crm_xlsx(xlsx, regs, cd_updates, monthly_updates, label, file_timestamps):
+                continue   # handled — skip CSV export path
+            # Try single-column CRM format (Koramangala/Electronic City style)
+            if try_parse_single_col_crm_xlsx(xlsx, regs, cd_updates, monthly_updates, label, file_timestamps):
                 continue   # handled — skip CSV export path
 
         # Standard batch-level format (Numbers files + non-CRM xlsx)
