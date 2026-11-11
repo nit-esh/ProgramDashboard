@@ -10626,28 +10626,19 @@ function buildIeoCurrentMonth(){
   const left    = centres.slice(0, half);
   const right   = centres.slice(half);
 
-  // Prominent month header
+  // Compact month header
   const headerHtml = `
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
-      <div style="display:flex;align-items:center;gap:12px">
-        <div style="background:#1e2a45;color:#fff;border-radius:8px;padding:6px 14px;font-size:.95rem;font-weight:900;letter-spacing:.5px">${cm.month}</div>
-        <div>
-          <div style="font-size:.72rem;font-weight:700;color:var(--navy)">${total.toLocaleString()} total registrations &nbsp;·&nbsp; ${centres.length} active centres</div>
-          ${cm.as_of ? `<div style="font-size:.6rem;color:var(--muted);margin-top:1px">updated ${cm.as_of}</div>` : ''}
-        </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="background:#1e2a45;color:#fff;border-radius:6px;padding:3px 10px;font-size:.8rem;font-weight:900;letter-spacing:.5px">${cm.month}</div>
+        <div style="font-size:.65rem;font-weight:700;color:var(--navy)">${total.toLocaleString()} regs &nbsp;·&nbsp; ${centres.length} centres${cm.as_of?` &nbsp;·&nbsp; <span style="color:var(--muted);font-weight:400">updated ${cm.as_of}</span>`:''}</div>
       </div>
-      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-        <div style="display:flex;gap:10px;font-size:.65rem;font-weight:700">
-          <span style="background:#fff8e0;border:1.5px solid #e6c84a;border-radius:6px;padding:3px 8px;color:#7a5c00">🥇 ${centres[0]?.[0]||'—'}</span>
-          <span style="background:#f5f5f5;border:1.5px solid #bbb;border-radius:6px;padding:3px 8px;color:#555">${centres[1]?.[0]?'🥈 '+centres[1][0]:''}</span>
-          <span style="background:#fff3ec;border:1.5px solid #e8a87c;border-radius:6px;padding:3px 8px;color:#7a3800">${centres[2]?.[0]?'🥉 '+centres[2][0]:''}</span>
+      <div style="display:flex;align-items:center;gap:6px">
+        <div style="display:flex;background:#f0ebe0;border:1px solid #e0d8c8;border-radius:7px;padding:2px;gap:2px">
+          <button onclick="_setIeoCMView('centre')" style="border:none;border-radius:5px;padding:3px 8px;font-size:.6rem;font-weight:700;cursor:pointer;background:${isCMSector?'transparent':'var(--navy)'};color:${isCMSector?'var(--muted)':'#fff'}">By Centre</button>
+          <button onclick="_setIeoCMView('sector')" style="border:none;border-radius:5px;padding:3px 8px;font-size:.6rem;font-weight:700;cursor:pointer;background:${isCMSector?'var(--navy)':'transparent'};color:${isCMSector?'#fff':'var(--muted)'}">By Sector</button>
         </div>
-        <div style="display:flex;background:#f0ebe0;border:1px solid #e0d8c8;border-radius:8px;padding:2px;gap:2px">
-          <button onclick="_setIeoCMView('centre')" style="border:none;border-radius:6px;padding:4px 10px;font-size:.62rem;font-weight:700;cursor:pointer;background:${isCMSector?'transparent':'var(--navy)'};color:${isCMSector?'var(--muted)':'#fff'}">By Centre</button>
-          <button onclick="_setIeoCMView('sector')" style="border:none;border-radius:6px;padding:4px 10px;font-size:.62rem;font-weight:700;cursor:pointer;background:${isCMSector?'var(--navy)':'transparent'};color:${isCMSector?'#fff':'var(--muted)'}">By Sector</button>
-        </div>
-        <button onclick="_exportIeoCurrentMonthPNG('${(cm.month||'ieo').replace(/\s+/g,'_')}')"
-          style="padding:4px 12px;font-size:.62rem;font-weight:700;border:1px solid var(--border);border-radius:20px;background:#fff;color:var(--navy);cursor:pointer">↓ PNG</button>
+        <button onclick="_exportIeoCurrentMonthPNG('${(cm.month||'ieo').replace(/\s+/g,'_')}')" style="padding:3px 9px;font-size:.58rem;font-weight:700;border:1px solid var(--border);border-radius:14px;background:#fff;color:var(--navy);cursor:pointer">↓ PNG</button>
       </div>
     </div>`;
 
@@ -10663,17 +10654,17 @@ function buildIeoCurrentMonth(){
       ? `<a href="javascript:void(0)" onclick="_navToIeoOnlineCentre('${dashCentre}')" style="color:var(--navy);text-decoration:none;font-weight:${isTop3?'800':'600'};border-bottom:1px dashed var(--navy)" onmouseover="this.style.color='var(--saffron)'" onmouseout="this.style.color='var(--navy)'">${centre}</a>`
       : `<span style="font-weight:${isTop3?'700':'400'};color:${isTop3?'var(--navy)':'var(--muted)'}">${centre}</span>`;
     return `<tr style="border-top:1px solid #f0ebe0;background:${rowBg}">
-      <td style="padding:5px 8px;font-size:.65rem;font-weight:${isTop3?'800':'400'};color:var(--muted);white-space:nowrap">${medal||rank}</td>
-      <td style="padding:5px 8px;font-size:.7rem">${nameHtml}</td>
-      <td style="padding:5px 10px;text-align:right;font-weight:${isTop3?'800':'700'};color:${countColor};font-size:.72rem;white-space:nowrap">${count.toLocaleString()}</td>
+      <td style="padding:2px 5px;font-size:.72rem;font-weight:${isTop3?'800':'400'};color:var(--muted);white-space:nowrap;width:28px;text-align:center">${medal||rank}</td>
+      <td style="padding:5px 5px;font-size:.76rem">${nameHtml}</td>
+      <td style="padding:5px 7px;text-align:right;font-weight:${isTop3?'800':'700'};color:${countColor};font-size:.78rem;white-space:nowrap">${count.toLocaleString()}</td>
     </tr>`;
   };
 
-  const thS = `padding:6px 8px;text-align:left;font-size:.58rem;font-weight:700;color:var(--muted);letter-spacing:.7px;text-transform:uppercase;background:#f5f2eb`;
-  const thR = `padding:6px 10px;text-align:right;font-size:.58rem;font-weight:700;color:var(--muted);letter-spacing:.7px;text-transform:uppercase;background:#f5f2eb`;
+  const thS = `padding:3px 5px;text-align:left;font-size:.55rem;font-weight:700;color:var(--muted);letter-spacing:.6px;text-transform:uppercase;background:#f5f2eb`;
+  const thR = `padding:3px 7px;text-align:right;font-size:.55rem;font-weight:700;color:var(--muted);letter-spacing:.6px;text-transform:uppercase;background:#f5f2eb`;
 
   const mkTable = (rows, offset) => `
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden">
       <table style="width:100%;border-collapse:collapse">
         <thead><tr>
           <th style="${thS}">#</th>
@@ -10684,13 +10675,20 @@ function buildIeoCurrentMonth(){
       </table>
     </div>`;
 
-  // ── Sector view — two-column layout grouped by sector ───────────────────
+  // ── Sector view — 2-column grid of sector cards ────────────────────────
   if(isCMSector){
     const SECTOR_COLORS = {
-      'Bangalore':'#1e2a45','Mangalore Sector':'#1a5276','Tumkur Sector':'#1d6a3c',
-      'Mysuru Sector':'#6c3483','Chikkaballapura Sector':'#7d6608','North Karnataka Sector':'#922b21'
+      'E-City':'#0a3d6b','Budigere - Banaswadi':'#1a4d8c','Indiranagar - Sarjapur - HSR':'#1e5fa0',
+      'Jayanagar':'#1565c0','BG Road - KNK Road':'#1976d2','Marathahalli - WF':'#1e88e5',
+      'North Bengaluru':'#039be5','Malleswaram':'#0277bd','Vijayanagar':'#01579b',
+      'Mysuru Sector':'#6c3483','Mangaluru Sector':'#1a5276','Tumakuru Sector':'#1d6a3c',
+      'Chikkaballapura Sector':'#7d6608','North Karnataka Sector':'#922b21'
     };
-    const SECTOR_ORDER = ['Bangalore','Mangalore Sector','Tumkur Sector','Mysuru Sector','Chikkaballapura Sector','North Karnataka Sector'];
+    const SECTOR_ORDER = [
+      'E-City','Budigere - Banaswadi','Indiranagar - Sarjapur - HSR','Jayanagar',
+      'BG Road - KNK Road','Marathahalli - WF','North Bengaluru','Malleswaram','Vijayanagar',
+      'Mysuru Sector','Mangaluru Sector','Tumakuru Sector','Chikkaballapura Sector','North Karnataka Sector'
+    ];
     const groups = {}; SECTOR_ORDER.forEach(s=>{ groups[s]=[]; }); groups['Other']=[];
     centres.forEach(([name,cnt])=>{
       const s = _ieoSector(name); (s && groups[s]) ? groups[s].push([name,cnt]) : groups['Other'].push([name,cnt]);
@@ -10698,60 +10696,47 @@ function buildIeoCurrentMonth(){
 
     let globalRank = 0;
 
-    const mkSectorTable = (rows, startGlobalRank) => {
-      const tRows = rows.map(([name, cnt], i) => {
-        const r = startGlobalRank + i;
+    const sectorCards = [...SECTOR_ORDER,...(groups['Other'].length?['Other']:[])].map(sName=>{
+      const sRows = groups[sName]; if(!sRows||!sRows.length) return '';
+      const col   = SECTOR_COLORS[sName]||'#555';
+      const sTotal = sRows.reduce((a,[,v])=>a+v,0);
+      const centreRows = sRows.map(([name,cnt])=>{
+        globalRank++;
+        const r = globalRank;
         const isTop3 = r <= 3;
         const medal = r===1?'🥇':r===2?'🥈':r===3?'🥉':'';
         const rowBg = r===1?'#fff8e0':r===2?'#f4f4f4':r===3?'#fff3ec':'transparent';
         const countColor = isTop3 ? '#8a5c00' : '#1a6b3a';
         const dashCentre = _ieoToDashCentre(name);
         const nameHtml = dashCentre
-          ? `<a href="javascript:void(0)" onclick="_navToIeoOnlineCentre('${dashCentre}')" style="color:var(--navy);text-decoration:none;font-weight:${isTop3?'800':'600'};border-bottom:1px dashed var(--navy)" onmouseover="this.style.color='var(--saffron)'" onmouseout="this.style.color='var(--navy)'">${name}</a>`
-          : `<span style="font-weight:${isTop3?'700':'400'};color:${isTop3?'var(--navy)':'var(--muted)'}">${name}</span>`;
+          ? `<a href="javascript:void(0)" onclick="_navToIeoOnlineCentre('${dashCentre}')" style="color:var(--navy);text-decoration:none;font-weight:600;border-bottom:1px dashed var(--navy)">${name}</a>`
+          : `<span style="color:var(--muted)">${name}</span>`;
         return `<tr style="border-top:1px solid #f0ebe0;background:${rowBg}">
-          <td style="padding:5px 8px;font-size:.65rem;font-weight:${isTop3?'800':'400'};color:var(--muted);white-space:nowrap">${medal||r}</td>
-          <td style="padding:5px 8px;font-size:.7rem">${nameHtml}</td>
-          <td style="padding:5px 10px;text-align:right;font-weight:${isTop3?'800':'700'};color:${countColor};font-size:.72rem;white-space:nowrap">${cnt.toLocaleString()}</td>
+          <td style="padding:5px 5px;font-size:.68rem;color:var(--muted);white-space:nowrap;width:28px;text-align:center">${medal||r}</td>
+          <td style="padding:5px 5px;font-size:.74rem">${nameHtml}</td>
+          <td style="padding:5px 8px;text-align:right;font-weight:700;color:${countColor};font-size:.76rem">${cnt.toLocaleString()}</td>
         </tr>`;
       }).join('');
-      return `<div style="background:var(--surface);border:1px solid var(--border);border-radius:0 0 10px 10px;overflow:hidden">
-        <table style="width:100%;border-collapse:collapse">
-          <thead><tr>
-            <th style="${thS}">#</th><th style="${thS}">Centre</th><th style="${thR}">Regs</th>
-          </tr></thead>
-          <tbody>${tRows}</tbody>
-        </table>
-      </div>`;
-    };
-
-    const sectorBlocks = [...SECTOR_ORDER,...(groups['Other'].length?['Other']:[])].map(sName=>{
-      const sRows = groups[sName]; if(!sRows||!sRows.length) return '';
-      const col  = SECTOR_COLORS[sName]||'#555';
-      const sTotal = sRows.reduce((a,[,v])=>a+v,0);
-      const sHalf  = Math.ceil(sRows.length / 2);
-      const lRows  = sRows.slice(0, sHalf);
-      const rRows  = sRows.slice(sHalf);
-      const lStart = globalRank + 1;
-      const rStart = globalRank + sHalf + 1;
-      globalRank  += sRows.length;
-      return `
-        <div style="grid-column:1/-1;background:${col};color:#fff;border-radius:10px 10px 0 0;padding:8px 14px;display:flex;align-items:center;gap:10px;margin-top:8px">
-          <span style="font-weight:800;font-size:.78rem;flex:1">${sName}</span>
+      return `<div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden">
+        <div style="background:${col};color:#fff;padding:5px 10px;display:flex;align-items:center;gap:6px">
+          <span style="font-weight:800;font-size:.76rem;flex:1">${sName}</span>
           <span style="font-size:.68rem;opacity:.8">${sRows.length} centre${sRows.length!==1?'s':''}</span>
-          <span style="font-weight:800;font-size:.78rem">${sTotal.toLocaleString()} regs</span>
+          <span style="font-weight:800;font-size:.78rem">${sTotal} regs</span>
         </div>
-        ${mkSectorTable(lRows, lStart)}
-        ${rRows.length ? mkSectorTable(rRows, rStart) : '<div></div>'}`;
-    }).join('');
+        <table style="width:100%;border-collapse:collapse"><tbody>${centreRows}</tbody></table>
+      </div>`;
+    });
 
-    el.innerHTML = headerHtml + `<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start">${sectorBlocks}</div>`;
+    // Split cards into two independent columns (avoids paired-row height gaps)
+    const col1Html = sectorCards.filter((_,i)=>i%2===0).filter(Boolean).join('');
+    const col2Html = sectorCards.filter((_,i)=>i%2!==0).filter(Boolean).join('');
+    el.innerHTML = headerHtml + `<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><div style="display:flex;flex-direction:column;gap:6px">${col1Html}</div><div style="display:flex;flex-direction:column;gap:6px">${col2Html}</div></div>`;
     return;
   }
 
   // ── Centre view (default two-column layout) ─────────────────────────────
   const tableHtml = `
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
       ${mkTable(left, 0)}
       ${mkTable(right, half)}
     </div>`;
@@ -10930,10 +10915,17 @@ function _renderIeoPage(){
 
 function _renderIeoSectorView(rows){
   const SECTOR_COLORS = {
-    'Bangalore':'#1e2a45','Mangalore Sector':'#1a5276','Tumkur Sector':'#1d6a3c',
-    'Mysuru Sector':'#6c3483','Chikkaballapura Sector':'#7d6608','North Karnataka Sector':'#922b21'
+    'E-City':'#0a3d6b','Budigere - Banaswadi':'#1a4d8c','Indiranagar - Sarjapur - HSR':'#1e5fa0',
+    'Jayanagar':'#1565c0','BG Road - KNK Road':'#1976d2','Marathahalli - WF':'#1e88e5',
+    'North Bengaluru':'#039be5','Malleswaram':'#0277bd','Vijayanagar':'#01579b',
+    'Mysuru Sector':'#6c3483','Mangaluru Sector':'#1a5276','Tumakuru Sector':'#1d6a3c',
+    'Chikkaballapura Sector':'#7d6608','North Karnataka Sector':'#922b21'
   };
-  const SECTOR_ORDER = ['Bangalore','Mangalore Sector','Tumkur Sector','Mysuru Sector','Chikkaballapura Sector','North Karnataka Sector'];
+  const SECTOR_ORDER = [
+    'E-City','Budigere - Banaswadi','Indiranagar - Sarjapur - HSR','Jayanagar',
+    'BG Road - KNK Road','Marathahalli - WF','North Bengaluru','Malleswaram','Vijayanagar',
+    'Mysuru Sector','Mangaluru Sector','Tumakuru Sector','Chikkaballapura Sector','North Karnataka Sector'
+  ];
   const groups = {}; SECTOR_ORDER.forEach(s=>{ groups[s]=[]; }); groups['Other']=[];
   rows.forEach(r => {
     const s = _ieoSector(r.centre); (s && groups[s]) ? groups[s].push(r) : groups['Other'].push(r);
@@ -11153,32 +11145,45 @@ function _setIeoView(mode){
 
 function _ieoSector(name){
   const n = name.toLowerCase().replace(/\s+/g,' ').trim();
-  // Explicit aliases for IEO names that differ from SECTOR_DEFS keys
-  const ALIASES = {
-    'mysore':'Mysuru Sector', 'mysuru':'Mysuru Sector',
-    'kodagu':'Mysuru Sector', 'mandya':'Mysuru Sector', 'chamarajanagar':'Mysuru Sector',
-    'mangalore':'Mangalore Sector', 'udupi':'Mangalore Sector',
-    'shivamogga':'Mangalore Sector', 'shimoga':'Mangalore Sector',
-    'chikmagalur':'Mangalore Sector', 'uttara kannada':'Mangalore Sector',
-    'tumkur':'Tumkur Sector', 'hassan':'Tumkur Sector',
-    'ramanagara':'Tumkur Sector', 'kolar':'Tumkur Sector',
-    'chikkaballapura':'Chikkaballapura Sector', 'bangalore rural':'Chikkaballapura Sector',
-    'ballari':'North Karnataka Sector', 'belagavi':'North Karnataka Sector',
-    'hubballi':'North Karnataka Sector', 'hubli':'North Karnataka Sector',
-    'kalaburagi':'North Karnataka Sector', 'vijayapura':'North Karnataka Sector',
-    'koppal':'North Karnataka Sector', 'chitradurga':'North Karnataka Sector',
-    'raichur':'North Karnataka Sector', 'davangere':'North Karnataka Sector',
-    'haveri':'North Karnataka Sector', 'bagalkot':'North Karnataka Sector',
-    'gadag':'North Karnataka Sector', 'vijayanagara':'North Karnataka Sector',
+  // 14-sector map per Karnataka programme team structure
+  const IEO_SECTOR_MAP = {
+    // Sector 1 — E-City (Bangalore)
+    'electronic city':'E-City','singasandra':'E-City','chandapura':'E-City',
+    // Sector 2 — Budigere - Banaswadi (Bangalore)
+    'banaswadi':'Budigere - Banaswadi','budigere cross':'Budigere - Banaswadi',
+    // Sector 3 — Indiranagar - Sarjapur - HSR (Bangalore)
+    'indiranagar':'Indiranagar - Sarjapur - HSR','hsr':'Indiranagar - Sarjapur - HSR','sarjapur road':'Indiranagar - Sarjapur - HSR',
+    // Sector 4 — Jayanagar (Bangalore)
+    'jayanagar':'Jayanagar','koramangala (jn)':'Jayanagar','koramangala jn':'Jayanagar','koramangala':'Jayanagar','girinagar':'Jayanagar',
+    // Sector 5 — BG Road - KNK Road (Bangalore)
+    'bannerghatta road':'BG Road - KNK Road','kanakapura road':'BG Road - KNK Road','kanakapura':'BG Road - KNK Road',
+    // Sector 6 — Marathahalli - WF (Bangalore)
+    'marathahalli':'Marathahalli - WF','whitefield':'Marathahalli - WF',
+    // Sector 7 — North Bengaluru (Bangalore)
+    'jakkur':'North Bengaluru','yelahanka':'North Bengaluru','hebbal':'North Bengaluru',
+    // Sector 8 — Malleswaram (Bangalore)
+    'malleswaram':'Malleswaram','nagasandra':'Malleswaram',
+    // Sector 9 — Vijayanagar (Bangalore)
+    'vijayanagar':'Vijayanagar','rr nagar':'Vijayanagar','nagarabhavi':'Vijayanagar','kengeri':'Vijayanagar',
+    // Sector 10 — Mysuru
+    'mysore':'Mysuru Sector','mysuru':'Mysuru Sector','mandya':'Mysuru Sector','kodagu':'Mysuru Sector','chamarajanagar':'Mysuru Sector',
+    // Sector 11 — Mangaluru
+    'mangalore':'Mangaluru Sector','udupi':'Mangaluru Sector','shivamogga':'Mangaluru Sector','shimoga':'Mangaluru Sector',
+    // Sector 12 — Tumakuru
+    'tumkur':'Tumakuru Sector','hassan':'Tumakuru Sector','chikmagalur':'Tumakuru Sector',
+    // Sector 13 — Chikkaballapura
+    'chikkaballapura':'Chikkaballapura Sector','kolar':'Chikkaballapura Sector','bangalore rural':'Chikkaballapura Sector','ramanagara':'Chikkaballapura Sector',
+    // Sector 14 — North Karnataka
+    'ballari':'North Karnataka Sector','belagavi':'North Karnataka Sector','hubballi':'North Karnataka Sector','hubli':'North Karnataka Sector',
+    'kalaburagi':'North Karnataka Sector','vijayapura':'North Karnataka Sector','koppal':'North Karnataka Sector','chitradurga':'North Karnataka Sector',
+    'raichur':'North Karnataka Sector','davangere':'North Karnataka Sector','haveri':'North Karnataka Sector','bagalkot':'North Karnataka Sector',
+    'gadag':'North Karnataka Sector','vijayanagara':'North Karnataka Sector','bidar':'North Karnataka Sector','yadgir':'North Karnataka Sector',
+    'uttara kannada':'North Karnataka Sector',
   };
-  if(ALIASES[n]) return ALIASES[n];
-  const blrKeywords = ['banaswadi','bannerghatta','electronic city','girinagar','hebbal',
-    'indiranagar','jayanagar','koramangala','malleswaram','marathahalli',
-    'vijayanagar','kanakapura','whitefield','budigere'];
-  if(blrKeywords.some(k=>n.includes(k))) return 'Bangalore';
-  const norm = s => s.toLowerCase().replace(/\s+/g,' ').trim();
-  for(const [sector, centres] of Object.entries(SECTOR_DEFS)){
-    if(centres.some(c => norm(c)===n || n.includes(norm(c)) || norm(c).includes(n))) return sector;
+  if(IEO_SECTOR_MAP[n]) return IEO_SECTOR_MAP[n];
+  // Partial match for slight name variations (e.g. "Kanakapura road")
+  for(const [key, sector] of Object.entries(IEO_SECTOR_MAP)){
+    if(n.startsWith(key) || key.startsWith(n)) return sector;
   }
   return null;
 }
