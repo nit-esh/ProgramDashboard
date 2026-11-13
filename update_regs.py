@@ -133,6 +133,7 @@ CENTRE_KEY_MAP = {
     'girinagar':     'Girinagar',
     'hassan':        'Hassan',
     'chikkaballapura': 'Chikkaballapura',
+    'chikkaballapur':  'Chikkaballapura',   # norm_centre() returns this spelling
     'chikballapur':    'Chikkaballapura',
     'mandya':          'Mandya',
     'shivamogga':      'Shivamogga',
@@ -817,7 +818,7 @@ def parse_ieo_current_month(xlsx_path):
         try: count = int(v1)
         except: continue
         indent = len(s_raw) - len(s)
-        if indent >= 10:   # individual centre rows
+        if indent >= 4:   # individual centre rows (indent 5 in newer exports, 10+ in older)
             centres[s] = count
             total += count
 
@@ -880,6 +881,7 @@ PLACE_CENTRE = {
     'belgaum':         'Belagavi',
     'dharwad':         'Dharwad',
     'chikkaballapura': 'Chikkaballapura',
+    'chikkaballapur':  'Chikkaballapura',   # norm_centre() returns this spelling
     'chikballapur':    'Chikkaballapura',
     'mandya':          'Mandya',
     'shivamogga':      'Shivamogga',
