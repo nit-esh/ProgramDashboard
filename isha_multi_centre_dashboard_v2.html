@@ -8461,7 +8461,6 @@ let _regCapFilter  = 'all'; // 'all'|'0-25'|'25-50'|'50-75'|'75-100'
 let _showAllHist = false;   // false = last 3 days, true = all history
 let _regCountRows = [];        // last rendered rows — used by export
 let _regCountHistDates = [];   // last rendered history date labels — used by export
-
 function _exportRegCountsCSV(filename){
   const fmtDt = raw => {
     if(!raw) return '';
@@ -11181,6 +11180,7 @@ function _renderIeoPage(){
   document.getElementById('ieoTableWrap').innerHTML = `
     <table style="width:100%;border-collapse:collapse;font-size:.73rem">
       <thead><tr>
+        <th style="padding:8px 10px;font-size:.65rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);border-bottom:2px solid var(--border);background:#faf6ef;text-align:center;width:36px">#</th>
         ${_sortBtn('centre','Centre')}
         ${_sortBtn('total','Enrolled')}
         ${_sortBtn('cc','Completed')}
@@ -11205,7 +11205,12 @@ function _renderIeoPage(){
         const stepsMini = `<div style="display:flex;gap:3px;justify-content:center;flex-wrap:wrap">
           ${r.s.map((v,i)=>v?`<span style="background:#e8f0ff;color:#1e4090;border-radius:4px;padding:2px 5px;font-size:.6rem;font-weight:700" title="Step ${i+1}: ${v}">S${i+1}:${v}</span>`:'').filter(Boolean).join('')||'<span style="color:var(--muted);font-size:.62rem">—</span>'}
         </div>`;
+        const medal = idx===0?'🥇':idx===1?'🥈':idx===2?'🥉':'';
+        const rankCell = medal
+          ? `<span title="#${idx+1}">${medal}</span>`
+          : `<span style="color:var(--muted);font-size:.7rem">${idx+1}</span>`;
         return `<tr style="background:${idx%2?'#faf6ef':'#fff'}" onmouseover="this.style.background='#f0eadc'" onmouseout="this.style.background='${idx%2?'#faf6ef':'#fff'}'">
+          <td style="padding:8px 10px;text-align:center">${rankCell}</td>
           <td style="padding:8px 10px;font-weight:600">${centreCell}</td>
           <td style="padding:8px 10px;text-align:right;font-weight:700;color:var(--navy)">${r.total.toLocaleString()}</td>
           <td style="padding:8px 10px;text-align:right;font-weight:700;color:#1a6b3a">${r.cc.toLocaleString()}</td>
@@ -11218,6 +11223,7 @@ function _renderIeoPage(){
       </tbody>
       <tfoot>
         <tr style="background:#1e2a45;color:#fff;font-weight:800">
+          <td style="padding:8px 10px;text-align:center;opacity:.6">—</td>
           <td style="padding:8px 10px">Karnataka Total</td>
           <td style="padding:8px 10px;text-align:right">${totalAll.toLocaleString()}</td>
           <td style="padding:8px 10px;text-align:right;color:#7be8a0">${ccAll.toLocaleString()}</td>
@@ -13171,21 +13177,10 @@ function buildAdminRegCounts(){
   const tblRows = [...rows];
   const cmpConf = (a,b) => a.confirmed===null&&b.confirmed===null?0:a.confirmed===null?1:b.confirmed===null?-1:b.confirmed-a.confirmed;
   const hideProg = _regTypeFilter === 'satsang';
-  const _effectiveGroupBy = (_regSortCol || _regTypeFilter === 'satsang') ? 'none' : _regGroupBy;
+  const _effectiveGroupBy = _regTypeFilter === 'satsang' ? 'none' : _regGroupBy;
   if(_effectiveGroupBy==='centre')       tblRows.sort((a,b)=>a.centre.localeCompare(b.centre)||cmpConf(a,b)||new Date(a.startDate||0)-new Date(b.startDate||0));
   else if(_effectiveGroupBy==='programme') tblRows.sort((a,b)=>a.progLabel.localeCompare(b.progLabel)||cmpConf(a,b)||new Date(a.startDate||0)-new Date(b.startDate||0));
   else tblRows.sort((a,b)=>cmpConf(a,b)||new Date(a.startDate||0)-new Date(b.startDate||0));
-
-  // Column header sort overrides default sort
-  if(_regSortCol){
-    tblRows.sort((a,b)=>{
-      let va = _regSortCol==='_cap' ? (_getCapacity(a.progLabel,a.centre,a.startDate)||0) : (a[_regSortCol]??'');
-      let vb = _regSortCol==='_cap' ? (_getCapacity(b.progLabel,b.centre,b.startDate)||0) : (b[_regSortCol]??'');
-      if(_regSortCol==='confirmed'){ va=va??-1; vb=vb??-1; }
-      const cmp = typeof va==='number'&&typeof vb==='number' ? va-vb : String(va).localeCompare(String(vb));
-      return _regSortAsc ? cmp : -cmp;
-    });
-  }
 
   const groupKey = r => _effectiveGroupBy==='centre' ? r.centre : _effectiveGroupBy==='programme' ? r.progLabel : null;
 
@@ -13196,24 +13191,8 @@ function buildAdminRegCounts(){
     if(k){ grpTotals[k]=(grpTotals[k]||0)+(r.confirmed||0); grpCounts[k]=(grpCounts[k]||0)+1; }
   }
 
-  const _SORT_COLS2 = {Programme:'programme', Centre:'centre', Date:'startDate', Language:'lang', Confirmed:'confirmed', Capacity:'_cap'};
-  const _thStyle2 = (align='left') => `padding:9px 12px;text-align:${align};font-weight:700;color:var(--muted);font-size:.65rem;text-transform:uppercase;letter-spacing:.5px;`;
-  const th = s => {
-    const col = _SORT_COLS2[s];
-    if(!col) return `<th style="${_thStyle2()}">${s}</th>`;
-    const isSorted = _regSortCol===col, asc = _regSortAsc;
-    const arrow = isSorted ? (asc ? ' ▲' : ' ▼') : ' ⇅';
-    const bg = isSorted ? 'rgba(26,64,128,.08)' : 'transparent';
-    return `<th onclick="_regSortCol='${col}';_regSortAsc=${isSorted?!asc:true};buildAdminRegCounts()" style="${_thStyle2()}color:${isSorted?'var(--navy)':'#8899bb'};cursor:pointer;user-select:none;white-space:nowrap;background:${bg};border-radius:4px" onmouseover="this.style.background='rgba(26,64,128,.12)'" onmouseout="this.style.background='${bg}'">${s}<span style="font-size:.7rem;opacity:.85">${arrow}</span></th>`;
-  };
-  const thC = s => {
-    const col = _SORT_COLS2[s];
-    if(!col) return `<th style="${_thStyle2('center')}">${s}</th>`;
-    const isSorted = _regSortCol===col, asc = _regSortAsc;
-    const arrow = isSorted ? (asc ? ' ▲' : ' ▼') : ' ⇅';
-    const bg = isSorted ? 'rgba(26,64,128,.08)' : 'transparent';
-    return `<th onclick="_regSortCol='${col}';_regSortAsc=${isSorted?!asc:true};buildAdminRegCounts()" style="${_thStyle2('center')}color:${isSorted?'var(--navy)':'#8899bb'};cursor:pointer;user-select:none;white-space:nowrap;background:${bg};border-radius:4px" onmouseover="this.style.background='rgba(26,64,128,.12)'" onmouseout="this.style.background='${bg}'">${s}<span style="font-size:.7rem;opacity:.85">${arrow}</span></th>`;
-  };
+  const th = s => `<th style="padding:9px 12px;text-align:left;font-weight:700;color:var(--muted);font-size:.65rem;text-transform:uppercase;letter-spacing:.5px">${s}</th>`;
+  const thC = s => `<th style="padding:9px 12px;text-align:center;font-weight:700;color:var(--muted);font-size:.65rem;text-transform:uppercase;letter-spacing:.5px">${s}</th>`;
   let lastGrp = null; let dataRowIdx = 0; let grpIdx = 0;
   const tblBodyRows = tblRows.map(r=>{
     const grp = groupKey(r);
@@ -13361,10 +13340,6 @@ function buildAdminRegCounts(){
       <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
         ${viewToggle}
         ${toggle}
-        ${_regSortCol ? `<button onclick="_regSortCol=null;_regSortAsc=true;buildAdminRegCounts()"
-          style="padding:5px 12px;border:1px solid #c8a060;border-radius:20px;background:#fff8e8;color:#8a5c00;font-size:.7rem;font-weight:700;cursor:pointer;white-space:nowrap">
-          ✕ Clear sort
-        </button>` : ''}
         ${hasMoreHist ? `<button onclick="_showAllHist=!_showAllHist;buildAdminRegCounts()"
           style="padding:5px 12px;border:1px solid var(--border);border-radius:20px;background:${_showAllHist?'var(--navy)':'var(--surface)'};color:${_showAllHist?'#fff':'var(--navy)'};font-size:.7rem;font-weight:700;cursor:pointer;white-space:nowrap">
           ${_showAllHist ? '⊟ Last 3 days' : '⊞ All history'}
