@@ -43,7 +43,7 @@ CENTRE_PATTERNS = [
     (r'jayanagar|jaynagar',                                   'jayanagar'),
     (r'banaswadi|banasawadi',                                 'banaswadi'),
     (r'hebbal|hebbala',                                       'hebbal'),
-    (r'indiranagar|indira nagar',                             'indiranagar'),
+    (r'indiranagar|indira nagar|adarsh vista',                'indiranagar'),
     (r'mysuru|mysore',                                        'mysuru'),
     (r'hubballi|hubbali|hubli',                               'hubbali'),
     (r'ballari|bellary',                                      'ballari'),
@@ -202,6 +202,23 @@ def extract_start_date(text):
     ym = re.search(r'\b(20\d{2})\b', text)
     if m and ym:
         return f"{ym.group(1)}-{_MONTH_MAP[m.group(1)]}-{m.group(2).zfill(2)}"
+    return None
+
+def extract_end_date(text):
+    """Extract end date from programme name strings like '11-14 Feb 2027' or '17-20 Sep 2026'."""
+    t = text.lower()
+    # Pattern: "DD-DD Mon YYYY" same-month range → end is second DD
+    m = re.search(r'\b\d{1,2}-(\d{1,2})\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\w*[,\s]+(20\d{2})\b', t)
+    if m:
+        return f"{m.group(3)}-{_MONTH_MAP[m.group(2)]}-{m.group(1).zfill(2)}"
+    # Pattern: "DD Mon - DD Mon YYYY" cross-month range → end is second DD+Mon
+    m = re.search(r'\b\d{1,2}\s+\w+\s*[-–]\s*(\d{1,2})\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\w*\s+(20\d{2})\b', t)
+    if m:
+        return f"{m.group(3)}-{_MONTH_MAP[m.group(2)]}-{m.group(1).zfill(2)}"
+    # Pattern: "DD-Mon to DD-Mon YYYY" with hyphens
+    m = re.search(r'\bto\s+(\d{1,2})-(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\w*\s+(20\d{2})\b', t)
+    if m:
+        return f"{m.group(3)}-{_MONTH_MAP[m.group(2)]}-{m.group(1).zfill(2)}"
     return None
 
 def norm_centre(text):
@@ -524,7 +541,7 @@ def export_to_csv(file_path, tmp_csv):
         return export_numbers_to_csv(file_path, tmp_csv)
 
 # ── Parse one CSV, merge into regs (LIVE_REGS) and cd_updates (CENTRE_DATA) ──
-def parse_csv(csv_path, regs, cd_updates, source_label, lang_map=None):
+def parse_csv(csv_path, regs, cd_updates, source_label, lang_map=None, regs_to=None):
     skipped = 0
     matched = 0
 
@@ -611,6 +628,11 @@ def parse_csv(csv_path, regs, cd_updates, source_label, lang_map=None):
                     lang_map.setdefault(centre, {})[f"{prog}|{date}"] = _lm.group(1).title()
             # Always overwrite — no accumulation across rows or re-runs for the same key
             regs[centre][prog_key] = count
+            # Track end date for multi-day programmes
+            if regs_to is not None and date:
+                end = extract_end_date(name)
+                if end and end != date:
+                    regs_to.setdefault(centre, {})[prog_key] = end
 
             # ── CENTRE_DATA update (IE / BSP / Shoonya / Samyama only) ─────
             cd_key      = PROG_TO_CD_KEY.get(prog)
@@ -1283,8 +1305,10 @@ def inject_html(html, regs, centre_data=None, monthly_data=None, latest_mtime=No
     dt          = datetime.datetime.fromtimestamp(latest_mtime)
     updated_str = dt.strftime('%d %b %Y, %I:%M %p')
     regs_json   = json.dumps(regs, indent=2, ensure_ascii=False)
+    regs_to_json= json.dumps(regs_to or {}, indent=2, ensure_ascii=False)
     lang_json   = json.dumps(lang_map or {}, indent=2, ensure_ascii=False)
-    live_block  = (f"{LIVE_START}\nconst LIVE_REGS = {regs_json};\nconst LIVE_REGS_LANG = {lang_json};\n"
+    live_block  = (f"{LIVE_START}\nconst LIVE_REGS = {regs_json};\nconst LIVE_REGS_TO = {regs_to_json};\n"
+                   f"const LIVE_REGS_LANG = {lang_json};\n"
                    f"const LIVE_REGS_UPDATED = {json.dumps(updated_str)};\n{LIVE_END}")
 
     if LIVE_START not in html:
@@ -1441,6 +1465,7 @@ if __name__ == '__main__':
         print("  ⚠ Could not parse MONTHLY_DATA from HTML — will skip monthly chart update")
 
     regs            = {}   # merged LIVE_REGS
+    regs_to         = {}   # end dates for multi-day programmes: centre → {prog_key → end_date}
     lang_map        = {}   # language per (centre, prog_key)
     cd_updates      = {}   # CENTRE_DATA changes to apply
     monthly_updates = {}   # MONTHLY_DATA changes to apply
@@ -1468,7 +1493,7 @@ if __name__ == '__main__':
         tmp_files.append(tmp_csv)
         print(f"\nExporting {label} → CSV …")
         if export_to_csv(xlsx, tmp_csv):
-            parse_csv(tmp_csv, regs, cd_updates, label, lang_map=lang_map)
+            parse_csv(tmp_csv, regs, cd_updates, label, lang_map=lang_map, regs_to=regs_to)
         else:
             print(f"  ⚠ Skipping {label} (export failed)")
 
